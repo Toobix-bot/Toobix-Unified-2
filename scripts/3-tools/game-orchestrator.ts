@@ -121,9 +121,11 @@ async function main() {
 
     // Interaction loop
     while (true) {
-      const userInput = await askQuestion(rl, 'Dein Input (Enter zum Beenden): ');
-      if (!userInput.trim()) break;
-      messages.push({ role: 'user', content: userInput });
+      const userInput = await askQuestion(rl, 'Dein Input (Enter = "mach weiter", exit = beenden): ');
+      if (userInput.trim().toLowerCase() === 'exit') break;
+
+      const content = userInput.trim() || 'Mach den nächsten Zug: erweitere Welt/Regeln behutsam, fasse Änderungen kurz zusammen und stelle eine Rückfrage.';
+      messages.push({ role: 'user', content: content });
 
       const resp = await callGateway(messages);
       if (!resp.success) {
