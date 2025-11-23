@@ -1,0 +1,11 @@
+{
+  "answers": [
+    {"questionId": "career_stage", "value": "Ausbildung/Studium"},
+    {"questionId": "job_satisfaction", "value": 7},
+    {"questionId": "career_goals", "value": "IHK Prüfung bestehen"},
+    {"questionId": "skills_development", "value": 8},
+    {"questionId": "work_life_balance", "value": 6},
+    {"questionId": "exam_preparation", "value": true},
+    {"questionId": "career_challenges", "value": "Zeit für Prüfungsvorbereitung finden"}
+  ]
+}

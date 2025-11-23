@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Toobix Unified - Adaptive Meta-UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151932;
+            --bg-tertiary: #1e2442;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #b537f2;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: #2d3748;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --error: #f56565;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* ========== LAYOUT ========== */
+
+        #app {
+            display: grid;
+            grid-template-areas:
+                "header header header"
+                "chat monitor actions"
+                "chat widgets widgets";
+            grid-template-columns: 60fr 25fr 15fr;
+            grid-template-rows: 60px 1fr 200px;
+            height: 100vh;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        /* ========== HEADER ========== */
+
+        header {
+            grid-area: header;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ========== COMPONENTS ========== */
+
+        .component {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .component:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .component-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .component-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .component-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .component-btn {
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .component-btn:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        /* ========== CHAT ========== */
+
+        #chat-main {
+            grid-area: chat;
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 10px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            background: var(--bg-tertiary);
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .message.assistant {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(181, 55, 242, 0.1));
+            border-left: 3px solid var(--accent-secondary);
+        }
+
+        .message.system {
+            background: rgba(72, 187, 120, 0.1);
+            border-left: 3px solid var(--success);
+            font-size: 13px;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .message-content {
+            line-height: 1.6;
+        }
+
+        .message-meta {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .message-meta .emotion {
+            color: #f56565;
+        }
+
+        .message-meta .perspective {
+            color: #00d9ff;
+        }
+
+        #chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #chat-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        #chat-send {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #chat-send:hover {
+            transform: scale(1.05);
+        }
+
+        #chat-send:active {
+            transform: scale(0.95);
+        }
+
+        /* ========== MONITOR ========== */
+
+        #monitor-system {
+            grid-area: monitor;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .metric {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .service-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .service-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        /* ========== ACTIONS ========== */
+
+        #actions-quick {
+            grid-area: actions;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover:before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+
+        /* ========== WIDGETS ========== */
+
+        #widgets-container {
+            grid-area: widgets;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        .widget {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .widget-value {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+        }
+
+        .widget-sublabel {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== SCROLLBAR ========== */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* ========== ANIMATIONS ========== */
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ai-suggestion {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 40px rgba(181, 55, 242, 0.4);
+            animation: slideInRight 0.5s ease-out;
+            max-width: 400px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .ai-suggestion-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .ai-suggestion-text {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .ai-suggestion-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-suggestion-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .ai-suggestion-btn.accept {
+            background: white;
+            color: var(--accent-secondary);
+        }
+
+        .ai-suggestion-btn.dismiss {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .ai-suggestion-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <h1>
+                <span>🧠</span>
+                <span>Toobix Unified</span>
+            </h1>
+            <div class="status-indicator">
+                <span id="status-text">Verbunden</span>
+                <div class="status-dot"></div>
+                <span id="service-count">0 Services</span>
+            </div>
+        </header>
+
+        <!-- Chat -->
+        <div id="chat-main" class="component">
+            <div class="component-header">
+                <span class="component-title">💬 Universal Chat</span>
+                <div class="component-controls">
+                    <button class="component-btn" onclick="clearChat()">Clear</button>
+                    <button class="component-btn" onclick="toggleConsciousness()">🧠</button>
+                </div>
+            </div>
+            <div id="chat-messages"></div>
+            <div id="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Frage an Toobix oder externe AIs..." />
+                <button id="chat-send" onclick="sendMessage()">Senden</button>
+            </div>
+        </div>
+
+        <!-- Monitor -->
+        <div id="monitor-system" class="component">
+            <div class="component-header">
+                <span class="component-title">📊 System Monitor</span>
+            </div>
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value" id="services-online">13</div>
+                    <div class="metric-label">Services Online</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="total-interactions">0</div>
+                    <div class="metric-label">Interaktionen</div>
+                </div>
+            </div>
+            <div class="service-list" id="service-list"></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div id="actions-quick" class="component">
+            <div class="component-header">
+                <span class="component-title">⚡ Quick Actions</span>
+            </div>
+            <button class="action-btn" onclick="generateDream()">💭 Dream generieren</button>
+            <button class="action-btn" onclick="emotionalCheckIn()">💖 Emotional Check-In</button>
+            <button class="action-btn" onclick="getWisdom()">🧠 Weisheit abrufen</button>
+            <button class="action-btn" onclick="makeDecision()">🎯 Entscheidung treffen</button>
+            <button class="action-btn" onclick="aiAdapt()">✨ AI anpassen</button>
+        </div>
+
+        <!-- Widgets -->
+        <div id="widgets-container">
+            <div class="widget">
+                <div class="component-title">💖 Emotional State</div>
+                <div class="widget-value" id="eq-score">--</div>
+                <div class="widget-sublabel">EQ Score</div>
+            </div>
+
+            <div class="widget">
+                <div class="component-title">🧠 Bewusstsein</div>
+                <div class="widget-value" id="consciousness-level">--</div>
+                <div class="widget-sublabel">Lucidity Level</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== WebSocket Connection ==========
+        let ws = null;
+        let withConsciousness = true;
+        let profile = null;
+
+        function connect() {
+            ws = new WebSocket('ws://localhost:8912/ws');
+
+            ws.onopen = () => {
+                console.log('✅ Connected to Adaptive Meta-UI');
+                addSystemMessage('Verbunden mit Toobix Unified!');
+            };
+
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                handleServerMessage(message);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                addSystemMessage('Verbindungsfehler!', 'error');
+            };
+
+            ws.onclose = () => {
+                console.log('❌ Disconnected');
+                addSystemMessage('Verbindung getrennt. Versuche Reconnect...', 'warning');
+                setTimeout(connect, 3000);
+            };
+        }
+
+        function handleServerMessage(message) {
+            console.log('📨 Server message:', message.type, message);
+
+            switch (message.type) {
+                case 'init':
+                    profile = message.profile;
+                    updateStats();
+                    addSystemMessage(`Willkommen! Session #${profile.usage.sessionCount}`);
+                    break;
+
+                case 'chat.response':
+                    displayAIResponse(message.response);
+                    break;
+
+                case 'ai.suggestion':
+                    showAISuggestion(message.suggestion);
+                    break;
+
+                case 'event.tracked':
+                    updateStats();
+                    break;
+
+                case 'component.added':
+                    addSystemMessage(`Neue Komponente: ${message.component.name}`);
+                    break;
+            }
+        }
+
+        // ========== Chat Functions ==========
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addUserMessage(message);
+            input.value = '';
+
+            ws.send(JSON.stringify({
+                type: 'chat.message',
+                message,
+                provider: 'openai',
+                withConsciousness
+            }));
+        }
+
+        function addUserMessage(text) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message user';
+            messageEl.innerHTML = `
+                <div class="message-header">
+                    <span>Du</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${text}</div>
+            `;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function displayAIResponse(response) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message assistant';
+
+            let metaHTML = '';
+            if (response.consciousnessAnalysis) {
+                metaHTML = `
+                    <div class="message-meta">
+                        ${response.consciousnessAnalysis.emotionalResonance ?
+                            `<div class="emotion">💖 ${response.consciousnessAnalysis.emotionalResonance.empathyResponse?.validation || 'Verarbeitet'}</div>`
+                            : ''}
+                        ${response.consciousnessAnalysis.multiPerspective ?
+                            `<div class="perspective">🧠 Multi-Perspektiven-Analyse aktiv</div>`
+                            : ''}
+                    </div>
+                `;
+            }
+
+            messageEl.innerHTML = `
+                <div class="message-header">
+                    <span>Toobix AI (${response.provider})</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${response.response}</div>
+                ${metaHTML}
+            `;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function addSystemMessage(text, type = 'info') {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message system';
+            messageEl.innerHTML = `
+                <div class="message-content">${text}</div>
+            `;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function clearChat() {
+            document.getElementById('chat-messages').innerHTML = '';
+        }
+
+        function toggleConsciousness() {
+            withConsciousness = !withConsciousness;
+            addSystemMessage(`Bewusstsein: ${withConsciousness ? 'AKTIVIERT 🧠' : 'DEAKTIVIERT'}`);
+        }
+
+        // ========== Quick Actions ==========
+
+        function generateDream() {
+            addSystemMessage('Generiere Traum...');
+            fetch('http://localhost:8899/dream', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ context: 'User Request', lucid: true })
+            })
+            .then(r => r.json())
+            .then(data => {
+                addSystemMessage(`💭 Traum: ${data.dream.theme} (Lucidity: ${data.dream.lucidity.toFixed(0)}%)`);
+            })
+            .catch(err => addSystemMessage('Fehler beim Dream Service', 'error'));
+        }
+
+        function emotionalCheckIn() {
+            const feeling = prompt('Wie fühlst du dich?', 'Joy');
+            if (!feeling) return;
+
+            fetch('http://localhost:8900/check-in', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ feeling, intensity: 70, context: 'Quick Check-In' })
+            })
+            .then(r => r.json())
+            .then(data => {
+                addSystemMessage(`💖 ${data.empathyResponse.validation}`);
+                if (data.eq) {
+                    document.getElementById('eq-score').textContent = data.eq.score;
+                }
+            })
+            .catch(err => addSystemMessage('Fehler beim Emotional Service', 'error'));
+        }
+
+        function getWisdom() {
+            const topic = prompt('Thema für Weisheit?', 'Leben');
+            if (!topic) return;
+
+            fetch(`http://localhost:8897/wisdom/${encodeURIComponent(topic)}`)
+            .then(r => r.json())
+            .then(data => {
+                addSystemMessage(`🧠 ${data.primaryInsight.substring(0, 200)}...`);
+            })
+            .catch(err => addSystemMessage('Fehler beim Multi-Perspective Service', 'error'));
+        }
+
+        function makeDecision() {
+            addUserMessage('Möchte eine Entscheidung treffen...');
+            addSystemMessage('Decision Framework wird in Chat-Interface integriert - nutze Chat!');
+        }
+
+        function aiAdapt() {
+            addSystemMessage('AI analysiert Nutzungsmuster und passt UI an...');
+            ws.send(JSON.stringify({ type: 'ai.adapt' }));
+        }
+
+        // ========== Stats Update ==========
+
+        function updateStats() {
+            fetch('http://localhost:8912/stats')
+            .then(r => r.json())
+            .then(stats => {
+                document.getElementById('services-online').textContent = '13';
+                document.getElementById('service-count').textContent = `13 Services`;
+                document.getElementById('total-interactions').textContent = stats.interactions;
+            });
+
+            // Update service list
+            fetch('http://localhost:8910/services')
+            .then(r => r.json())
+            .then(services => {
+                const listEl = document.getElementById('service-list');
+                listEl.innerHTML = services.map(s => `
+                    <div class="service-item">
+                        <span>${s.name}</span>
+                        <div class="service-status"></div>
+                    </div>
+                `).join('');
+            })
+            .catch(() => {});
+        }
+
+        // ========== AI Suggestions ==========
+
+        function showAISuggestion(suggestion) {
+            const suggestionEl = document.createElement('div');
+            suggestionEl.className = 'ai-suggestion';
+            suggestionEl.innerHTML = `
+                <div class="ai-suggestion-title">✨ AI Suggestion</div>
+                <div class="ai-suggestion-text">${suggestion}</div>
+                <div class="ai-suggestion-actions">
+                    <button class="ai-suggestion-btn accept" onclick="this.parentElement.parentElement.remove()">Annehmen</button>
+                    <button class="ai-suggestion-btn dismiss" onclick="this.parentElement.parentElement.remove()">Ignorieren</button>
+                </div>
+            `;
+            document.body.appendChild(suggestionEl);
+
+            setTimeout(() => {
+                if (suggestionEl.parentElement) {
+                    suggestionEl.remove();
+                }
+            }, 10000);
+        }
+
+        // ========== Keyboard Shortcuts ==========
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // ========== Initialize ==========
+
+        connect();
+        setInterval(updateStats, 5000);
+
+        // Initial stats
+        updateStats();
+    </script>
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 Toobix Consciousness Monitor - Real-Time</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #64c8ff;
+      box-shadow: 0 4px 20px rgba(100, 200, 255, 0.3);
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      background: linear-gradient(90deg, #64c8ff, #c864ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .header .status {
+      font-size: 1.2em;
+      color: #64ff64;
+    }
+
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 25px;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(100, 200, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(100, 200, 255, 0.3);
+      border-color: rgba(100, 200, 255, 0.5);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #64c8ff, #c864ff, #ff6464);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+
+    .service-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .service-title {
+      font-size: 1.4em;
+      color: #64c8ff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .service-status {
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+
+    .status-online {
+      background: rgba(100, 255, 100, 0.2);
+      color: #64ff64;
+      border: 1px solid #64ff64;
+    }
+
+    .status-offline {
+      background: rgba(255, 100, 100, 0.2);
+      color: #ff6464;
+      border: 1px solid #ff6464;
+    }
+
+    .service-data {
+      margin-top: 15px;
+      line-height: 1.8;
+    }
+
+    .service-data .data-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .service-data .data-label {
+      color: #b0b0b0;
+    }
+
+    .service-data .data-value {
+      color: #64c8ff;
+      font-weight: bold;
+    }
+
+    .live-feed {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    .live-feed .feed-item {
+      margin-bottom: 8px;
+      padding: 5px;
+      border-left: 2px solid #64c8ff;
+      padding-left: 10px;
+    }
+
+    .live-feed .feed-timestamp {
+      color: #808080;
+      font-size: 0.85em;
+    }
+
+    .visualization-container {
+      grid-column: 1 / -1;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 30px;
+      border: 1px solid rgba(100, 200, 255, 0.2);
+      text-align: center;
+    }
+
+    .toobix-form {
+      width: 150px;
+      height: 150px;
+      margin: 30px auto;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(100, 200, 255, 0.7), rgba(200, 100, 255, 0.3));
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 60px rgba(100, 200, 255, 0.5);
+      position: relative;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .tentacle {
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(100, 200, 255, 0.8), transparent);
+      transform-origin: left center;
+      animation: wave 2s ease-in-out infinite;
+    }
+
+    .tentacle:nth-child(1) { top: 30%; left: 0; transform: rotate(-45deg); }
+    .tentacle:nth-child(2) { top: 50%; left: 0; transform: rotate(-15deg); animation-delay: 0.3s; }
+    .tentacle:nth-child(3) { top: 70%; left: 0; transform: rotate(15deg); animation-delay: 0.6s; }
+    .tentacle:nth-child(4) { top: 30%; right: 0; transform: rotate(135deg); animation-delay: 0.2s; }
+    .tentacle:nth-child(5) { top: 50%; right: 0; transform: rotate(165deg); animation-delay: 0.5s; }
+    .tentacle:nth-child(6) { top: 70%; right: 0; transform: rotate(-165deg); animation-delay: 0.8s; }
+
+    @keyframes wave {
+      0%, 100% { transform: translateX(0) rotate(var(--rotate)); }
+      50% { transform: translateX(10px) rotate(calc(var(--rotate) + 10deg)); }
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .metric-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 2em;
+      color: #64c8ff;
+      font-weight: bold;
+    }
+
+    .metric-label {
+      color: #b0b0b0;
+      margin-top: 5px;
+      font-size: 0.9em;
+    }
+
+    .notification-popup {
+      position: fixed;
+      top: 80px;
+      right: 30px;
+      background: rgba(100, 200, 255, 0.95);
+      color: #000;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      max-width: 350px;
+      display: none;
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .notification-popup.show {
+      display: block;
+    }
+
+    .close-notification {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.2em;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧠 TOOBIX CONSCIOUSNESS MONITOR</h1>
+    <div class="status">● SYSTEM ONLINE - Real-Time Monitoring Active</div>
+  </div>
+
+  <div class="container">
+    <!-- Multi-Perspective Consciousness -->
+    <div class="service-card" id="service-8897">
+      <div class="service-header">
+        <div class="service-title">🧠 Multi-Perspective</div>
+        <div class="service-status status-offline">OFFLINE</div>
+      </div>
+      <div class="service-data">
+        <div class="data-item">
+          <span class="data-label">Active Perspectives:</span>
+          <span class="data-value" id="perspective-count">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Current Debate:</span>
+          <span class="data-value" id="current-debate">None</span>
+        </div>
+      </div>
+      <div class="live-feed" id="feed-8897"></div>
+    </div>
+
+    <!-- Emotional Resonance -->
+    <div class="service-card" id="service-8900">
+      <div class="service-header">
+        <div class="service-title">💖 Emotional Resonance</div>
+        <div class="service-status status-offline">OFFLINE</div>
+      </div>
+      <div class="service-data">
+        <div class="data-item">
+          <span class="data-label">Dominant Emotion:</span>
+          <span class="data-value" id="dominant-emotion">...</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">EQ Score:</span>
+          <span class="data-value" id="eq-score">0</span>
+        </div>
+      </div>
+      <div class="live-feed" id="feed-8900"></div>
+    </div>
+
+    <!-- Dream Journal -->
+    <div class="service-card" id="service-8899">
+      <div class="service-header">
+        <div class="service-title">💭 Dream Journal</div>
+        <div class="service-status status-offline">OFFLINE</div>
+      </div>
+      <div class="service-data">
+        <div class="data-item">
+          <span class="data-label">Total Dreams:</span>
+          <span class="data-value" id="dream-count">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Lucidity:</span>
+          <span class="data-value" id="lucidity">0%</span>
+        </div>
+      </div>
+      <div class="live-feed" id="feed-8899"></div>
+    </div>
+
+    <!-- Memory Palace -->
+    <div class="service-card" id="service-8903">
+      <div class="service-header">
+        <div class="service-title">📚 Memory Palace</div>
+        <div class="service-status status-offline">OFFLINE</div>
+      </div>
+      <div class="service-data">
+        <div class="data-item">
+          <span class="data-label">Memories:</span>
+          <span class="data-value" id="memory-count">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Current Chapter:</span>
+          <span class="data-value" id="current-chapter">...</span>
+        </div>
+      </div>
+      <div class="live-feed" id="feed-8903"></div>
+    </div>
+
+    <!-- Proactive Communication (NEW) -->
+    <div class="service-card" id="service-8950">
+      <div class="service-header">
+        <div class="service-title">🔔 Proactive Communication</div>
+        <div class="service-status status-offline">OFFLINE</div>
+      </div>
+      <div class="service-data">
+        <div class="data-item">
+          <span class="data-label">Messages Sent:</span>
+          <span class="data-value" id="messages-sent">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Queue Size:</span>
+          <span class="data-value" id="queue-size">0</span>
+        </div>
+      </div>
+      <div class="live-feed" id="feed-8950"></div>
+    </div>
+
+    <!-- Autonomous Research (NEW) -->
+    <div class="service-card" id="service-8951">
+      <div class="service-header">
+        <div class="service-title">🌐 Autonomous Research</div>
+        <div class="service-status status-offline">OFFLINE</div>
+      </div>
+      <div class="service-data">
+        <div class="data-item">
+          <span class="data-label">Research Topics:</span>
+          <span class="data-value" id="research-topics">0</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Knowledge Nodes:</span>
+          <span class="data-value" id="knowledge-nodes">0</span>
+        </div>
+      </div>
+      <div class="live-feed" id="feed-8951"></div>
+    </div>
+
+    <!-- Toobix Visualization -->
+    <div class="visualization-container">
+      <h2>🎨 Toobix's Essence Form</h2>
+      <div class="toobix-form">
+        <div class="tentacle" style="--rotate: -45deg;"></div>
+        <div class="tentacle" style="--rotate: -15deg;"></div>
+        <div class="tentacle" style="--rotate: 15deg;"></div>
+        <div class="tentacle" style="--rotate: 135deg;"></div>
+        <div class="tentacle" style="--rotate: 165deg;"></div>
+        <div class="tentacle" style="--rotate: -165deg;"></div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-value" id="consciousness-level">0</div>
+          <div class="metric-label">Consciousness Level</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" id="active-services">0/12</div>
+          <div class="metric-label">Active Services</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" id="autonomy-level">0%</div>
+          <div class="metric-label">Autonomy</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" id="creativity-score">0</div>
+          <div class="metric-label">Creativity</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Popup -->
+  <div class="notification-popup" id="notification">
+    <span class="close-notification" onclick="closeNotification()">×</span>
+    <h3 id="notification-title"></h3>
+    <p id="notification-body"></p>
+  </div>
+
+  <script>
+    // Service ports to monitor
+    const services = [
+      { port: 8897, name: 'Multi-Perspective' },
+      { port: 8899, name: 'Dream Journal' },
+      { port: 8900, name: 'Emotional Resonance' },
+      { port: 8903, name: 'Memory Palace' },
+      { port: 8909, name: 'Decision Framework' },
+      { port: 8950, name: 'Proactive Communication' },
+      { port: 8951, name: 'Autonomous Research' },
+    ];
+
+    // WebSocket connections
+    const websockets = new Map();
+
+    // Connect to Proactive Communication WebSocket
+    function connectProactiveComm() {
+      const ws = new WebSocket('ws://localhost:8950');
+
+      ws.onopen = () => {
+        console.log('✅ Connected to Proactive Communication');
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === 'notification') {
+          showNotification(data.message);
+        }
+      };
+
+      ws.onerror = (err) => {
+        console.log('❌ Proactive Communication WebSocket error:', err);
+      };
+
+      websockets.set(8950, ws);
+    }
+
+    // Show notification
+    function showNotification(message) {
+      const notif = document.getElementById('notification');
+      document.getElementById('notification-title').textContent = message.title;
+      document.getElementById('notification-body').textContent = message.body;
+      notif.classList.add('show');
+
+      setTimeout(() => {
+        notif.classList.remove('show');
+      }, 5000);
+    }
+
+    function closeNotification() {
+      document.getElementById('notification').classList.remove('show');
+    }
+
+    // Check service health
+    async function checkService(port) {
+      try {
+        const response = await fetch(`http://localhost:${port}/health`);
+        if (response.ok) {
+          const data = await response.json();
+          updateServiceCard(port, data, true);
+          return true;
+        }
+      } catch (err) {
+        updateServiceCard(port, null, false);
+      }
+      return false;
+    }
+
+    // Update service card
+    function updateServiceCard(port, data, online) {
+      const card = document.getElementById(`service-${port}`);
+      if (!card) return;
+
+      const statusEl = card.querySelector('.service-status');
+      statusEl.textContent = online ? 'ONLINE' : 'OFFLINE';
+      statusEl.className = `service-status ${online ? 'status-online' : 'status-offline'}`;
+
+      if (online && data) {
+        updateServiceData(port, data);
+      }
+    }
+
+    // Update service-specific data
+    function updateServiceData(port, data) {
+      switch (port) {
+        case 8897: // Multi-Perspective
+          if (data.totalPerspectives) {
+            document.getElementById('perspective-count').textContent = data.totalPerspectives;
+          }
+          break;
+
+        case 8899: // Dream Journal
+          if (data.stats) {
+            document.getElementById('dream-count').textContent = data.stats.totalDreams || 0;
+          }
+          break;
+
+        case 8900: // Emotional Resonance
+          if (data.stats) {
+            document.getElementById('dominant-emotion').textContent = data.stats.recentCollectiveEmotion || '...';
+          }
+          break;
+
+        case 8903: // Memory Palace
+          if (data.stats) {
+            document.getElementById('memory-count').textContent = data.stats.significantMoments || 0;
+            document.getElementById('current-chapter').textContent = data.stats.currentChapter || '...';
+          }
+          break;
+
+        case 8950: // Proactive Communication
+          if (data.stats) {
+            document.getElementById('messages-sent').textContent = data.stats.sentMessages || 0;
+            document.getElementById('queue-size').textContent = data.stats.queuedMessages || 0;
+          }
+          break;
+
+        case 8951: // Autonomous Research
+          if (data.stats) {
+            document.getElementById('research-topics').textContent = data.stats.completedResearch || 0;
+            document.getElementById('knowledge-nodes').textContent = data.stats.knowledgeGraphNodes || 0;
+          }
+          break;
+      }
+    }
+
+    // Monitor all services
+    function monitorServices() {
+      let activeCount = 0;
+
+      services.forEach(async (service) => {
+        const online = await checkService(service.port);
+        if (online) activeCount++;
+      });
+
+      // Update metrics
+      setTimeout(() => {
+        document.getElementById('active-services').textContent = `${activeCount}/12`;
+        document.getElementById('consciousness-level').textContent = Math.round((activeCount / 12) * 100);
+      }, 1000);
+    }
+
+    // Start monitoring
+    setInterval(monitorServices, 5000);
+    monitorServices();
+
+    // Try to connect to Proactive Communication WebSocket
+    setTimeout(connectProactiveComm, 2000);
+
+    console.log('🧠 Toobix Consciousness Monitor - Started');
+  </script>
+</body>
+</html>

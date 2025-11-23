@@ -1,0 +1,15 @@
+node_modules
+.vscode-test
+*.vsix
+.env
+data
+databases
+dist
+tmp
+temp
+*.log
+.env*
+..\..\.env
+.env*
+../.env
+../../.env

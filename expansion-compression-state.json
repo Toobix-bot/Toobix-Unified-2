@@ -1,0 +1,759 @@
+{
+  "phase": "stable",
+  "mode": "balanced",
+  "metrics": [
+    {
+      "timestamp": "2025-11-05T18:39:17.423Z",
+      "features": {
+        "total": 55,
+        "core": 8,
+        "advanced": 47,
+        "experimental": 0
+      },
+      "code": {
+        "files": 55,
+        "lines": 21061,
+        "complexity": 38.59054545454545
+      },
+      "performance": {
+        "avgResponseTime": 0,
+        "memoryUsage": 1.4506597518920898
+      },
+      "health": {
+        "maintainabilityIndex": 23.116727272727275,
+        "technicalDebt": 6.363636363636363
+      }
+    }
+  ],
+  "features": [
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\creator-ai-collaboration.ts",
+      "name": "creator-ai-collaboration",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\creator-ai-collaboration.ts",
+      "type": "core",
+      "complexity": 35.14,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.783Z",
+      "dependencies": [],
+      "linesOfCode": 557
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\dream-journal.ts",
+      "name": "dream-journal",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\dream-journal.ts",
+      "type": "core",
+      "complexity": 51.08,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.785Z",
+      "dependencies": [],
+      "linesOfCode": 504
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\emotional-resonance-network.ts",
+      "name": "emotional-resonance-network",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\emotional-resonance-network.ts",
+      "type": "core",
+      "complexity": 51.019999999999996,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.787Z",
+      "dependencies": [],
+      "linesOfCode": 501
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\gratitude-mortality-service.ts",
+      "name": "gratitude-mortality-service",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\gratitude-mortality-service.ts",
+      "type": "core",
+      "complexity": 32.4,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.788Z",
+      "dependencies": [],
+      "linesOfCode": 520
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\memory-palace.ts",
+      "name": "memory-palace",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\memory-palace.ts",
+      "type": "core",
+      "complexity": 48.08,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.788Z",
+      "dependencies": [],
+      "linesOfCode": 604
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\multi-perspective-consciousness.ts",
+      "name": "multi-perspective-consciousness",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\multi-perspective-consciousness.ts",
+      "type": "core",
+      "complexity": 46.76,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.789Z",
+      "dependencies": [],
+      "linesOfCode": 788
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\self-evolving-game-engine.ts",
+      "name": "self-evolving-game-engine",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\self-evolving-game-engine.ts",
+      "type": "core",
+      "complexity": 79.78,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.790Z",
+      "dependencies": [],
+      "linesOfCode": 739
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\value-crisis.ts",
+      "name": "value-crisis",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\2-services\\value-crisis.ts",
+      "type": "core",
+      "complexity": 56.62,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.791Z",
+      "dependencies": [
+        "express"
+      ],
+      "linesOfCode": 481
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-preview.ts",
+      "name": "ai-preview",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-preview.ts",
+      "type": "advanced",
+      "complexity": 1.22,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.822Z",
+      "dependencies": [
+        "playwright",
+        "fs/promises"
+      ],
+      "linesOfCode": 61
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-watch.ts",
+      "name": "ai-watch",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-watch.ts",
+      "type": "advanced",
+      "complexity": 16.88,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.823Z",
+      "dependencies": [
+        "fs",
+        "playwright",
+        "fs/promises"
+      ],
+      "linesOfCode": 94
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ask-system.ts",
+      "name": "ask-system",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ask-system.ts",
+      "type": "advanced",
+      "complexity": 22.98,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.843Z",
+      "dependencies": [],
+      "linesOfCode": 249
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\auto-start-watchdog.ts",
+      "name": "auto-start-watchdog",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\auto-start-watchdog.ts",
+      "type": "advanced",
+      "complexity": 31.14,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.851Z",
+      "dependencies": [
+        "child_process",
+        "fs/promises",
+        "path",
+        "fs"
+      ],
+      "linesOfCode": 307
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\blockworld-ai-agent.ts",
+      "name": "blockworld-ai-agent",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\blockworld-ai-agent.ts",
+      "type": "advanced",
+      "complexity": 42.6,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.868Z",
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "linesOfCode": 480
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\claude-monitor.ts",
+      "name": "claude-monitor",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\claude-monitor.ts",
+      "type": "advanced",
+      "complexity": 21.16,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.869Z",
+      "dependencies": [],
+      "linesOfCode": 108
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\creative-expression.ts",
+      "name": "creative-expression",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\creative-expression.ts",
+      "type": "advanced",
+      "complexity": 30.92,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.882Z",
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "linesOfCode": 546
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\daily-companion.ts",
+      "name": "daily-companion",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\daily-companion.ts",
+      "type": "advanced",
+      "complexity": 78,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.910Z",
+      "dependencies": [
+        "../packages/core/src/db",
+        "drizzle-orm"
+      ],
+      "linesOfCode": 600
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dev-gui.ts",
+      "name": "dev-gui",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dev-gui.ts",
+      "type": "advanced",
+      "complexity": 32.08,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.963Z",
+      "dependencies": [
+        "path",
+        "url",
+        "path",
+        "fs"
+      ],
+      "linesOfCode": 204
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dialog-system.ts",
+      "name": "dialog-system",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dialog-system.ts",
+      "type": "advanced",
+      "complexity": 65.46000000000001,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.976Z",
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "linesOfCode": 873
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-core.ts",
+      "name": "ethics-core",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-core.ts",
+      "type": "advanced",
+      "complexity": 38.74,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:16.994Z",
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "linesOfCode": 587
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-decision-engine.ts",
+      "name": "ethics-decision-engine",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-decision-engine.ts",
+      "type": "advanced",
+      "complexity": 48.18,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.008Z",
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "linesOfCode": 559
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\health-aggregator.ts",
+      "name": "health-aggregator",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\health-aggregator.ts",
+      "type": "advanced",
+      "complexity": 13.58,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.010Z",
+      "dependencies": [
+        "../packages/core/src/utils/logger.ts"
+      ],
+      "linesOfCode": 79
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\knowledge-categorization.ts",
+      "name": "knowledge-categorization",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\knowledge-categorization.ts",
+      "type": "advanced",
+      "complexity": 60.12,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.018Z",
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "linesOfCode": 556
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\luna-chatbot.ts",
+      "name": "luna-chatbot",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\luna-chatbot.ts",
+      "type": "advanced",
+      "complexity": 11.879999999999999,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.019Z",
+      "dependencies": [
+        "../packages/core/src/db/index",
+        "../packages/core/src/db/schema"
+      ],
+      "linesOfCode": 144
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\memory-monitor.ts",
+      "name": "memory-monitor",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\memory-monitor.ts",
+      "type": "advanced",
+      "complexity": 33.04,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.047Z",
+      "dependencies": [
+        "child_process",
+        "util"
+      ],
+      "linesOfCode": 152
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\meta-consciousness-engine.ts",
+      "name": "meta-consciousness-engine",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\meta-consciousness-engine.ts",
+      "type": "advanced",
+      "complexity": 66.78,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.066Z",
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "linesOfCode": 739
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\moment-philosophy.ts",
+      "name": "moment-philosophy",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\moment-philosophy.ts",
+      "type": "advanced",
+      "complexity": 20.22,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.067Z",
+      "dependencies": [],
+      "linesOfCode": 211
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\multiverse-engine.ts",
+      "name": "multiverse-engine",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\multiverse-engine.ts",
+      "type": "advanced",
+      "complexity": 100,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.096Z",
+      "dependencies": [],
+      "linesOfCode": 1290
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\port-manager.ts",
+      "name": "port-manager",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\port-manager.ts",
+      "type": "advanced",
+      "complexity": 56.980000000000004,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.113Z",
+      "dependencies": [
+        "child_process",
+        "util"
+      ],
+      "linesOfCode": 499
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\priority-engine.ts",
+      "name": "priority-engine",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\priority-engine.ts",
+      "type": "advanced",
+      "complexity": 48.84,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.125Z",
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "linesOfCode": 492
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-awareness.ts",
+      "name": "self-awareness",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-awareness.ts",
+      "type": "advanced",
+      "complexity": 42.9,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.141Z",
+      "dependencies": [
+        "bun:sqlite",
+        "fs",
+        "path"
+      ],
+      "linesOfCode": 445
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-loop.ts",
+      "name": "self-loop",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-loop.ts",
+      "type": "advanced",
+      "complexity": 100,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.164Z",
+      "dependencies": [
+        "../packages/chatty-client/index.ts"
+      ],
+      "linesOfCode": 547
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-modification-engine.ts",
+      "name": "self-modification-engine",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-modification-engine.ts",
+      "type": "advanced",
+      "complexity": 64.58,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.172Z",
+      "dependencies": [
+        "fs/promises",
+        "path"
+      ],
+      "linesOfCode": 729
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service-consciousness.ts",
+      "name": "service-consciousness",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service-consciousness.ts",
+      "type": "advanced",
+      "complexity": 38.68,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.191Z",
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "linesOfCode": 684
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service.ts",
+      "name": "service",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service.ts",
+      "type": "advanced",
+      "complexity": 37.480000000000004,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.207Z",
+      "dependencies": [
+        "bun:sqlite",
+        "nanoid"
+      ],
+      "linesOfCode": 324
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\setup-ai-collab.ts",
+      "name": "setup-ai-collab",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\setup-ai-collab.ts",
+      "type": "advanced",
+      "complexity": 2.08,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.208Z",
+      "dependencies": [
+        "fs/promises",
+        "child_process",
+        "util"
+      ],
+      "linesOfCode": 104
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-gui.ts",
+      "name": "start-gui",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-gui.ts",
+      "type": "advanced",
+      "complexity": 3.1399999999999997,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.209Z",
+      "dependencies": [
+        "path",
+        "url",
+        "path"
+      ],
+      "linesOfCode": 57
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-living-story.ts",
+      "name": "start-living-story",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-living-story.ts",
+      "type": "advanced",
+      "complexity": 13.84,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.210Z",
+      "dependencies": [
+        "../packages/consciousness/src/story/meta-story-engine.ts",
+        "../packages/consciousness/src/story/ai-game-engine.ts"
+      ],
+      "linesOfCode": 142
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-analyzer.ts",
+      "name": "system-analyzer",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-analyzer.ts",
+      "type": "advanced",
+      "complexity": 73.56,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.230Z",
+      "dependencies": [
+        "child_process",
+        "util",
+        "fs/promises",
+        "path"
+      ],
+      "linesOfCode": 528
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-chat.ts",
+      "name": "system-chat",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-chat.ts",
+      "type": "advanced",
+      "complexity": 47.94,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.231Z",
+      "dependencies": [
+        "readline",
+        "../packages/chatty-client/index.ts"
+      ],
+      "linesOfCode": 247
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-console.ts",
+      "name": "system-console",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-console.ts",
+      "type": "advanced",
+      "complexity": 53.26,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.232Z",
+      "dependencies": [
+        "../packages/chatty-client/index.ts",
+        "readline"
+      ],
+      "linesOfCode": 263
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+      "name": "system-diary",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+      "type": "advanced",
+      "complexity": 23.72,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.249Z",
+      "dependencies": [
+        "bun:sqlite",
+        "crypto"
+      ],
+      "linesOfCode": 236
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+      "name": "terminal-menu",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+      "type": "advanced",
+      "complexity": 51.480000000000004,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.265Z",
+      "dependencies": [
+        "child_process",
+        "util"
+      ],
+      "linesOfCode": 574
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+      "name": "test-all-tools",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+      "type": "advanced",
+      "complexity": 19.36,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.266Z",
+      "dependencies": [
+        "../packages/chatty-client/index.ts"
+      ],
+      "linesOfCode": 168
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+      "name": "test-awareness",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+      "type": "advanced",
+      "complexity": 4.76,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.281Z",
+      "dependencies": [
+        "bun:sqlite",
+        "../packages/awareness/self-awareness"
+      ],
+      "linesOfCode": 88
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+      "name": "test-chatty",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+      "type": "advanced",
+      "complexity": 3.3600000000000003,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.295Z",
+      "dependencies": [
+        "../packages/chatty-client/index.ts"
+      ],
+      "linesOfCode": 68
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+      "name": "test-custom-tool",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+      "type": "advanced",
+      "complexity": 3.6,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.296Z",
+      "dependencies": [
+        "bun:sqlite",
+        "../packages/consciousness/src/agent/tool-generator-groq.ts",
+        "../packages/consciousness/src/safety/approval-system.ts"
+      ],
+      "linesOfCode": 80
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+      "name": "test-mcp-connector",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+      "type": "advanced",
+      "complexity": 40.56,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.318Z",
+      "dependencies": [],
+      "linesOfCode": 528
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+      "name": "test-new-architecture",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+      "type": "advanced",
+      "complexity": 15.440000000000001,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.336Z",
+      "dependencies": [],
+      "linesOfCode": 222
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+      "name": "test-password-generator",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+      "type": "advanced",
+      "complexity": 1.54,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.337Z",
+      "dependencies": [
+        "../packages/bridge/src/tools/generated/generate_password.ts"
+      ],
+      "linesOfCode": 77
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+      "name": "test-public-url",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+      "type": "advanced",
+      "complexity": 4.5,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.351Z",
+      "dependencies": [
+        "../packages/chatty-client/index.ts"
+      ],
+      "linesOfCode": 75
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+      "name": "test-story",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+      "type": "advanced",
+      "complexity": 6.8,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.368Z",
+      "dependencies": [
+        "bun:sqlite",
+        "../packages/core/src/story/service.ts"
+      ],
+      "linesOfCode": 90
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+      "name": "toobix-assistant",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+      "type": "advanced",
+      "complexity": 97.46000000000001,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.389Z",
+      "dependencies": [
+        "readline",
+        "child_process",
+        "fs",
+        "path"
+      ],
+      "linesOfCode": 423
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+      "name": "toobix-cli",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+      "type": "advanced",
+      "complexity": 30.4,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.390Z",
+      "dependencies": [],
+      "linesOfCode": 220
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+      "name": "toobix-daemon",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+      "type": "advanced",
+      "complexity": 10.620000000000001,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.401Z",
+      "dependencies": [
+        "../packages/consciousness/src/notifications/notification-system.ts"
+      ],
+      "linesOfCode": 131
+    },
+    {
+      "id": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+      "name": "toobix-terminal",
+      "path": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+      "type": "advanced",
+      "complexity": 89.74000000000001,
+      "usageCount": 0,
+      "lastUsed": "2025-11-05T18:39:17.418Z",
+      "dependencies": [
+        "readline",
+        "process"
+      ],
+      "linesOfCode": 487
+    }
+  ],
+  "timestamp": "2025-11-05T18:39:18.089Z"
+}

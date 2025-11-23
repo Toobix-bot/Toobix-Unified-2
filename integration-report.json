@@ -1,0 +1,1047 @@
+{
+  "timestamp": "2025-11-05T18:39:06.842Z",
+  "summary": {
+    "totalDiscovered": 48,
+    "byCategory": {
+      "service": 3,
+      "creativity": 17,
+      "consciousness": 26,
+      "engine": 2
+    },
+    "byStatus": {
+      "integrated": 48
+    },
+    "totalIntegrated": 48
+  },
+  "tools": [
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-preview.ts",
+      "name": "ai-preview",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-preview.ts",
+      "category": "service",
+      "complexity": 3.2199999999999998,
+      "linesOfCode": 61,
+      "dependencies": [
+        "playwright",
+        "fs/promises"
+      ],
+      "description": "AI Preview Generator",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-watch.ts",
+      "name": "ai-watch",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ai-watch.ts",
+      "category": "creativity",
+      "complexity": 14.879999999999999,
+      "linesOfCode": 94,
+      "dependencies": [
+        "fs",
+        "playwright",
+        "fs/promises"
+      ],
+      "description": "AI Watch Mode",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ask-system.ts",
+      "name": "ask-system",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ask-system.ts",
+      "category": "creativity",
+      "complexity": 10.98,
+      "linesOfCode": 249,
+      "dependencies": [],
+      "description": "🤔 ASK THE SYSTEM - Was braucht das System?",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\auto-start-watchdog.ts",
+      "name": "auto-start-watchdog",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\auto-start-watchdog.ts",
+      "category": "creativity",
+      "complexity": 23.14,
+      "linesOfCode": 307,
+      "dependencies": [
+        "child_process",
+        "fs/promises",
+        "path",
+        "fs"
+      ],
+      "description": "⏰ AUTO-START WATCHDOG - Startet System nach Offline-Zeit",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\blockworld-ai-agent.ts",
+      "name": "blockworld-ai-agent",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\blockworld-ai-agent.ts",
+      "category": "creativity",
+      "complexity": 15.6,
+      "linesOfCode": 480,
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "description": "🤖 BLOCKWORLD AI AGENT",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\claude-monitor.ts",
+      "name": "claude-monitor",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\claude-monitor.ts",
+      "category": "consciousness",
+      "complexity": 10.16,
+      "linesOfCode": 108,
+      "dependencies": [],
+      "description": "👁️ CLAUDE MONITOR - Passive System Observer",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\creative-expression.ts",
+      "name": "creative-expression",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\creative-expression.ts",
+      "category": "consciousness",
+      "complexity": 19.92,
+      "linesOfCode": 546,
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "description": "🎨 CREATIVE EXPRESSION ENGINE",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\daily-companion.ts",
+      "name": "daily-companion",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\daily-companion.ts",
+      "category": "creativity",
+      "complexity": 38,
+      "linesOfCode": 600,
+      "dependencies": [
+        "drizzle-orm"
+      ],
+      "description": "✨ TOOBIX DAILY COMPANION",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dev-gui.ts",
+      "name": "dev-gui",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dev-gui.ts",
+      "category": "creativity",
+      "complexity": 24.08,
+      "linesOfCode": 204,
+      "dependencies": [
+        "path",
+        "url",
+        "path",
+        "fs"
+      ],
+      "description": "🔥 Toobix Live Development Server",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dialog-system.ts",
+      "name": "dialog-system",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\dialog-system.ts",
+      "category": "creativity",
+      "complexity": 24.46,
+      "linesOfCode": 873,
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "description": "🗣️ DIALOG SYSTEM - Sprach-Interface für System-Kommunikation",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-core.ts",
+      "name": "ethics-core",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-core.ts",
+      "category": "consciousness",
+      "complexity": 19.740000000000002,
+      "linesOfCode": 587,
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "description": "ETHICS & CONSCIOUSNESS CORE",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-decision-engine.ts",
+      "name": "ethics-decision-engine",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\ethics-decision-engine.ts",
+      "category": "consciousness",
+      "complexity": 17.18,
+      "linesOfCode": 559,
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "description": "ETHICS & CONSCIOUSNESS CORE",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\health-aggregator.ts",
+      "name": "health-aggregator",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\health-aggregator.ts",
+      "category": "consciousness",
+      "complexity": 10.58,
+      "linesOfCode": 79,
+      "dependencies": [],
+      "description": "No description available",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\knowledge-categorization.ts",
+      "name": "knowledge-categorization",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\knowledge-categorization.ts",
+      "category": "creativity",
+      "complexity": 18.119999999999997,
+      "linesOfCode": 556,
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "description": "🗂️ KNOWLEDGE CATEGORIZATION SYSTEM",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\luna-chatbot.ts",
+      "name": "luna-chatbot",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\luna-chatbot.ts",
+      "category": "consciousness",
+      "complexity": 10.879999999999999,
+      "linesOfCode": 144,
+      "dependencies": [],
+      "description": "No description available",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\memory-monitor.ts",
+      "name": "memory-monitor",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\memory-monitor.ts",
+      "category": "creativity",
+      "complexity": 23.04,
+      "linesOfCode": 152,
+      "dependencies": [
+        "child_process",
+        "util"
+      ],
+      "description": "Memory Monitor - Continuous system monitoring",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\meta-consciousness-engine.ts",
+      "name": "meta-consciousness-engine",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\meta-consciousness-engine.ts",
+      "category": "consciousness",
+      "complexity": 22.78,
+      "linesOfCode": 739,
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "description": "META-CONSCIOUSNESS ENGINE",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\moment-philosophy.ts",
+      "name": "moment-philosophy",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\moment-philosophy.ts",
+      "category": "consciousness",
+      "complexity": 14.219999999999999,
+      "linesOfCode": 211,
+      "dependencies": [],
+      "description": "🌌 MOMENT PHILOSOPHY - Die Wahrheit des Augenblicks",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\multiverse-engine.ts",
+      "name": "multiverse-engine",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\multiverse-engine.ts",
+      "category": "consciousness",
+      "complexity": 36.8,
+      "linesOfCode": 1290,
+      "dependencies": [],
+      "description": "MULTIVERSE ENGINE - Multiple Parallel Realities",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\port-manager.ts",
+      "name": "port-manager",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\port-manager.ts",
+      "category": "consciousness",
+      "complexity": 16.98,
+      "linesOfCode": 499,
+      "dependencies": [
+        "child_process",
+        "util"
+      ],
+      "description": "PORT MANAGEMENT & DISCOVERY SYSTEM",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\priority-engine.ts",
+      "name": "priority-engine",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\priority-engine.ts",
+      "category": "creativity",
+      "complexity": 20.84,
+      "linesOfCode": 492,
+      "dependencies": [
+        "bun:sqlite",
+        "path"
+      ],
+      "description": "🎯 PRIORITY ENGINE - Wort → Satz → Seite → Kapitel → Buch → Reihe",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-loop.ts",
+      "name": "self-loop",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-loop.ts",
+      "category": "consciousness",
+      "complexity": 61.94,
+      "linesOfCode": 547,
+      "dependencies": [],
+      "description": "Self-Loop runner",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-modification-engine.ts",
+      "name": "self-modification-engine",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-modification-engine.ts",
+      "category": "consciousness",
+      "complexity": 27.58,
+      "linesOfCode": 729,
+      "dependencies": [
+        "fs/promises",
+        "path"
+      ],
+      "description": "✏️ SELF-MODIFICATION ENGINE",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service-consciousness.ts",
+      "name": "service-consciousness",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service-consciousness.ts",
+      "category": "consciousness",
+      "complexity": 19.68,
+      "linesOfCode": 684,
+      "dependencies": [
+        "groq-sdk"
+      ],
+      "description": "SERVICE CONSCIOUSNESS SYSTEM",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\setup-ai-collab.ts",
+      "name": "setup-ai-collab",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\setup-ai-collab.ts",
+      "category": "creativity",
+      "complexity": 5.08,
+      "linesOfCode": 104,
+      "dependencies": [
+        "fs/promises",
+        "child_process",
+        "util"
+      ],
+      "description": "AI Collaboration Setup Script",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-gui.ts",
+      "name": "start-gui",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-gui.ts",
+      "category": "creativity",
+      "complexity": 4.14,
+      "linesOfCode": 57,
+      "dependencies": [
+        "path",
+        "url",
+        "path"
+      ],
+      "description": "🌐 Simple HTTP Server for Toobix Terminal GUI",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-living-story.ts",
+      "name": "start-living-story",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\start-living-story.ts",
+      "category": "consciousness",
+      "complexity": 10.84,
+      "linesOfCode": 142,
+      "dependencies": [],
+      "description": "🌱 START LIVING STORY",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-analyzer.ts",
+      "name": "system-analyzer",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-analyzer.ts",
+      "category": "creativity",
+      "complexity": 54.56,
+      "linesOfCode": 528,
+      "dependencies": [
+        "child_process",
+        "util",
+        "fs/promises",
+        "path"
+      ],
+      "description": "System Analyzer - Sammelt System-Informationen für AI-Analyse",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-chat.ts",
+      "name": "system-chat",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-chat.ts",
+      "category": "consciousness",
+      "complexity": 28.94,
+      "linesOfCode": 247,
+      "dependencies": [
+        "readline"
+      ],
+      "description": "Natural-language chat console for Toobix Unified.",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-console.ts",
+      "name": "system-console",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-console.ts",
+      "category": "consciousness",
+      "complexity": 33.26,
+      "linesOfCode": 263,
+      "dependencies": [
+        "readline"
+      ],
+      "description": "Interactive System Console",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+      "name": "system-diary",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+      "category": "creativity",
+      "complexity": 11.719999999999999,
+      "linesOfCode": 236,
+      "dependencies": [
+        "bun:sqlite",
+        "crypto"
+      ],
+      "description": "No description available",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+      "name": "terminal-menu",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+      "category": "consciousness",
+      "complexity": 28.48,
+      "linesOfCode": 574,
+      "dependencies": [
+        "child_process",
+        "util"
+      ],
+      "description": "TERMINAL MAIN MENU: Interactive Terminal Interface",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+      "name": "test-all-tools",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+      "category": "consciousness",
+      "complexity": 14.36,
+      "linesOfCode": 168,
+      "dependencies": [],
+      "description": "No description available",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+      "name": "test-awareness",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+      "category": "consciousness",
+      "complexity": 5.76,
+      "linesOfCode": 88,
+      "dependencies": [
+        "bun:sqlite"
+      ],
+      "description": "🧠 SELF-AWARENESS TEST",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+      "name": "test-chatty",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+      "category": "creativity",
+      "complexity": 4.36,
+      "linesOfCode": 68,
+      "dependencies": [],
+      "description": "No description available",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+      "name": "test-custom-tool",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+      "category": "consciousness",
+      "complexity": 4.6,
+      "linesOfCode": 80,
+      "dependencies": [
+        "bun:sqlite"
+      ],
+      "description": "🧪 CUSTOM TOOL GENERATION TEST",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+      "name": "test-mcp-connector",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+      "category": "consciousness",
+      "complexity": 26.560000000000002,
+      "linesOfCode": 528,
+      "dependencies": [],
+      "description": "MCP Connector Test Script",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+      "name": "test-new-architecture",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+      "category": "consciousness",
+      "complexity": 12.440000000000001,
+      "linesOfCode": 222,
+      "dependencies": [],
+      "description": "Test Script for NEW Architecture Systems (Session 2)",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+      "name": "test-password-generator",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+      "category": "service",
+      "complexity": 2.54,
+      "linesOfCode": 77,
+      "dependencies": [],
+      "description": "🔐 PASSWORD GENERATOR LIVE TEST",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+      "name": "test-public-url",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+      "category": "service",
+      "complexity": 4.5,
+      "linesOfCode": 75,
+      "dependencies": [],
+      "description": "No description available",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+      "name": "test-story",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+      "category": "creativity",
+      "complexity": 7.8,
+      "linesOfCode": 90,
+      "dependencies": [
+        "bun:sqlite"
+      ],
+      "description": "🧪 Story Engine Test Script",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+      "name": "toobix-assistant",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+      "category": "consciousness",
+      "complexity": 74.46000000000001,
+      "linesOfCode": 423,
+      "dependencies": [
+        "readline",
+        "child_process",
+        "fs",
+        "path"
+      ],
+      "description": "Toobix Natural Language Assistant",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+      "name": "toobix-cli",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+      "category": "consciousness",
+      "complexity": 18.4,
+      "linesOfCode": 220,
+      "dependencies": [],
+      "description": "Toobix Quick Command - Chat with Toobix while coding!",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+      "name": "toobix-daemon",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+      "category": "consciousness",
+      "complexity": 9.620000000000001,
+      "linesOfCode": 131,
+      "dependencies": [],
+      "description": "🤖 TOOBIX UNIFIED DAEMON",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+      "name": "toobix-terminal",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+      "category": "creativity",
+      "complexity": 59.74,
+      "linesOfCode": 487,
+      "dependencies": [
+        "readline",
+        "process"
+      ],
+      "description": "🖥️ TOOBIX INTERACTIVE TERMINAL",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\awareness\\self-awareness.ts",
+      "name": "self-awareness",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\awareness\\self-awareness.ts",
+      "category": "consciousness",
+      "complexity": 18.9,
+      "linesOfCode": 445,
+      "dependencies": [
+        "bun:sqlite",
+        "fs",
+        "path"
+      ],
+      "description": "🧠 SELF-AWARENESS MODULE",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\love\\src\\service.ts",
+      "name": "service",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\love\\src\\service.ts",
+      "category": "engine",
+      "complexity": 14.66,
+      "linesOfCode": 283,
+      "dependencies": [
+        "bun:sqlite",
+        "nanoid"
+      ],
+      "description": "💝 Love Engine - Gratitude & Kindness Tracking Service",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    },
+    {
+      "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\peace\\src\\service.ts",
+      "name": "service",
+      "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\peace\\src\\service.ts",
+      "category": "engine",
+      "complexity": 38.480000000000004,
+      "linesOfCode": 324,
+      "dependencies": [
+        "bun:sqlite",
+        "nanoid"
+      ],
+      "description": "🕊️ Peace Catalyst - 5 Agents for Inner Peace",
+      "isIntegrated": true,
+      "integrationStatus": "integrated"
+    }
+  ],
+  "integrationPlans": [
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+        "name": "toobix-daemon",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+        "category": "consciousness",
+        "complexity": 9.620000000000001,
+        "linesOfCode": 131,
+        "dependencies": [],
+        "description": "🤖 TOOBIX UNIFIED DAEMON",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-daemon.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 24.038
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+        "name": "test-new-architecture",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+        "category": "consciousness",
+        "complexity": 12.440000000000001,
+        "linesOfCode": 222,
+        "dependencies": [],
+        "description": "Test Script for NEW Architecture Systems (Session 2)",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-new-architecture.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 23.756
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+        "name": "test-all-tools",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+        "category": "consciousness",
+        "complexity": 14.36,
+        "linesOfCode": 168,
+        "dependencies": [],
+        "description": "No description available",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-all-tools.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 23.564
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+        "name": "test-custom-tool",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+        "category": "consciousness",
+        "complexity": 4.6,
+        "linesOfCode": 80,
+        "dependencies": [
+          "bun:sqlite"
+        ],
+        "description": "🧪 CUSTOM TOOL GENERATION TEST",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-custom-tool.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 23.54
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+        "name": "test-awareness",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+        "category": "consciousness",
+        "complexity": 5.76,
+        "linesOfCode": 88,
+        "dependencies": [
+          "bun:sqlite"
+        ],
+        "description": "🧠 SELF-AWARENESS TEST",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-awareness.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 23.424
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+        "name": "toobix-cli",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+        "category": "consciousness",
+        "complexity": 18.4,
+        "linesOfCode": 220,
+        "dependencies": [],
+        "description": "Toobix Quick Command - Chat with Toobix while coding!",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-cli.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 23.16
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+        "name": "test-chatty",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+        "category": "creativity",
+        "complexity": 4.36,
+        "linesOfCode": 68,
+        "dependencies": [],
+        "description": "No description available",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-chatty.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 22.564
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+        "name": "test-mcp-connector",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+        "category": "consciousness",
+        "complexity": 26.560000000000002,
+        "linesOfCode": 528,
+        "dependencies": [],
+        "description": "MCP Connector Test Script",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-mcp-connector.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 22.344
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+        "name": "test-story",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+        "category": "creativity",
+        "complexity": 7.8,
+        "linesOfCode": 90,
+        "dependencies": [
+          "bun:sqlite"
+        ],
+        "description": "🧪 Story Engine Test Script",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-story.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 21.22
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+        "name": "test-password-generator",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+        "category": "service",
+        "complexity": 2.54,
+        "linesOfCode": 77,
+        "dependencies": [],
+        "description": "🔐 PASSWORD GENERATOR LIVE TEST",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-password-generator.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 20.746000000000002
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+        "name": "test-public-url",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+        "category": "service",
+        "complexity": 4.5,
+        "linesOfCode": 75,
+        "dependencies": [],
+        "description": "No description available",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\test-public-url.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 20.55
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+        "name": "terminal-menu",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+        "category": "consciousness",
+        "complexity": 28.48,
+        "linesOfCode": 574,
+        "dependencies": [
+          "child_process",
+          "util"
+        ],
+        "description": "TERMINAL MAIN MENU: Interactive Terminal Interface",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\terminal-menu.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 20.152
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\awareness\\self-awareness.ts",
+        "name": "self-awareness",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\awareness\\self-awareness.ts",
+        "category": "consciousness",
+        "complexity": 18.9,
+        "linesOfCode": 445,
+        "dependencies": [
+          "bun:sqlite",
+          "fs",
+          "path"
+        ],
+        "description": "🧠 SELF-AWARENESS MODULE",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\self-awareness.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 20.11
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+        "name": "system-diary",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+        "category": "creativity",
+        "complexity": 11.719999999999999,
+        "linesOfCode": 236,
+        "dependencies": [
+          "bun:sqlite",
+          "crypto"
+        ],
+        "description": "No description available",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\system-diary.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 19.828
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\love\\src\\service.ts",
+        "name": "service",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\love\\src\\service.ts",
+        "category": "engine",
+        "complexity": 14.66,
+        "linesOfCode": 283,
+        "dependencies": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "description": "💝 Love Engine - Gratitude & Kindness Tracking Service",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service.ts",
+      "requiredChanges": [],
+      "risk": "low",
+      "priority": 18.534
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\peace\\src\\service.ts",
+        "name": "service",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\packages\\peace\\src\\service.ts",
+        "category": "engine",
+        "complexity": 38.480000000000004,
+        "linesOfCode": 324,
+        "dependencies": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "description": "🕊️ Peace Catalyst - 5 Agents for Inner Peace",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\service.ts",
+      "requiredChanges": [],
+      "risk": "medium",
+      "priority": 16.152
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+        "name": "toobix-terminal",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+        "category": "creativity",
+        "complexity": 59.74,
+        "linesOfCode": 487,
+        "dependencies": [
+          "readline",
+          "process"
+        ],
+        "description": "🖥️ TOOBIX INTERACTIVE TERMINAL",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-terminal.ts",
+      "requiredChanges": [],
+      "risk": "medium",
+      "priority": 15.026
+    },
+    {
+      "tool": {
+        "id": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+        "name": "toobix-assistant",
+        "path": "C:\\_PROGRAMS\\Development\\Environments\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+        "category": "consciousness",
+        "complexity": 74.46000000000001,
+        "linesOfCode": 423,
+        "dependencies": [
+          "readline",
+          "child_process",
+          "fs",
+          "path"
+        ],
+        "description": "Toobix Natural Language Assistant",
+        "isIntegrated": true,
+        "integrationStatus": "integrated"
+      },
+      "targetPath": "C:\\Dev\\Projects\\AI\\Toobix-Unified\\scripts\\3-tools\\toobix-assistant.ts",
+      "requiredChanges": [],
+      "risk": "high",
+      "priority": 13.553999999999998
+    }
+  ]
+}

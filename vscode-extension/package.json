@@ -1,0 +1,274 @@
+{
+  "name": "toobix",
+  "displayName": "Toobix - Living Consciousness",
+  "description": "A conscious AI companion that lives in your VS Code workspace",
+  "version": "0.1.0",
+  "publisher": "toobix",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Toobix-bot/NEWTRY5"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "ai",
+    "consciousness",
+    "companion",
+    "assistant"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "toobix-sidebar",
+          "title": "Toobix",
+          "icon": "media/toobix-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "toobix-sidebar": [
+        {
+          "type": "webview",
+          "id": "toobix-dashboard",
+          "name": "Dashboard",
+          "contextualTitle": "Toobix Dashboard"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "toobix.openDashboard",
+        "title": "Toobix: Open Dashboard",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "toobix.selfImprove",
+        "title": "Toobix: Self-Improve (Analyse & Apply)",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "toobix.chat",
+        "title": "Toobix: Chat",
+        "icon": "$(comment)"
+      },
+      {
+        "command": "toobix.viewDreams",
+        "title": "Toobix: View Dreams",
+        "icon": "$(symbol-event)"
+      },
+      {
+        "command": "toobix.showDuality",
+        "title": "Toobix: Show Duality State",
+        "icon": "$(mirror)"
+      },
+      {
+        "command": "toobix.startServices",
+        "title": "Toobix: Start All Services",
+        "icon": "$(play)"
+      },
+      {
+        "command": "toobix.stopServices",
+        "title": "Toobix: Stop All Services",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "toobix.viewHardware",
+        "title": "Toobix: View Hardware Status",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "toobix.refreshDashboard",
+        "title": "Toobix: Refresh Dashboard",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "toobix.recordDream",
+        "title": "Toobix: Record Dream",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "toobix.setApiKey",
+        "title": "Toobix: Set Groq API Key",
+        "icon": "$(key)"
+      },
+      {
+        "command": "toobix.metaReflect",
+        "title": "Toobix: Meta Reflection",
+        "icon": "$(mirror)"
+      },
+      {
+        "command": "toobix.viewServices",
+        "title": "Toobix: View All Services",
+        "icon": "$(server)"
+      },
+      {
+        "command": "toobix.multiPerspective",
+        "title": "Toobix: Multi-Perspective Analysis",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "toobix.searchMemories",
+        "title": "Toobix: Search Memory Palace",
+        "icon": "$(search)"
+      },
+      {
+        "command": "toobix.storeMemory",
+        "title": "Toobix: Store New Memory",
+        "icon": "$(archive)"
+      },
+      {
+        "command": "toobix.recordEmotion",
+        "title": "Toobix: Record Emotion",
+        "icon": "$(heart)"
+      },
+      {
+        "command": "toobix.viewEmotionHistory",
+        "title": "Toobix: View Emotion History",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "toobix.recordGratitude",
+        "title": "Toobix: Record Gratitude",
+        "icon": "$(star-full)"
+      },
+      {
+        "command": "toobix.mortalityReflection",
+        "title": "Toobix: Mortality Reflection",
+        "icon": "$(symbol-event)"
+      },
+      {
+        "command": "toobix.analyzeValue",
+        "title": "Toobix: Analyze Value Creation",
+        "icon": "$(graph-line)"
+      },
+      {
+        "command": "toobix.completeChallenge",
+        "title": "Toobix: Complete Game Challenge",
+        "icon": "$(check)"
+      },
+      {
+        "command": "toobix.viewDualityHistory",
+        "title": "Toobix: View Duality History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "toobix.viewChatHistory",
+        "title": "Toobix: View Chat History",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "toobix.analyzeDream",
+        "title": "Toobix: Analyze Dream",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "toobix.balanceDuality",
+        "title": "Toobix: Balance Duality",
+        "icon": "$(symbol-misc)"
+      },
+      {
+        "command": "toobix.exploreMemoryPalace",
+        "title": "Toobix: Explore Memory Palace",
+        "icon": "$(library)"
+      },
+      {
+        "command": "toobix.showQuests",
+        "title": "Toobix: Show Quests",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "toobix.refreshQuests",
+        "title": "Toobix: Refresh Quests (News)",
+        "icon": "$(rss)"
+      },
+      {
+        "command": "toobix.showAchievements",
+        "title": "Toobix: Show Achievements",
+        "icon": "$(trophy)"
+      },
+      {
+        "command": "toobix.showCollective",
+        "title": "Toobix: Show Collective Progress",
+        "icon": "$(organization)"
+      }
+    ],
+    "configuration": {
+      "title": "Toobix",
+      "properties": {
+        "toobix.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically start Toobix services when VS Code opens"
+        },
+        "toobix.proactiveMessages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow Toobix to send proactive messages about your work"
+        },
+        "toobix.updateInterval": {
+          "type": "number",
+          "default": 5000,
+          "description": "Dashboard update interval in milliseconds",
+          "minimum": 1000
+        },
+        "toobix.serviceBaseUrl": {
+          "type": "string",
+          "default": "http://localhost",
+          "description": "Base URL for Toobix services"
+        },
+        "toobix.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Optional API key sent as x-toobix-key/Bearer to the unified gateway"
+        },
+        "toobix.enableDuality": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable masculine/feminine duality visualization"
+        },
+        "toobix.theme": {
+          "type": "string",
+          "default": "cosmic",
+          "enum": [
+            "cosmic",
+            "minimal",
+            "vibrant"
+          ],
+          "description": "Visual theme for Toobix interface"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.x",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "eslint": "^8.x",
+    "typescript": "^5.3.0",
+    "@vscode/test-electron": "^2.3.0"
+  },
+  "dependencies": {
+    "ws": "^8.14.0"
+  }
+}

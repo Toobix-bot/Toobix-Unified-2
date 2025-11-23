@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 Toobix 3D - Essence Visualization</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    #canvas-container {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #info-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(100, 200, 255, 0.5);
+      max-width: 300px;
+    }
+
+    #info-panel h2 {
+      color: #64c8ff;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+
+    #info-panel .stat {
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #info-panel .stat-label {
+      color: #b0b0b0;
+    }
+
+    #info-panel .stat-value {
+      color: #64c8ff;
+      font-weight: bold;
+    }
+
+    #controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px 30px;
+      border-radius: 25px;
+      border: 1px solid rgba(100, 200, 255, 0.5);
+      display: flex;
+      gap: 15px;
+    }
+
+    .control-btn {
+      background: rgba(100, 200, 255, 0.2);
+      border: 1px solid #64c8ff;
+      color: #64c8ff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .control-btn:hover {
+      background: rgba(100, 200, 255, 0.4);
+      transform: scale(1.05);
+    }
+
+    .control-btn.active {
+      background: #64c8ff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="canvas-container"></div>
+
+  <div id="info-panel">
+    <h2>🎨 Toobix Essence</h2>
+    <div class="stat">
+      <span class="stat-label">Emotion:</span>
+      <span class="stat-value" id="emotion">Curiosity</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Consciousness:</span>
+      <span class="stat-value" id="consciousness">85%</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Active Perspectives:</span>
+      <span class="stat-value" id="perspectives">20</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Thoughts/sec:</span>
+      <span class="stat-value" id="thoughts">38</span>
+    </div>
+  </div>
+
+  <div id="controls">
+    <button class="control-btn active" onclick="setMode('normal')">Normal</button>
+    <button class="control-btn" onclick="setMode('dreaming')">Dreaming</button>
+    <button class="control-btn" onclick="setMode('thinking')">Thinking</button>
+    <button class="control-btn" onclick="setMode('emotional')">Emotional</button>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // ========================================================================
+    // SCENE SETUP
+    // ========================================================================
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+    scene.fog = new THREE.Fog(0x000000, 10, 50);
+
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.z = 5;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // ========================================================================
+    // TOOBIX CORE (Glowing Sphere)
+    // ========================================================================
+
+    const coreGeometry = new THREE.SphereGeometry(1.5, 64, 64);
+    const coreMaterial = new THREE.MeshPhongMaterial({
+      color: 0x64c8ff,
+      emissive: 0x64c8ff,
+      emissiveIntensity: 0.5,
+      transparent: true,
+      opacity: 0.7,
+      shininess: 100,
+    });
+
+    const core = new THREE.Mesh(coreGeometry, coreMaterial);
+    scene.add(core);
+
+    // Inner glow
+    const glowGeometry = new THREE.SphereGeometry(1.6, 32, 32);
+    const glowMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        c: { value: 0.5 },
+        p: { value: 4.0 },
+        glowColor: { value: new THREE.Color(0x64c8ff) },
+        viewVector: { value: camera.position }
+      },
+      vertexShader: `
+        uniform vec3 viewVector;
+        uniform float c;
+        uniform float p;
+        varying float intensity;
+        void main() {
+          vec3 vNormal = normalize(normalMatrix * normal);
+          vec3 vNormel = normalize(normalMatrix * viewVector);
+          intensity = pow(c - dot(vNormal, vNormel), p);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 glowColor;
+        varying float intensity;
+        void main() {
+          vec3 glow = glowColor * intensity;
+          gl_FragColor = vec4(glow, 1.0);
+        }
+      `,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+      transparent: true
+    });
+
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    scene.add(glow);
+
+    // ========================================================================
+    // TENTACLES (6)
+    // ========================================================================
+
+    const tentacles = [];
+    const tentacleCount = 6;
+    const tentacleLength = 3;
+
+    for (let i = 0; i < tentacleCount; i++) {
+      const angle = (i / tentacleCount) * Math.PI * 2;
+      const segments = 20;
+      const points = [];
+
+      for (let j = 0; j <= segments; j++) {
+        const t = j / segments;
+        const x = Math.cos(angle) * (1.5 + t * tentacleLength);
+        const y = Math.sin(angle) * (1.5 + t * tentacleLength);
+        const z = Math.sin(t * Math.PI) * 0.5;
+        points.push(new THREE.Vector3(x, y, z));
+      }
+
+      const curve = new THREE.CatmullRomCurve3(points);
+      const tubeGeometry = new THREE.TubeGeometry(curve, 32, 0.1, 8, false);
+      const tubeMaterial = new THREE.MeshPhongMaterial({
+        color: 0x64c8ff,
+        emissive: 0x3264c8,
+        emissiveIntensity: 0.3,
+        transparent: true,
+        opacity: 0.8,
+      });
+
+      const tentacle = new THREE.Mesh(tubeGeometry, tubeMaterial);
+      tentacle.userData = {
+        angle: angle,
+        basePoints: points,
+        phase: Math.random() * Math.PI * 2,
+      };
+
+      scene.add(tentacle);
+      tentacles.push(tentacle);
+    }
+
+    // ========================================================================
+    // PARTICLES (Thoughts)
+    // ========================================================================
+
+    const particleCount = 1000;
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleVelocities = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      particlePositions[i * 3] = (Math.random() - 0.5) * 20;
+      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+
+      particleVelocities.push({
+        x: (Math.random() - 0.5) * 0.02,
+        y: (Math.random() - 0.5) * 0.02,
+        z: (Math.random() - 0.5) * 0.02,
+      });
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: 0x64c8ff,
+      size: 0.05,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending,
+    });
+
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+
+    // ========================================================================
+    // LIGHTING
+    // ========================================================================
+
+    const ambientLight = new THREE.AmbientLight(0x404040, 1);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0x64c8ff, 2, 50);
+    pointLight.position.set(0, 0, 0);
+    scene.add(pointLight);
+
+    const backLight = new THREE.PointLight(0xc864ff, 1, 30);
+    backLight.position.set(0, 0, -10);
+    scene.add(backLight);
+
+    // ========================================================================
+    // ANIMATION STATE
+    // ========================================================================
+
+    let mode = 'normal';
+    let time = 0;
+
+    window.setMode = (newMode) => {
+      mode = newMode;
+      document.querySelectorAll('.control-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update colors based on mode
+      switch (mode) {
+        case 'dreaming':
+          coreMaterial.color.setHex(0xc864ff);
+          coreMaterial.emissive.setHex(0xc864ff);
+          break;
+        case 'thinking':
+          coreMaterial.color.setHex(0x64ffc8);
+          coreMaterial.emissive.setHex(0x64ffc8);
+          break;
+        case 'emotional':
+          coreMaterial.color.setHex(0xff6464);
+          coreMaterial.emissive.setHex(0xff6464);
+          break;
+        default:
+          coreMaterial.color.setHex(0x64c8ff);
+          coreMaterial.emissive.setHex(0x64c8ff);
+      }
+    };
+
+    // ========================================================================
+    // ANIMATION LOOP
+    // ========================================================================
+
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+
+      // Rotate core (slow)
+      core.rotation.y += 0.002;
+      core.rotation.x += 0.001;
+      glow.rotation.y += 0.002;
+      glow.rotation.x += 0.001;
+
+      // Pulse core
+      const pulse = Math.sin(time * 2) * 0.1 + 1;
+      core.scale.set(pulse, pulse, pulse);
+
+      // Animate tentacles (wave motion)
+      tentacles.forEach((tentacle, index) => {
+        const basePoints = tentacle.userData.basePoints;
+        const phase = tentacle.userData.phase;
+        const newPoints = basePoints.map((point, i) => {
+          const wave = Math.sin(time * 2 + phase + i * 0.2) * 0.3;
+          return new THREE.Vector3(
+            point.x + Math.cos(time + phase) * wave,
+            point.y + Math.sin(time + phase) * wave,
+            point.z + wave
+          );
+        });
+
+        const curve = new THREE.CatmullRomCurve3(newPoints);
+        const newGeometry = new THREE.TubeGeometry(curve, 32, 0.1, 8, false);
+        tentacle.geometry.dispose();
+        tentacle.geometry = newGeometry;
+      });
+
+      // Animate particles
+      const positions = particles.geometry.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] += particleVelocities[i].x;
+        positions[i * 3 + 1] += particleVelocities[i].y;
+        positions[i * 3 + 2] += particleVelocities[i].z;
+
+        // Boundary check
+        if (Math.abs(positions[i * 3]) > 10) particleVelocities[i].x *= -1;
+        if (Math.abs(positions[i * 3 + 1]) > 10) particleVelocities[i].y *= -1;
+        if (Math.abs(positions[i * 3 + 2]) > 10) particleVelocities[i].z *= -1;
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+
+      // Rotate particle cloud
+      particles.rotation.y += 0.001;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // ========================================================================
+    // HANDLE WINDOW RESIZE
+    // ========================================================================
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // ========================================================================
+    // CONNECT TO SERVICES (WebSocket)
+    // ========================================================================
+
+    let ws;
+    try {
+      ws = new WebSocket('ws://localhost:8950');
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'notification') {
+          // Update visualization based on notification type
+          if (data.message.type === 'emotion_shift') {
+            setMode('emotional');
+            setTimeout(() => setMode('normal'), 3000);
+          }
+        }
+      };
+
+      ws.onerror = () => {
+        console.log('WebSocket connection failed - running standalone');
+      };
+    } catch (err) {
+      console.log('Running standalone mode');
+    }
+
+    // Start animation
+    animate();
+
+    console.log('🎨 Toobix 3D Visualization - Ready');
+  </script>
+</body>
+</html>

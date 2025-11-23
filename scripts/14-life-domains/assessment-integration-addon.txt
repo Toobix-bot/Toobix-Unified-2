@@ -1,0 +1,184 @@
+# ASSESSMENT INTEGRATION ADDON
+# Diese Code-Snippets erweitern life-domain-chat.ts mit Assessment-Funktionalität
+
+## 1. DB Schema Erweiterung (in initialize() Methode einfügen nach user_profile table):
+
+```typescript
+// Assessment results table
+this.db.run(`
+  CREATE TABLE IF NOT EXISTS assessment_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    domain TEXT NOT NULL,
+    level INTEGER NOT NULL,
+    levelName TEXT NOT NULL,
+    score INTEGER NOT NULL,
+    strengths TEXT NOT NULL,
+    weaknesses TEXT NOT NULL,
+    recommendations TEXT NOT NULL,
+    profile TEXT NOT NULL,
+    timestamp TEXT NOT NULL,
+    UNIQUE(domain)
+  )
+`);
+```
+
+## 2. Neue DB-Methoden (in LifeDomainDatabase class einfügen):
+
+```typescript
+saveAssessmentResult(result: AssessmentResult): void {
+  const stmt = this.db.prepare(`
+    INSERT OR REPLACE INTO assessment_results
+    (domain, level, levelName, score, strengths, weaknesses, recommendations, profile, timestamp)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  stmt.run(
+    result.domain,
+    result.level,
+    result.levelName,
+    result.score,
+    JSON.stringify(result.strengths),
+    JSON.stringify(result.weaknesses),
+    JSON.stringify(result.recommendations),
+    JSON.stringify(result.profile),
+    result.timestamp
+  );
+}
+
+getAssessmentResult(domain: LifeDomain): AssessmentResult | null {
+  const stmt = this.db.prepare(`
+    SELECT * FROM assessment_results WHERE domain = ?
+  `);
+
+  const row = stmt.get(domain) as any;
+  if (!row) return null;
+
+  return {
+    domain: row.domain,
+    level: row.level,
+    levelName: row.levelName,
+    score: row.score,
+    strengths: JSON.parse(row.strengths),
+    weaknesses: JSON.parse(row.weaknesses),
+    recommendations: JSON.parse(row.recommendations),
+    profile: JSON.parse(row.profile),
+    timestamp: row.timestamp
+  };
+}
+```
+
+## 3. Neue Service-Methoden (in LifeDomainChatService class einfügen):
+
+```typescript
+async submitAssessment(domain: LifeDomain, answers: AssessmentAnswer[]): Promise<AssessmentResult> {
+  const result = scoreAssessment(domain, answers);
+  this.db.saveAssessmentResult(result);
+  return result;
+}
+
+async getProfile(domain: LifeDomain): Promise<AssessmentResult | null> {
+  return this.db.getAssessmentResult(domain);
+}
+
+async hasAssessment(domain: LifeDomain): Promise<boolean> {
+  const result = this.db.getAssessmentResult(domain);
+  return result !== null;
+}
+```
+
+## 4. Chat-Methode anpassen (buildContextPrompt ersetzen):
+
+```typescript
+private buildContextPrompt(domain: LifeDomain, userMessage: string, context: DomainContext): string {
+  let prompt = `${LIFE_DOMAINS[domain].systemPrompt}\n\n`;
+
+  // ADD: Personalization based on assessment
+  const assessment = this.db.getAssessmentResult(domain);
+  if (assessment) {
+    prompt += generatePersonalizedPrompt(assessment) + '\n\n';
+  }
+
+  // Rest bleibt gleich...
+  if (context.relevantKnowledge.length > 0) {
+    prompt += `**Relevantes Wissen:**\n`;
+    context.relevantKnowledge.forEach(entry => {
+      prompt += `- ${entry.title}: ${entry.content.substring(0, 200)}...\n`;
+    });
+    prompt += '\n';
+  }
+
+  if (context.recentMessages.length > 0) {
+    prompt += `**Bisherige Konversation:**\n`;
+    context.recentMessages.slice(-3).forEach(msg => {
+      prompt += `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}\n`;
+    });
+    prompt += '\n';
+  }
+
+  prompt += `**Aktuelle Frage:** ${userMessage}\n\n`;
+  prompt += `Antworte auf Deutsch, hilfreich und auf den Lebensbereich "${LIFE_DOMAINS[domain].name}" fokussiert.`;
+
+  return prompt;
+}
+```
+
+## 5. Neue API Routes (im server fetch handler einfügen):
+
+```typescript
+// GET /assessment/:domain - Get assessment questions
+if (url.pathname.startsWith('/assessment/') && req.method === 'GET') {
+  const domainId = url.pathname.split('/')[2] as LifeDomain;
+
+  if (!LIFE_DOMAINS[domainId]) {
+    return Response.json({ error: 'Invalid domain' }, { status: 404, headers: corsHeaders });
+  }
+
+  const assessment = getAssessmentForDomain(domainId);
+  return Response.json({ assessment }, { headers: corsHeaders });
+}
+
+// POST /assessment/:domain - Submit assessment answers
+if (url.pathname.startsWith('/assessment/') && req.method === 'POST') {
+  try {
+    const domainId = url.pathname.split('/')[2] as LifeDomain;
+    const body = await req.json() as any;
+    const { answers } = body;
+
+    if (!LIFE_DOMAINS[domainId]) {
+      return Response.json({ error: 'Invalid domain' }, { status: 404, headers: corsHeaders });
+    }
+
+    const result = await service.submitAssessment(domainId, answers);
+    return Response.json({ result }, { headers: corsHeaders });
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 500, headers: corsHeaders });
+  }
+}
+
+// GET /profile/:domain - Get domain profile
+if (url.pathname.startsWith('/profile/') && req.method === 'GET') {
+  const domainId = url.pathname.split('/')[2] as LifeDomain;
+
+  if (!LIFE_DOMAINS[domainId]) {
+    return Response.json({ error: 'Invalid domain' }, { status: 404, headers: corsHeaders });
+  }
+
+  const profile = await service.getProfile(domainId);
+  return Response.json({ profile }, { headers: corsHeaders });
+}
+```
+
+## 6. Server startup message erweitern:
+
+```typescript
+New Endpoints (add to startup log):
+  GET  /assessment/{domain}    - Get assessment questions
+  POST /assessment/{domain}    - Submit assessment & get profile
+  GET  /profile/{domain}        - Get saved profile
+
+Features:
+  ✓ Domain Assessments (1-10 Leveling)
+  ✓ Personalized Prompts based on Profile
+  ✓ Strengths/Weaknesses Analysis
+  ✓ Custom Recommendations
+```

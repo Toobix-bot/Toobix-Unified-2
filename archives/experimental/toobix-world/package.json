@@ -1,0 +1,25 @@
+{
+  "name": "toobix-world",
+  "version": "0.1.0",
+  "description": "Toobix Consciousness Metaverse - Walk through Toobix's mind",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^24.10.1",
+    "vite": "^7.2.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  }
+}

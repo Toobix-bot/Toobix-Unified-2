@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  toobix-gateway:
+    image: oven/bun:latest
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      TOOBIX_GATEWAY_PORT: 9000
+      TOOBIX_HARDWARE_PORT: 8940
+      TOOBIX_API_KEY: ${TOOBIX_API_KEY:-}
+      TOOBIX_STORAGE: sqlite
+    command: ["bun", "services/unified-service-gateway.ts"]
+    ports:
+      - "9000:9000"
+    depends_on:
+      - toobix-hardware
+
+  toobix-hardware:
+    image: oven/bun:latest
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      TOOBIX_HARDWARE_PORT: 8940
+    command: ["bun", "services/hardware-awareness-v2.ts"]
+    ports:
+      - "8940:8940"
+
+  toobix-start-all:
+    image: oven/bun:latest
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      TOOBIX_API_KEY: ${TOOBIX_API_KEY:-}
+      TOOBIX_STORAGE: sqlite
+    command: ["bun", "scripts/start-all.ts", "--mode", "demo"]
+    profiles: ["all"]

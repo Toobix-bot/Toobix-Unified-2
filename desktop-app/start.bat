@@ -1,0 +1,6 @@
+@echo off
+cd /d C:\Dev\Projects\AI\Toobix-Unified\desktop-app
+echo Compiling TypeScript...
+node_modules\.bin\tsc.exe -p tsconfig.electron.json
+echo Starting Electron...
+node_modules\.bin\electron.exe .

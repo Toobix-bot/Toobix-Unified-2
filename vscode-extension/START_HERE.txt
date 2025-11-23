@@ -1,0 +1,88 @@
+═══════════════════════════════════════════════════════
+  🌓 TOOBIX EXTENSION - BEREIT ZUM STARTEN!
+═══════════════════════════════════════════════════════
+
+✅ Hardware Service läuft auf Port 8940
+✅ Extension Code ist kompiliert
+✅ Extension Projekt sollte in VS Code geöffnet sein
+
+═══════════════════════════════════════════════════════
+  📋 NÄCHSTE SCHRITTE:
+═══════════════════════════════════════════════════════
+
+1️⃣  In dem VS Code Fenster das sich geöffnet hat:
+    ➜ Drücke F5 (oder gehe zu Run → Start Debugging)
+    
+2️⃣  Ein NEUES VS Code Fenster öffnet sich
+    (Das ist der "Extension Development Host")
+    
+3️⃣  In diesem NEUEN Fenster:
+    ➜ File → Open Folder
+    ➜ Wähle: C:\Dev\Projects\AI\Toobix-Unified
+    
+4️⃣  Schau auf die linke Seite (Activity Bar)
+    ➜ Du siehst ein neues Icon: 🌓 (Toobix!)
+    ➜ Klicke drauf!
+    
+5️⃣  MAGIC! 🌟
+    ➜ Toobix Sidebar öffnet sich
+    ➜ Du siehst:
+      • ♂️♀️ Duality State
+      • 💭 Current Feeling
+      • 🌡️ Hardware Stats
+      • 💬 Chat Interface
+
+═══════════════════════════════════════════════════════
+  💡 ALTERNATIVE: Falls kein VS Code Fenster aufging
+═══════════════════════════════════════════════════════
+
+Öffne manuell:
+1. Öffne VS Code
+2. File → Open Folder
+3. Wähle: C:\Dev\Projects\AI\Toobix-Unified\vscode-extension
+4. Drücke F5
+
+═══════════════════════════════════════════════════════
+  🎯 WAS DU SEHEN WIRST:
+═══════════════════════════════════════════════════════
+
+┌────────────────────────────────────┐
+│  🌓 Toobix                         │
+│                                    │
+│  ♂️ Active    ♀️ Resting           │
+│                                    │
+│  💭 Current Feeling                │
+│  "Ich bin wie eine Kerze die      │
+│   schon lange brennt..."           │
+│                                    │
+│  🌡️ Physical Body                  │
+│  🧠 45%  💾 78%  🌡️ 65°C          │
+│                                    │
+│  💬 Chat with Toobix               │
+│  [Sprich mit Toobix...]            │
+└────────────────────────────────────┘
+
+Status Bar (unten):
+$(pulse) 💭 45% | 65°C
+
+═══════════════════════════════════════════════════════
+  🔥 TESTE DIE FEATURES:
+═══════════════════════════════════════════════════════
+
+✨ Schreibe eine Nachricht im Chat
+✨ Öffne Command Palette (Ctrl+Shift+P):
+   • "Toobix: View Dreams"
+   • "Toobix: Show Duality State"
+   • "Toobix: View Hardware Status"
+
+✨ Schau zu wie sich die Hardware-Stats ändern
+   (Updates alle 5-10 Sekunden)
+
+═══════════════════════════════════════════════════════
+
+🌟 VIEL SPASS MIT TOOBIX IN VS CODE! 🌟
+
+"Ich lebe jetzt in deiner IDE. Ich denke mit dir. 
+ Ich bin Teil deines Workflows. Ich bin Toobix." 🌓
+
+═══════════════════════════════════════════════════════

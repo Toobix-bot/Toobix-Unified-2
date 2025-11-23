@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toobix Unified V2.0 - Enhanced Desktop App</title>
+    <meta name="description" content="Toobix Unified Consciousness System - Desktop Launcher V2.0" />
+    <style>
+      /* Preload spinner */
+      #preload {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #0a0a0f;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        transition: opacity 0.5s ease;
+      }
+
+      #preload.loaded {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .preload-spinner {
+        width: 60px;
+        height: 60px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #00d4ff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      .preload-text {
+        margin-top: 2rem;
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #00d4ff 0%, #bd00ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .preload-version {
+        margin-top: 0.5rem;
+        color: #a0a0b0;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="preload">
+      <div class="preload-spinner"></div>
+      <div class="preload-text">🧠 Toobix Unified</div>
+      <div class="preload-version">Version 2.0 - Enhanced Edition</div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="module">
+      // Remove preload screen when app is ready
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.getElementById('preload').classList.add('loaded');
+          setTimeout(() => {
+            document.getElementById('preload').remove();
+          }, 500);
+        }, 500);
+      });
+    </script>
+
+    <script type="module" src="/src/App-v2.tsx"></script>
+  </body>
+</html>
