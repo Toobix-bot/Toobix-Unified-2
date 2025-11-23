@@ -22,8 +22,9 @@ import Groq from 'groq-sdk';
 // ============================================================================
 
 export type LLMProvider = 'ollama' | 'groq';
-export type OllamaModel = 'gemma3:1b' | 'llama3.2:3b' | 'mistral:7b';
-export type GroqModel = 'llama3-70b-8192' | 'llama3-8b-8192' | 'mixtral-8x7b-32768' | 'gemma2-9b-it';
+// Allow free-form model IDs so we can switch without code changes
+export type OllamaModel = string;
+export type GroqModel = string;
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -55,17 +56,22 @@ export interface LLMResponse {
   cached?: boolean;
   memory_id?: string; // If stored in Memory Palace
   error?: string;
+  fallback_from?: LLMProvider;
+  primary_error?: string;
 }
 
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
 
-const OLLAMA_BASE_URL = 'http://localhost:11434';
+const OLLAMA_BASE_URL = process.env.LOCAL_LLM_URL || 'http://localhost:11434';
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-const DEFAULT_OLLAMA_MODEL: OllamaModel = 'gemma3:1b';
-const DEFAULT_GROQ_MODEL: GroqModel = 'llama3-8b-8192';
+const DEFAULT_OLLAMA_MODEL: OllamaModel = (process.env.LOCAL_LLM_MODEL || 'gemma3:1b').trim();
+const DEFAULT_GROQ_MODEL: GroqModel = (process.env.GROQ_MODEL || 'llama-3.1-8b-instant').trim();
+
+const ROUTER_MODE = (process.env.LLM_PROVIDER || 'auto').toLowerCase() as 'auto' | LLMProvider;
+const ENABLE_FALLBACK = process.env.LLM_FALLBACK !== 'false';
 
 const MEMORY_PALACE_URL = 'http://localhost:8953';
 
@@ -99,7 +105,7 @@ async function queryOllama(
   });
 
   if (!response.ok) {
-    throw new Error(`Ollama API error: ${response.statusText}`);
+    throw new Error(`Ollama API error: ${response.status} ${response.statusText}`);
   }
 
   const data = await response.json();
@@ -143,33 +149,47 @@ async function queryGroq(
 // AUTO-SELECT PROVIDER (Smart Routing)
 // ============================================================================
 
-function selectProvider(req: LLMRequest): { provider: LLMProvider; model: string } {
+function selectProvider(req: LLMRequest): { provider: LLMProvider; model: string; fallback?: { provider: LLMProvider; model: string } } {
   // If explicitly specified, use that
   if (req.provider) {
     const model = req.model || (req.provider === 'ollama' ? DEFAULT_OLLAMA_MODEL : DEFAULT_GROQ_MODEL);
-    return { provider: req.provider, model };
+    const fallback = req.provider === 'ollama' && groq
+      ? { provider: 'groq', model: DEFAULT_GROQ_MODEL }
+      : { provider: 'ollama', model: DEFAULT_OLLAMA_MODEL };
+    return { provider: req.provider, model, fallback };
   }
 
-  // Smart routing logic:
-  // 1. Short conversations (< 3 messages) → Ollama (fast, local)
-  // 2. Long conversations (≥ 3 messages) → Groq (more capable)
-  // 3. Complex perspectives (Philosopher, Scientist) → Groq
-  // 4. Simple perspectives (Pragmatist, Observer) → Ollama
-  // 5. No Groq API key → Always Ollama
-
-  if (!groq) {
-    return { provider: 'ollama', model: DEFAULT_OLLAMA_MODEL };
+  // Router mode override via env
+  if (ROUTER_MODE === 'groq' && groq) {
+    return { provider: 'groq', model: DEFAULT_GROQ_MODEL, fallback: { provider: 'ollama', model: DEFAULT_OLLAMA_MODEL } };
   }
+  if (ROUTER_MODE === 'ollama' || !groq) {
+    const fb = groq ? { provider: 'groq', model: DEFAULT_GROQ_MODEL } : undefined;
+    return { provider: 'ollama', model: DEFAULT_OLLAMA_MODEL, fallback: fb };
+  }
+
+  // Smart routing logic (auto):
+  // 1. Short conversations (< 3 messages) -> Ollama (fast, local)
+  // 2. Long conversations (>= 3 messages) -> Groq (more capable)
+  // 3. Complex perspectives -> Groq
 
   const messageCount = req.messages.length;
   const complexPerspectives = ['Philosopher', 'Scientist', 'Mystic', 'Ethicist', 'Visionary'];
   const isComplexPerspective = req.perspective && complexPerspectives.includes(req.perspective);
 
   if (messageCount < 3 && !isComplexPerspective) {
-    return { provider: 'ollama', model: DEFAULT_OLLAMA_MODEL };
-  } else {
-    return { provider: 'groq', model: DEFAULT_GROQ_MODEL };
+    return {
+      provider: 'ollama',
+      model: DEFAULT_OLLAMA_MODEL,
+      fallback: groq ? { provider: 'groq', model: DEFAULT_GROQ_MODEL } : undefined
+    };
   }
+
+  return {
+    provider: 'groq',
+    model: DEFAULT_GROQ_MODEL,
+    fallback: { provider: 'ollama', model: DEFAULT_OLLAMA_MODEL }
+  };
 }
 
 // ============================================================================
@@ -221,64 +241,101 @@ async function storeConversationInMemory(
 async function queryLLM(request: LLMRequest): Promise<LLMResponse> {
   const startTime = Date.now();
 
-  try {
-    // Auto-select provider and model
-    const { provider, model } = selectProvider(request);
+  const selection = selectProvider(request);
+  let providerUsed: LLMProvider = selection.provider;
+  let modelUsed: string = selection.model;
+  let primaryError: string | undefined;
 
-    let result: { content: string; usage?: any };
-
-    // Query the selected provider
+  const tryProvider = async (provider: LLMProvider, model: string) => {
     if (provider === 'ollama') {
-      result = await queryOllama(
-        request.messages,
-        model as OllamaModel,
-        {
-          temperature: request.temperature,
-          max_tokens: request.max_tokens
-        }
-      );
-    } else {
-      result = await queryGroq(
-        request.messages,
-        model as GroqModel,
-        {
-          temperature: request.temperature,
-          max_tokens: request.max_tokens
-        }
-      );
+      return queryOllama(request.messages, model, {
+        temperature: request.temperature,
+        max_tokens: request.max_tokens
+      });
     }
+    return queryGroq(request.messages, model, {
+      temperature: request.temperature,
+      max_tokens: request.max_tokens
+    });
+  };
 
+  try {
+    const primaryResult = await tryProvider(selection.provider, selection.model);
     const latency = Date.now() - startTime;
 
-    // Store in Memory Palace if requested
     let memory_id: string | undefined;
     if (request.store_in_memory !== false) {
       memory_id = await storeConversationInMemory(
         request.messages,
-        result.content,
+        primaryResult.content,
         request.perspective,
-        { provider, model, latency }
+        { provider: selection.provider, model: selection.model, latency }
       ) || undefined;
     }
 
     return {
       success: true,
-      provider,
-      model,
-      content: result.content,
-      usage: result.usage,
+      provider: selection.provider,
+      model: selection.model,
+      content: primaryResult.content,
+      usage: primaryResult.usage,
       latency_ms: latency,
       memory_id
     };
   } catch (error: any) {
+    primaryError = error?.message || String(error);
+
+    if (ENABLE_FALLBACK && selection.fallback) {
+      providerUsed = selection.fallback.provider;
+      modelUsed = selection.fallback.model;
+      try {
+        const fallbackResult = await tryProvider(selection.fallback.provider, selection.fallback.model);
+        const latency = Date.now() - startTime;
+
+        let memory_id: string | undefined;
+        if (request.store_in_memory !== false) {
+          memory_id = await storeConversationInMemory(
+            request.messages,
+            fallbackResult.content,
+            request.perspective,
+            { provider: selection.fallback.provider, model: selection.fallback.model, latency, fallback_from: selection.provider, primary_error: primaryError }
+          ) || undefined;
+        }
+
+        return {
+          success: true,
+          provider: selection.fallback.provider,
+          model: selection.fallback.model,
+          content: fallbackResult.content,
+          usage: fallbackResult.usage,
+          latency_ms: latency,
+          memory_id,
+          fallback_from: selection.provider,
+          primary_error: primaryError
+        };
+      } catch (fallbackError: any) {
+        const latency = Date.now() - startTime;
+        return {
+          success: false,
+          provider: providerUsed,
+          model: modelUsed,
+          content: '',
+          latency_ms: latency,
+          error: fallbackError?.message || String(fallbackError),
+          fallback_from: selection.provider,
+          primary_error: primaryError
+        };
+      }
+    }
+
     const latency = Date.now() - startTime;
     return {
       success: false,
-      provider: request.provider || 'auto',
-      model: request.model || 'auto',
+      provider: providerUsed,
+      model: modelUsed,
       content: '',
       latency_ms: latency,
-      error: error.message
+      error: primaryError
     };
   }
 }
@@ -298,6 +355,8 @@ app.get('/health', (req, res) => {
     status: 'ok',
     service: 'llm-gateway',
     port: 8954,
+    router_mode: ROUTER_MODE,
+    fallback_enabled: ENABLE_FALLBACK,
     providers: {
       ollama: {
         available: true,
@@ -440,6 +499,11 @@ app.get('/models', async (req, res) => {
     const ollamaData = await ollamaResponse.json();
     const ollamaModels = ollamaData.models?.map((m: any) => m.name) || [];
 
+    const groqDefaults = ['llama-3.1-8b-instant', 'llama-3.1-70b-versatile', 'mixtral-8x7b-32768', 'gemma2-9b-it'];
+    if (DEFAULT_GROQ_MODEL && !groqDefaults.includes(DEFAULT_GROQ_MODEL)) {
+      groqDefaults.unshift(DEFAULT_GROQ_MODEL);
+    }
+
     res.json({
       success: true,
       providers: {
@@ -448,7 +512,7 @@ app.get('/models', async (req, res) => {
           default: DEFAULT_OLLAMA_MODEL
         },
         groq: {
-          available: ['llama3-70b-8192', 'llama3-8b-8192', 'mixtral-8x7b-32768', 'gemma2-9b-it'],
+          available: groqDefaults,
           default: DEFAULT_GROQ_MODEL,
           configured: !!GROQ_API_KEY
         }
