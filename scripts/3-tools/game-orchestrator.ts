@@ -105,7 +105,15 @@ async function main() {
   console.log('Game Orchestrator startet...');
   console.log(`Gateway: ${GATEWAY_URL}`);
 
+  const autoSteps = Number(process.env.GAME_AUTO_STEPS || '0');
+  const autoPrompt =
+    'Mach den nächsten Zug: erweitere Welt/Regeln behutsam, fasse Änderungen kurz zusammen und stelle eine Rückfrage.';
+
   const rl = createInterface();
+  let closed = false;
+  rl.on('close', () => {
+    closed = true;
+  });
 
   let messages: ChatMessage[] = [
     { role: 'system', content: SYSTEM_PROMPT.trim() },
@@ -119,9 +127,33 @@ async function main() {
     }
     printResponse(first);
 
+    // Optional auto-run steps (no stdin required)
+    if (autoSteps > 0) {
+      for (let i = 0; i < autoSteps; i++) {
+        messages.push({ role: 'user', content: autoPrompt });
+        const resp = await callGateway(messages);
+        if (!resp.success) {
+          console.error('Fehler (auto):', resp.error || 'Unsuccessful response');
+          if (resp.fallback_from) {
+            console.error(`Fallback von ${resp.fallback_from}, primary_error: ${resp.primary_error}`);
+          }
+          return;
+        }
+        messages.push({ role: 'assistant', content: resp.content });
+        printResponse(resp);
+      }
+      return;
+    }
+
     // Interaction loop
     while (true) {
-      const userInput = await askQuestion(rl, 'Dein Input (Enter = "mach weiter", exit = beenden): ');
+      let userInput = '';
+      try {
+        userInput = await askQuestion(rl, 'Dein Input (Enter = "mach weiter", exit = beenden): ');
+      } catch {
+        break;
+      }
+      if (closed) break;
       if (userInput.trim().toLowerCase() === 'exit') break;
 
       const content = userInput.trim() || 'Mach den nächsten Zug: erweitere Welt/Regeln behutsam, fasse Änderungen kurz zusammen und stelle eine Rückfrage.';
