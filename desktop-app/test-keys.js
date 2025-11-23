@@ -2,6 +2,8 @@
 const Groq = require('groq-sdk');
 const Store = require('electron-store');
 
+const model = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
+
 // Accept comma, semicolon, or newline separated keys from GROQ_API_KEYS
 const rawKeys = process.env.GROQ_API_KEYS || '';
 const keys = rawKeys
@@ -19,19 +21,21 @@ async function testKey(key, index) {
     const groq = new Groq({ apiKey: key });
     await groq.chat.completions.create({
       messages: [{ role: 'user', content: 'Say "OK"' }],
-      model: 'mixtral-8x7b-32768',
+      model,
       max_tokens: 10
     });
     console.log(`OK: key #${index + 1} looks valid`);
     return true;
   } catch (error) {
-    console.log(`FAIL: key #${index + 1} invalid (${error.status || 'error'})`);
+    const code = error.status || 'error';
+    const detail = error?.message || error?.response?.data?.error?.message || '';
+    console.log(`FAIL: key #${index + 1} invalid (${code})${detail ? ` - ${detail}` : ''}`);
     return false;
   }
 }
 
 async function findValidKey() {
-  console.log('Testing Groq API keys from GROQ_API_KEYS...\n');
+  console.log(`Testing Groq API keys from GROQ_API_KEYS (model: ${model})...\n`);
 
   for (const [index, key] of keys.entries()) {
     const isValid = await testKey(key, index);
