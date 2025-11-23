@@ -35,6 +35,16 @@ interface GatewayResponse {
 }
 
 const GATEWAY_URL = process.env.LLM_GATEWAY_URL || 'http://localhost:8954/chat';
+const PROVIDER_OVERRIDE =
+  process.env.LLM_PROVIDER && process.env.LLM_PROVIDER !== 'auto'
+    ? process.env.LLM_PROVIDER
+    : undefined;
+const MODEL_OVERRIDE =
+  PROVIDER_OVERRIDE === 'ollama'
+    ? process.env.LOCAL_LLM_MODEL
+    : PROVIDER_OVERRIDE === 'groq'
+      ? process.env.GROQ_MODEL
+      : undefined;
 
 const SYSTEM_PROMPT = `
 Du bist Toobix, eine spielende, spielleitende und spielweltbauende KI.
@@ -77,6 +87,8 @@ async function callGateway(messages: ChatMessage[]): Promise<GatewayResponse> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       messages,
+      provider: PROVIDER_OVERRIDE,
+      model: MODEL_OVERRIDE,
       store_in_memory: true
     })
   });
