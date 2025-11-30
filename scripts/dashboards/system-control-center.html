@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Toobix System Control Center</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Toobix Brand Colors */
+            --toobix-primary: #7C3AED;
+            --toobix-secondary: #EC4899;
+            --toobix-accent: #00D4AA;
+
+            /* System Health Colors */
+            --critical: #FF4444;
+            --warning: #FFA500;
+            --info: #4A9EFF;
+            --success: #44FF44;
+            --optimal: #00D4AA;
+
+            /* UI Colors */
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --border: #475569;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--toobix-primary), var(--toobix-secondary));
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.optimal { background: rgba(0, 212, 170, 0.2); color: var(--optimal); }
+        .status-badge.good { background: rgba(68, 255, 68, 0.2); color: var(--success); }
+        .status-badge.warning { background: rgba(255, 165, 0, 0.2); color: var(--warning); }
+        .status-badge.critical { background: rgba(255, 68, 68, 0.2); color: var(--critical); }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Gauges */
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+        }
+
+        .gauge {
+            width: 100%;
+            height: 100%;
+        }
+
+        .gauge-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .gauge-value .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .gauge-value .label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Process List */
+        .process-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .process-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .process-item:hover {
+            background: var(--border);
+            transform: translateX(4px);
+        }
+
+        .process-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .process-stats {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .kill-btn {
+            padding: 0.25rem 0.75rem;
+            background: var(--critical);
+            border: none;
+            border-radius: 0.375rem;
+            color: white;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .process-item:hover .kill-btn {
+            opacity: 1;
+        }
+
+        .kill-btn:hover {
+            background: #CC0000;
+        }
+
+        /* Insights */
+        .insight {
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--toobix-accent);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .insight-icon {
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Warnings */
+        .warnings {
+            margin-top: 1rem;
+        }
+
+        .warning-item {
+            padding: 1rem;
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 4px solid var(--warning);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .warning-item.critical {
+            background: rgba(255, 68, 68, 0.1);
+            border-left-color: var(--critical);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            border: 3px solid var(--bg-tertiary);
+            border-top: 3px solid var(--toobix-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toobix Chat */
+        .toobix-chat {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 400px;
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .toobix-chat.open {
+            display: block;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--toobix-primary), var(--toobix-secondary));
+            border-radius: 1rem 1rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-message {
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0.5rem;
+            background: var(--bg-tertiary);
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .chat-input button {
+            padding: 0.75rem 1.5rem;
+            background: var(--toobix-primary);
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--toobix-primary), var(--toobix-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toobix-chat {
+                width: calc(100% - 2rem);
+                right: 1rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span style="font-size: 2rem;">🎛️</span>
+                <div>
+                    <h1>Toobix System Control Center</h1>
+                    <p style="font-size: 0.875rem; opacity: 0.9;">Dein digitaler Bewusstseins-Assistent</p>
+                </div>
+            </div>
+            <div id="systemStatus" class="status-badge optimal">
+                <span class="spinner"></span>
+                <span>Verbinde...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Initialisiere Toobix System Monitor...</p>
+        </div>
+
+        <div id="content" style="display: none;">
+            <!-- System Overview -->
+            <div class="grid">
+                <!-- RAM Gauge -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>💾</span>
+                            <span>Arbeitsspeicher</span>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <canvas id="ramGauge" class="gauge"></canvas>
+                        <div class="gauge-value">
+                            <div id="ramValue" class="number">0%</div>
+                            <div class="label" id="ramLabel">0 / 0 GB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disk Gauge -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>💿</span>
+                            <span>Speicherplatz C:\</span>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <canvas id="diskGauge" class="gauge"></canvas>
+                        <div class="gauge-value">
+                            <div id="diskValue" class="number">0%</div>
+                            <div class="label" id="diskLabel">0 / 0 GB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CPU Gauge -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>⚡</span>
+                            <span>CPU-Auslastung</span>
+                        </div>
+                    </div>
+                    <div class="gauge-container">
+                        <canvas id="cpuGauge" class="gauge"></canvas>
+                        <div class="gauge-value">
+                            <div id="cpuValue" class="number">0%</div>
+                            <div class="label" id="cpuLabel">0 Kerne</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issues & Suggestions -->
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>⚠️</span>
+                            <span>Probleme & Warnungen</span>
+                        </div>
+                        <span id="issueCount" class="status-badge info">0</span>
+                    </div>
+                    <div id="issuesList" class="warnings">
+                        <p style="color: var(--text-secondary);">Keine Probleme gefunden ✨</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span>💡</span>
+                            <span>Toobix Empfiehlt</span>
+                        </div>
+                    </div>
+                    <div id="suggestionsList">
+                        <p style="color: var(--text-secondary);">System läuft optimal!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Process List -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>📊</span>
+                        <span>Top Prozesse</span>
+                    </div>
+                </div>
+                <div id="processList" class="process-list"></div>
+            </div>
+
+            <!-- Insights -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>🧠</span>
+                        <span>Toobix Insights</span>
+                    </div>
+                </div>
+                <div id="insightsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="toggleChat()" title="Chat mit Toobix">
+        💬
+    </div>
+
+    <!-- Toobix Chat (hidden by default) -->
+    <div id="toobixChat" class="toobix-chat">
+        <div class="chat-header">
+            <h3>💬 Chat mit Toobix</h3>
+            <button onclick="toggleChat()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message">
+                <strong>Toobix:</strong> Hey! Ich beobachte dein System. Frag mich was du wissen möchtest!
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Frag Toobix..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()">Senden</button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let ws = null;
+        let currentState = null;
+        let charts = {};
+
+        // Initialize
+        async function init() {
+            try {
+                // Connect to WebSocket
+                connectWebSocket();
+
+                // Fetch initial data
+                const response = await fetch('http://localhost:8961/api/system/current');
+                const data = await response.json();
+                updateUI(data);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to initialize:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="spinner"></div>
+                    <p style="color: var(--critical);">❌ Fehler: System Monitor läuft nicht!</p>
+                    <p style="font-size: 0.875rem; margin-top: 1rem;">Starte mit: <code>bun run scripts/2-services/system-monitor-v1.ts</code></p>
+                `;
+            }
+        }
+
+        // WebSocket Connection
+        function connectWebSocket() {
+            ws = new WebSocket('ws://localhost:8961');
+
+            ws.onopen = () => {
+                console.log('✅ WebSocket connected');
+                updateStatus('optimal', 'Verbunden');
+            };
+
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                if (message.type === 'update' || message.type === 'initial') {
+                    updateUI(message.data);
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('❌ WebSocket disconnected');
+                updateStatus('critical', 'Verbindung unterbrochen');
+                setTimeout(connectWebSocket, 5000);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        // Update UI
+        function updateUI(state) {
+            currentState = state;
+
+            // Update Status
+            updateStatus(state.health.status, `${state.health.score}/100`);
+
+            // Update RAM
+            updateGauge('ram', state.memory.percentage, state.memory.used, state.memory.total);
+
+            // Update Disk (C: drive)
+            const cDrive = state.disk.drives.find(d => d.letter === 'C');
+            if (cDrive) {
+                updateGauge('disk', cDrive.percentage, cDrive.used, cDrive.total);
+            }
+
+            // Update CPU
+            updateGauge('cpu', state.cpu.usage, state.cpu.usage, 100);
+            document.getElementById('cpuLabel').textContent = `${state.cpu.cores} Kerne`;
+
+            // Update Issues
+            updateIssues(state.health.issues, state.health.suggestions);
+
+            // Update Processes
+            updateProcesses(state.processes);
+        }
+
+        // Update Gauge
+        function updateGauge(type, percentage, used, total) {
+            const canvas = document.getElementById(`${type}Gauge`);
+            const valueEl = document.getElementById(`${type}Value`);
+            const labelEl = document.getElementById(`${type}Label`);
+
+            valueEl.textContent = `${Math.round(percentage)}%`;
+            labelEl.textContent = `${used.toFixed(1)} / ${total.toFixed(1)} GB`;
+
+            // Color based on percentage
+            let color;
+            if (percentage >= 90) color = getComputedStyle(document.documentElement).getPropertyValue('--critical');
+            else if (percentage >= 80) color = getComputedStyle(document.documentElement).getPropertyValue('--warning');
+            else if (percentage >= 60) color = getComputedStyle(document.documentElement).getPropertyValue('--info');
+            else color = getComputedStyle(document.documentElement).getPropertyValue('--success');
+
+            // Create or update chart
+            if (charts[type]) {
+                charts[type].data.datasets[0].data = [percentage, 100 - percentage];
+                charts[type].data.datasets[0].backgroundColor[0] = color;
+                charts[type].update();
+            } else {
+                charts[type] = new Chart(canvas, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [percentage, 100 - percentage],
+                            backgroundColor: [color, 'rgba(255, 255, 255, 0.1)'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '75%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Update Status
+        function updateStatus(status, text) {
+            const statusEl = document.getElementById('systemStatus');
+            statusEl.className = `status-badge ${status}`;
+            statusEl.innerHTML = `
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: currentColor;"></span>
+                <span>${text}</span>
+            `;
+        }
+
+        // Update Issues
+        function updateIssues(issues, suggestions) {
+            const issuesEl = document.getElementById('issuesList');
+            const suggestionsEl = document.getElementById('suggestionsList');
+            const countEl = document.getElementById('issueCount');
+
+            countEl.textContent = issues.length;
+            countEl.className = `status-badge ${issues.length === 0 ? 'success' : issues.length < 3 ? 'warning' : 'critical'}`;
+
+            if (issues.length === 0) {
+                issuesEl.innerHTML = '<p style="color: var(--text-secondary);">Keine Probleme gefunden ✨</p>';
+            } else {
+                issuesEl.innerHTML = issues.map((issue, i) => `
+                    <div class="warning-item ${i === 0 ? 'critical' : ''}">
+                        <strong>${i === 0 ? '🔴' : '🟡'}</strong> ${issue}
+                    </div>
+                `).join('');
+            }
+
+            if (suggestions.length === 0) {
+                suggestionsEl.innerHTML = '<p style="color: var(--text-secondary);">System läuft optimal!</p>';
+            } else {
+                suggestionsEl.innerHTML = suggestions.map(s => `
+                    <div class="insight">
+                        <span class="insight-icon">💡</span>${s}
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Update Processes
+        function updateProcesses(processes) {
+            const listEl = document.getElementById('processList');
+            listEl.innerHTML = processes.slice(0, 15).map(p => `
+                <div class="process-item">
+                    <div class="process-name">${p.name}</div>
+                    <div class="process-stats">
+                        <span>💾 ${p.memory.toFixed(0)} MB</span>
+                        <span>⚡ ${p.cpu.toFixed(1)}%</span>
+                        <button class="kill-btn" onclick="killProcess(${p.pid})">Kill</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Kill Process
+        async function killProcess(pid) {
+            if (!confirm(`Prozess ${pid} wirklich beenden?`)) return;
+
+            try {
+                const response = await fetch(`http://localhost:8961/api/process/${pid}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                alert(result.success ? '✅ Prozess beendet' : '❌ Fehler: ' + result.message);
+            } catch (error) {
+                alert('❌ Fehler beim Beenden des Prozesses');
+            }
+        }
+
+        // Fetch Insights
+        async function fetchInsights() {
+            try {
+                const response = await fetch('http://localhost:8961/api/system/insights');
+                const data = await response.json();
+                const insightsEl = document.getElementById('insightsList');
+
+                if (data.insights.length === 0) {
+                    insightsEl.innerHTML = '<p style="color: var(--text-secondary);">Keine besonderen Erkenntnisse...</p>';
+                } else {
+                    insightsEl.innerHTML = data.insights.map(i => `
+                        <div class="insight">
+                            <span class="insight-icon">🧠</span>${i}
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error fetching insights:', error);
+            }
+        }
+
+        // Chat Functions
+        function toggleChat() {
+            const chat = document.getElementById('toobixChat');
+            chat.classList.toggle('open');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesEl = document.getElementById('chatMessages');
+            messagesEl.innerHTML += `
+                <div class="chat-message">
+                    <strong>Du:</strong> ${message}
+                </div>
+            `;
+
+            // TODO: Send to Toobix AI
+            setTimeout(() => {
+                messagesEl.innerHTML += `
+                    <div class="chat-message">
+                        <strong>Toobix:</strong> Ich arbeite noch an der KI-Integration! Bald kann ich dir helfen 😊
+                    </div>
+                `;
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            }, 500);
+
+            input.value = '';
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        // Initialize on load
+        init();
+        setInterval(fetchInsights, 10000); // Update insights every 10s
+    </script>
+</body>
+</html>
