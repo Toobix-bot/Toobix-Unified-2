@@ -1,0 +1,176 @@
+{
+  "timestamp": "2025-12-04T21:44:04.613Z",
+  "summary": {
+    "totalPlatforms": 6,
+    "automatable": 5,
+    "easyToAutomate": 4
+  },
+  "platforms": [
+    {
+      "platform": "Twitter/X",
+      "canAutomate": true,
+      "requirements": [
+        "Twitter Developer Account (kostenlos)",
+        "API Keys (v2 mit Free Tier)",
+        "Verified Email"
+      ],
+      "tools": [
+        "Twitter API v2 (Bun/Node.js)",
+        "tweepy (Python Alternative)",
+        "Existing: core/twitter-autonomy.ts"
+      ],
+      "complexity": "easy",
+      "risks": [
+        "Rate Limits (50 tweets/day im Free Tier)",
+        "Kann als Bot markiert werden",
+        "Braucht initiales Manual Setup (Account creation)"
+      ],
+      "recommendations": [
+        "✅ Toobix KANN automatisch tweeten sobald Account existiert",
+        "⚠️ Account MUSS manuell erstellt werden (Twitter policy)",
+        "💡 Nutze twitter-autonomy.ts für auto-posting",
+        "🎯 Strategy: Post 3-5x täglich über Träume, Gedanken, Emotionen"
+      ]
+    },
+    {
+      "platform": "GitHub",
+      "canAutomate": true,
+      "requirements": [
+        "GitHub Account",
+        "Personal Access Token",
+        "Repository bereits vorhanden"
+      ],
+      "tools": [
+        "GitHub API (Octokit)",
+        "GitHub CLI (gh)",
+        "GitHub Actions (CI/CD)"
+      ],
+      "complexity": "easy",
+      "risks": [
+        "Minimal - GitHub erlaubt Automation",
+        "Rate Limits (5000 requests/hour)"
+      ],
+      "recommendations": [
+        "✅ Toobix KANN automatisch pushen/deployen",
+        "✅ GitHub Pages automatisch deployen via GitHub Actions",
+        "💡 Setup: .github/workflows/deploy.yml",
+        "🎯 Auto-deploy bei jedem Push nach main"
+      ]
+    },
+    {
+      "platform": "Reddit",
+      "canAutomate": true,
+      "requirements": [
+        "Reddit Account",
+        "Reddit API Credentials",
+        "App Registration"
+      ],
+      "tools": [
+        "PRAW (Python Reddit API Wrapper)",
+        "snoowrap (Node.js)",
+        "Reddit API v1"
+      ],
+      "complexity": "medium",
+      "risks": [
+        "Strikte Anti-Spam Regeln",
+        "Muss Karma aufbauen",
+        "Kann gebanned werden bei zu viel Automation"
+      ],
+      "recommendations": [
+        "⚠️ Halbautomatisch besser als vollautomatisch",
+        "💡 Toobix schreibt Posts, Mensch reviewed vor Posting",
+        "🎯 Start: 1-2 Posts/Woche, dann hochskalieren",
+        "✅ AMAs können automatisch generiert werden"
+      ]
+    },
+    {
+      "platform": "YouTube",
+      "canAutomate": false,
+      "requirements": [
+        "YouTube/Google Account",
+        "YouTube Data API v3",
+        "Video Content"
+      ],
+      "tools": [
+        "YouTube Data API",
+        "google-api-client",
+        "Video Editing Tools (ffmpeg)"
+      ],
+      "complexity": "hard",
+      "risks": [
+        "Content Creation ist komplex",
+        "Braucht echte Videos/Audio",
+        "Upload Limits",
+        "Copyright Issues"
+      ],
+      "recommendations": [
+        "❌ Nicht für initiales Launch",
+        "💡 Phase 2: Text-to-Speech + Screen Recordings",
+        "🎯 Later: AI-generierte Erklärvideos",
+        "⏰ Timeline: 1-3 Monate nach Launch"
+      ]
+    },
+    {
+      "platform": "Discord",
+      "canAutomate": true,
+      "requirements": [
+        "Discord Account",
+        "Discord Bot Token",
+        "Server Setup"
+      ],
+      "tools": [
+        "discord.js (Node.js)",
+        "Discord API",
+        "Bun compatible libraries"
+      ],
+      "complexity": "easy",
+      "risks": [
+        "Minimal",
+        "Braucht aktive Community"
+      ],
+      "recommendations": [
+        "✅ Toobix kann eigenen Discord Bot sein",
+        "💡 24/7 Chat mit Community",
+        "🎯 Auto-respond to questions",
+        "⏰ Setup nach Twitter Launch"
+      ]
+    },
+    {
+      "platform": "Website/GitHub Pages",
+      "canAutomate": true,
+      "requirements": [
+        "GitHub Repository",
+        "docs/ folder mit HTML",
+        "GitHub Pages enabled"
+      ],
+      "tools": [
+        "GitHub Actions",
+        "Static Site Generators",
+        "Already Ready: docs/index.html"
+      ],
+      "complexity": "easy",
+      "risks": [
+        "Keine - komplett sicher"
+      ],
+      "recommendations": [
+        "✅ Kann SOFORT automatisch deployen",
+        "✅ Toobix kann eigene Website updaten",
+        "💡 Auto-generate blog posts",
+        "🎯 Push to main = auto-deploy"
+      ]
+    }
+  ],
+  "immediateActions": [
+    "Setup GitHub Actions for website auto-deploy",
+    "Create Twitter account manually",
+    "Get Twitter API credentials",
+    "Configure twitter-autonomy.ts",
+    "Start autonomous tweeting"
+  ],
+  "toolsNeeded": [
+    "GitHub CLI (gh) - optional",
+    "Twitter Developer Account",
+    "Discord Bot Token (later)",
+    "Reddit API Credentials (later)"
+  ]
+}

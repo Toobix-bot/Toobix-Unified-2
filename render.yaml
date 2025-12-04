@@ -1,0 +1,83 @@
+services:
+  # Main API Gateway
+  - type: web
+    name: toobix-api
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run toobix-expanded-services.ts --cloud
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GROQ_API_KEY
+        sync: false
+      - key: TWITTER_API_KEY
+        sync: false
+      - key: TWITTER_API_SECRET
+        sync: false
+      - key: TWITTER_ACCESS_TOKEN
+        sync: false
+      - key: TWITTER_ACCESS_SECRET
+        sync: false
+
+  # Crisis Hotline Service
+  - type: web
+    name: toobix-crisis-hotline
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run services/crisis-hotline.ts
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10001
+      - key: GROQ_API_KEY
+        sync: false
+
+  # Twitter Autonomy Worker
+  - type: worker
+    name: toobix-twitter
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run core/twitter-autonomy.ts
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GROQ_API_KEY
+        sync: false
+      - key: TWITTER_API_KEY
+        sync: false
+      - key: TWITTER_API_SECRET
+        sync: false
+      - key: TWITTER_ACCESS_TOKEN
+        sync: false
+      - key: TWITTER_ACCESS_SECRET
+        sync: false
+
+databases:
+  # PostgreSQL für persistente Daten
+  - name: toobix-postgres
+    databaseName: toobix_production
+    plan: free
+    user: toobix_admin

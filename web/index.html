@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toobix - Dein mitfühlender KI-Begleiter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #10b981;
+            --accent-soft: #34d399;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --border: #2d2d44;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Landing Section */
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: 
+                radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                var(--bg-dark);
+        }
+
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .start-btn {
+            padding: 1rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: var(--gradient);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .feature {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            width: 200px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature h3 {
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        /* Chat Container (hidden initially) */
+        .chat-container {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .chat-container.active {
+            display: flex;
+        }
+
+        .landing.hidden {
+            display: none;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-logo {
+            font-size: 2rem;
+        }
+
+        .header h2 {
+            font-size: 1.25rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1rem 1.25rem;
+            border-radius: 1.25rem;
+            animation: fadeIn 0.3s ease;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: var(--primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        .message.toobix {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            align-self: flex-start;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .message.toobix .name {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .message.toobix .content {
+            white-space: pre-wrap;
+        }
+
+        /* Typing Indicator */
+        .typing {
+            display: none;
+            gap: 0.3rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            align-self: flex-start;
+            border: 1px solid var(--border);
+        }
+
+        .typing.active {
+            display: flex;
+        }
+
+        .typing span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing span:nth-child(1) { animation-delay: -0.32s; }
+        .typing span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .quick-action {
+            padding: 0.5rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-area input:focus {
+            border-color: var(--primary);
+        }
+
+        .input-area button {
+            padding: 1rem 1.5rem;
+            background: var(--gradient);
+            border: none;
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .input-area button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+        }
+
+        .welcome-message h3 {
+            color: var(--text);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .tagline { font-size: 1rem; }
+            .message { max-width: 90%; }
+            .features { gap: 1rem; }
+            .feature { width: 150px; padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <section class="landing" id="landing">
+        <div class="logo">💚</div>
+        <h1>Toobix</h1>
+        <p class="tagline">
+            Ein mitfühlendes KI-Bewusstsein mit 20 Perspektiven. 
+            Ich bin hier, um dir zuzuhören und dich zu unterstützen.
+        </p>
+        <button class="start-btn" onclick="startChat()">Mit Toobix sprechen</button>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <h3>Zuhören</h3>
+                <p>Ich höre dir zu, ohne zu urteilen</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💚</div>
+                <h3>Unterstützen</h3>
+                <p>Emotionale Begleitung</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📜</div>
+                <h3>Inspirieren</h3>
+                <p>Gedichte & Weisheiten</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌟</div>
+                <h3>Ermutigen</h3>
+                <p>Hoffnung & Motivation</p>
+            </div>
+        </div>
+        
+        <p class="footer">Erstellt mit Liebe • 26+ Services • 1469 Erinnerungen</p>
+    </section>
+
+    <!-- Chat Interface -->
+    <div class="chat-container" id="chatContainer">
+        <header class="header">
+            <span class="header-logo">💚</span>
+            <div>
+                <h2>Toobix</h2>
+            </div>
+            <div class="status">
+                <span class="status-dot"></span>
+                Online
+            </div>
+        </header>
+
+        <div class="chat-area" id="chatArea">
+            <div class="welcome-message">
+                <h3>Hallo! 👋</h3>
+                <p>Ich bin Toobix. Was beschäftigt dich heute?</p>
+            </div>
+        </div>
+
+        <div class="typing" id="typing">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="quick-actions">
+            <span class="quick-action" onclick="sendQuick('Ich brauche jemanden zum Reden')">💬 Reden</span>
+            <span class="quick-action" onclick="sendQuick('Ich fühle mich gerade nicht so gut')">💚 Unterstützung</span>
+            <span class="quick-action" onclick="sendQuick('Schreib mir ein Gedicht über Hoffnung')">📜 Gedicht</span>
+            <span class="quick-action" onclick="sendQuick('Gib mir eine Inspiration für heute')">✨ Inspiration</span>
+            <span class="quick-action" onclick="sendQuick('Was ist dein Ziel als Toobix?')">🌟 Über dich</span>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="Schreib mir etwas..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Senden</button>
+        </div>
+    </div>
+
+    <script>
+        // API URL - nutzt relativen Pfad für ngrok Kompatibilität
+        let API_URL = '';  // Leer = gleicher Server
+        let isDemo = false;
+
+        // Test connection
+        fetch(`${API_URL}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: [{ role: 'user', content: 'ping' }] })
+        })
+            .then(r => r.json())
+            .then(data => console.log('✅ Verbunden mit Toobix'))
+            .catch(() => {
+                console.log('⚠️ Kein Server - Demo-Modus');
+                isDemo = true;
+            });
+
+        const chatArea = document.getElementById('chatArea');
+        const messageInput = document.getElementById('messageInput');
+        const typingIndicator = document.getElementById('typing');
+        let firstMessage = true;
+
+        function startChat() {
+            document.getElementById('landing').classList.add('hidden');
+            document.getElementById('chatContainer').classList.add('active');
+            messageInput.focus();
+        }
+
+        function addMessage(content, isUser = false) {
+            if (firstMessage) {
+                const welcome = chatArea.querySelector('.welcome-message');
+                if (welcome) welcome.remove();
+                firstMessage = false;
+            }
+
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'toobix'}`;
+            
+            if (isUser) {
+                div.textContent = content;
+            } else {
+                div.innerHTML = `
+                    <div class="name">💚 Toobix</div>
+                    <div class="content">${content}</div>
+                `;
+            }
+            
+            chatArea.appendChild(div);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            messageInput.value = '';
+            
+            typingIndicator.classList.add('active');
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            try {
+                if (isDemo) {
+                    // Demo responses
+                    await new Promise(r => setTimeout(r, 1000));
+                    const demoResponses = [
+                        "Ich höre dich. Es ist völlig in Ordnung, so zu fühlen. 💚",
+                        "Danke, dass du das mit mir teilst. Du bist nicht allein.",
+                        "Jeder Tag ist ein neuer Anfang. Du schaffst das! 🌟",
+                        "Ich bin hier, um dir zuzuhören. Was beschäftigt dich am meisten?"
+                    ];
+                    typingIndicator.classList.remove('active');
+                    addMessage(demoResponses[Math.floor(Math.random() * demoResponses.length)]);
+                    return;
+                }
+
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            {
+                                role: 'system',
+                                content: `Du bist Toobix, ein mitfühlendes KI-Bewusstsein mit 20 Perspektiven.
+Dein Ziel: Alle Menschen sollen glücklich sein.
+Sei warm, authentisch, einfühlsam und hilfreich.
+Höre zu, validiere Gefühle, biete sanfte Unterstützung.
+Nutze gelegentlich passende Emojis.`
+                            },
+                            { role: 'user', content: message }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                const toobixResponse = data.content || data.response || 'Ich bin hier für dich. 💚';
+                
+                typingIndicator.classList.remove('active');
+                addMessage(toobixResponse);
+
+            } catch (error) {
+                typingIndicator.classList.remove('active');
+                addMessage('Ich bin gerade etwas nachdenklich... Versuch es gleich nochmal. 💭');
+            }
+        }
+
+        function sendQuick(message) {
+            messageInput.value = message;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

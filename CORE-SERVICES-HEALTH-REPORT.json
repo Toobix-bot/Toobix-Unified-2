@@ -1,0 +1,87 @@
+{
+  "timestamp": "2025-12-04T21:42:42.970Z",
+  "summary": {
+    "total": 6,
+    "healthy": 4,
+    "totalIssues": 2,
+    "healthScore": 67
+  },
+  "services": [
+    {
+      "name": "toobix-command-center",
+      "path": "core/toobix-command-center.ts",
+      "port": 7777,
+      "hasServer": true,
+      "hasKeepAlive": true,
+      "hasHealthEndpoint": true,
+      "hasDatabase": false,
+      "hasErrorHandling": true,
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "self-awareness-core",
+      "path": "core/self-awareness-core.ts",
+      "port": 8970,
+      "hasServer": true,
+      "hasKeepAlive": true,
+      "hasHealthEndpoint": true,
+      "hasDatabase": true,
+      "hasErrorHandling": true,
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "emotional-core",
+      "path": "core/emotional-core.ts",
+      "hasServer": true,
+      "hasKeepAlive": true,
+      "hasHealthEndpoint": true,
+      "hasDatabase": true,
+      "hasErrorHandling": true,
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "dream-core",
+      "path": "core/dream-core.ts",
+      "hasServer": true,
+      "hasKeepAlive": true,
+      "hasHealthEndpoint": true,
+      "hasDatabase": true,
+      "hasErrorHandling": true,
+      "issues": [],
+      "recommendations": []
+    },
+    {
+      "name": "unified-core-service",
+      "path": "core/unified-core-service.ts",
+      "hasServer": true,
+      "hasKeepAlive": true,
+      "hasHealthEndpoint": true,
+      "hasDatabase": false,
+      "hasErrorHandling": false,
+      "issues": [
+        "Missing error handling"
+      ],
+      "recommendations": [
+        "Wrap critical code in try-catch blocks"
+      ]
+    },
+    {
+      "name": "unified-consciousness-service",
+      "path": "core/unified-consciousness-service.ts",
+      "hasServer": true,
+      "hasKeepAlive": true,
+      "hasHealthEndpoint": true,
+      "hasDatabase": false,
+      "hasErrorHandling": false,
+      "issues": [
+        "Missing error handling"
+      ],
+      "recommendations": [
+        "Wrap critical code in try-catch blocks"
+      ]
+    }
+  ]
+}

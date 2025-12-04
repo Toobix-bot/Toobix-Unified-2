@@ -1,0 +1,366 @@
+{
+  "timestamp": "2025-12-04T21:05:16.326Z",
+  "currentServices": 63,
+  "targetServices": 8,
+  "reduction": 55,
+  "groups": [
+    {
+      "category": "other",
+      "count": 25,
+      "services": [
+        {
+          "name": "autonomy-engine",
+          "port": 8975,
+          "path": "core\\autonomy-engine.ts"
+        },
+        {
+          "name": "multi-llm-router",
+          "port": 8959,
+          "path": "core\\multi-llm-router.ts"
+        },
+        {
+          "name": "self-awareness-core",
+          "port": 8970,
+          "path": "core\\self-awareness-core.ts"
+        },
+        {
+          "name": "toobix-command-center",
+          "port": 7777,
+          "path": "core\\toobix-command-center.ts"
+        },
+        {
+          "name": "toobix-gamification",
+          "port": 7778,
+          "path": "core\\toobix-gamification.ts"
+        },
+        {
+          "name": "twitter-autonomy",
+          "port": 8965,
+          "path": "core\\twitter-autonomy.ts"
+        },
+        {
+          "name": "hardware-awareness-v2",
+          "port": 8940,
+          "path": "services\\hardware-awareness-v2.ts"
+        },
+        {
+          "name": "hardware-awareness",
+          "port": 8940,
+          "path": "services\\hardware-awareness.ts"
+        },
+        {
+          "name": "toobix-mega-upgrade",
+          "port": 9100,
+          "path": "services\\toobix-mega-upgrade.ts"
+        },
+        {
+          "name": "unified-service-gateway",
+          "port": 9000,
+          "path": "services\\unified-service-gateway.ts"
+        },
+        {
+          "name": "adaptive-autonomous-engine",
+          "path": "scripts\\2-services\\adaptive-autonomous-engine.ts"
+        },
+        {
+          "name": "creator-ai-collaboration",
+          "port": 8902,
+          "path": "scripts\\2-services\\creator-ai-collaboration.ts"
+        },
+        {
+          "name": "daily-checkin-v1",
+          "port": 8972,
+          "path": "scripts\\2-services\\daily-checkin-v1.ts"
+        },
+        {
+          "name": "event-bus-v4",
+          "port": 8955,
+          "path": "scripts\\2-services\\event-bus-v4.ts"
+        },
+        {
+          "name": "file-analysis-v1",
+          "port": 8962,
+          "path": "scripts\\2-services\\file-analysis-v1.ts"
+        },
+        {
+          "name": "gratitude-mortality-service",
+          "port": 8901,
+          "path": "scripts\\2-services\\gratitude-mortality-service.ts"
+        },
+        {
+          "name": "hybrid-ai-core",
+          "port": 8911,
+          "path": "scripts\\2-services\\hybrid-ai-core.ts"
+        },
+        {
+          "name": "life-companion-core",
+          "port": 8970,
+          "path": "scripts\\2-services\\life-companion-core.ts"
+        },
+        {
+          "name": "llm-gateway-v4",
+          "port": 8954,
+          "path": "scripts\\2-services\\llm-gateway-v4.ts"
+        },
+        {
+          "name": "public-api-v1",
+          "port": 8960,
+          "path": "scripts\\2-services\\public-api-v1.ts"
+        },
+        {
+          "name": "decision-framework-server",
+          "port": 8909,
+          "path": "scripts\\8-conscious-decision-framework\\decision-framework-server.ts"
+        },
+        {
+          "name": "service-mesh",
+          "port": 8896,
+          "path": "scripts\\9-network\\service-mesh.ts"
+        },
+        {
+          "name": "life-simulation-engine",
+          "port": 8914,
+          "path": "scripts\\13-life-simulation\\life-simulation-engine.ts"
+        },
+        {
+          "name": "universal-integration-adapter",
+          "port": 8920,
+          "path": "scripts\\16-universal-integration\\universal-integration-adapter.ts"
+        },
+        {
+          "name": "wellness-safety-guardian",
+          "port": 8921,
+          "path": "scripts\\17-wellness-safety\\wellness-safety-guardian.ts"
+        }
+      ]
+    },
+    {
+      "category": "emotional",
+      "count": 4,
+      "services": [
+        {
+          "name": "dream-core",
+          "port": 8961,
+          "path": "core\\dream-core.ts"
+        },
+        {
+          "name": "emotional-core",
+          "port": 8900,
+          "path": "core\\emotional-core.ts"
+        },
+        {
+          "name": "dream-journal-unified",
+          "port": 8961,
+          "path": "scripts\\2-services\\dream-journal-unified.ts"
+        },
+        {
+          "name": "emotional-support-service",
+          "port": 8985,
+          "path": "scripts\\2-services\\emotional-support-service.ts"
+        }
+      ]
+    },
+    {
+      "category": "gaming",
+      "count": 4,
+      "services": [
+        {
+          "name": "real-world-intelligence",
+          "port": 8888,
+          "path": "core\\real-world-intelligence.ts"
+        },
+        {
+          "name": "toobix-living-world",
+          "port": 7779,
+          "path": "core\\toobix-living-world.ts"
+        },
+        {
+          "name": "self-evolving-game-engine",
+          "port": 8896,
+          "path": "scripts\\2-services\\self-evolving-game-engine.ts"
+        },
+        {
+          "name": "toobix-virtual-world",
+          "path": "scripts\\2-services\\toobix-virtual-world.ts"
+        }
+      ]
+    },
+    {
+      "category": "monitoring",
+      "count": 2,
+      "services": [
+        {
+          "name": "health-monitor",
+          "port": 9000,
+          "path": "services\\health-monitor.ts"
+        },
+        {
+          "name": "system-monitor-v1",
+          "port": 8961,
+          "path": "scripts\\2-services\\system-monitor-v1.ts"
+        }
+      ]
+    },
+    {
+      "category": "consciousness",
+      "count": 4,
+      "services": [
+        {
+          "name": "consciousness-stream",
+          "port": 9100,
+          "path": "scripts\\2-services\\consciousness-stream.ts"
+        },
+        {
+          "name": "multi-perspective-consciousness",
+          "port": 8897,
+          "path": "scripts\\2-services\\multi-perspective-consciousness.ts"
+        },
+        {
+          "name": "consciousness-network-protocol",
+          "port": 8910,
+          "path": "scripts\\9-network\\consciousness-network-protocol.ts"
+        },
+        {
+          "name": "meta-knowledge-orchestrator",
+          "port": 8918,
+          "path": "scripts\\15-meta-knowledge\\meta-knowledge-orchestrator.ts"
+        }
+      ]
+    },
+    {
+      "category": "memory",
+      "count": 2,
+      "services": [
+        {
+          "name": "memory-palace-v4",
+          "port": 8953,
+          "path": "scripts\\2-services\\memory-palace-v4.ts"
+        },
+        {
+          "name": "memory-palace",
+          "port": 8903,
+          "path": "scripts\\2-services\\memory-palace.ts"
+        }
+      ]
+    },
+    {
+      "category": "communication",
+      "count": 5,
+      "services": [
+        {
+          "name": "proactive-communication-v2",
+          "port": 8971,
+          "path": "scripts\\2-services\\proactive-communication-v2.ts"
+        },
+        {
+          "name": "toobix-chat-service-fixed",
+          "port": 8995,
+          "path": "scripts\\2-services\\toobix-chat-service-fixed.ts"
+        },
+        {
+          "name": "toobix-chat-service",
+          "port": 8995,
+          "path": "scripts\\2-services\\toobix-chat-service.ts"
+        },
+        {
+          "name": "life-domain-chat-v1",
+          "port": 8916,
+          "path": "scripts\\14-life-domains\\life-domain-chat-v1.ts"
+        },
+        {
+          "name": "life-domain-chat",
+          "port": 8916,
+          "path": "scripts\\14-life-domains\\life-domain-chat.ts"
+        }
+      ]
+    },
+    {
+      "category": "minecraft",
+      "count": 17,
+      "services": [
+        {
+          "name": "colony-brain-v2-consciousness",
+          "port": 8960,
+          "path": "scripts\\12-minecraft\\colony-brain-v2-consciousness.ts"
+        },
+        {
+          "name": "minecraft-bot-service",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\minecraft-bot-service.ts"
+        },
+        {
+          "name": "minecraft-consciousness-system",
+          "port": 8914,
+          "path": "scripts\\12-minecraft\\minecraft-consciousness-system.ts"
+        },
+        {
+          "name": "start-toobix-minecraft",
+          "path": "scripts\\12-minecraft\\start-toobix-minecraft.ts"
+        },
+        {
+          "name": "toobix-colony-7-stable",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-colony-7-stable.ts"
+        },
+        {
+          "name": "toobix-colony-bot",
+          "path": "scripts\\12-minecraft\\toobix-colony-bot.ts"
+        },
+        {
+          "name": "toobix-colony-brain",
+          "port": 8960,
+          "path": "scripts\\12-minecraft\\toobix-colony-brain.ts"
+        },
+        {
+          "name": "toobix-colony-ultimate-v2",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-colony-ultimate-v2.ts"
+        },
+        {
+          "name": "toobix-colony-ultimate",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-colony-ultimate.ts"
+        },
+        {
+          "name": "toobix-colony-v3",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-colony-v3.ts"
+        },
+        {
+          "name": "toobix-empire-5-stable",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-empire-5-stable.ts"
+        },
+        {
+          "name": "toobix-empire-v4",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-empire-v4.ts"
+        },
+        {
+          "name": "toobix-empire-v5-phased",
+          "port": 25565,
+          "path": "scripts\\12-minecraft\\toobix-empire-v5-phased.ts"
+        },
+        {
+          "name": "toobix-eternal-colony",
+          "port": 9300,
+          "path": "scripts\\12-minecraft\\toobix-eternal-colony.ts"
+        },
+        {
+          "name": "toobix-evolution-engine",
+          "port": 9450,
+          "path": "scripts\\12-minecraft\\toobix-evolution-engine.ts"
+        },
+        {
+          "name": "toobix-hybrid-empire",
+          "port": 52629,
+          "path": "scripts\\12-minecraft\\toobix-hybrid-empire.ts"
+        },
+        {
+          "name": "toobix-meta-consciousness",
+          "path": "scripts\\12-minecraft\\toobix-meta-consciousness.ts"
+        }
+      ]
+    }
+  ]
+}

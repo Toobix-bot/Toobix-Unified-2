@@ -1,0 +1,61 @@
+{
+  "day": 0,
+  "totalWood": 6,
+  "totalStone": 0,
+  "bots": {
+    "Alpha": {
+      "wood": 5,
+      "stone": 0,
+      "kills": 0,
+      "deaths": 0,
+      "nightsSurvived": 0,
+      "blocksWalked": 0
+    },
+    "Woody": {
+      "wood": 1,
+      "stone": 0,
+      "kills": 0,
+      "deaths": 1,
+      "nightsSurvived": 0,
+      "blocksWalked": 0
+    },
+    "Digger": {
+      "wood": 0,
+      "stone": 0,
+      "kills": 0,
+      "deaths": 0,
+      "nightsSurvived": 0,
+      "blocksWalked": 0
+    },
+    "Mason": {
+      "wood": 0,
+      "stone": 0,
+      "kills": 0,
+      "deaths": 0,
+      "nightsSurvived": 0,
+      "blocksWalked": 0
+    },
+    "Flora": {
+      "wood": 0,
+      "stone": 0,
+      "kills": 0,
+      "deaths": 0,
+      "nightsSurvived": 0,
+      "blocksWalked": 0
+    },
+    "Scout": {
+      "wood": 0,
+      "stone": 0,
+      "kills": 0,
+      "deaths": 0,
+      "nightsSurvived": 0,
+      "blocksWalked": 0
+    }
+  },
+  "spawnPoint": {
+    "x": 6.5,
+    "y": 63,
+    "z": -0.5
+  },
+  "savedAt": "2025-12-03T21:10:10.381Z"
+}

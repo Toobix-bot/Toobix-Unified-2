@@ -1,0 +1,188 @@
+{
+  "colony": {
+    "startTime": 1764788369823,
+    "daysSurvived": 1,
+    "currentDay": 1,
+    "currentPhase": "survival",
+    "totalWood": 1,
+    "totalStone": 0,
+    "totalFood": 0,
+    "totalIron": 0,
+    "totalDiamonds": 0,
+    "blocksPlaced": 0,
+    "blocksBroken": 1,
+    "totalDeaths": 2,
+    "activeBots": 5,
+    "nightsWithoutDeaths": 0,
+    "achievements": [
+      "teamwork"
+    ],
+    "baseLocation": null,
+    "exploredBiomes": [],
+    "highscores": {
+      "mostWood": {
+        "bot": "Woody",
+        "amount": 1
+      },
+      "mostStone": {
+        "bot": "",
+        "amount": 0
+      },
+      "longestSurvival": {
+        "bot": "Woody",
+        "nights": 1
+      },
+      "mostKills": {
+        "bot": "Scout",
+        "kills": 3
+      },
+      "fastestBuilder": {
+        "bot": "",
+        "blocks": 0
+      }
+    }
+  },
+  "bots": {
+    "Alpha": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 2,
+      "deaths": 1,
+      "respawns": 1,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "achievements": [
+        "phoenix"
+      ],
+      "lastPosition": {
+        "x": 3.326330367354348,
+        "y": 62,
+        "z": 5.3263303673530995
+      }
+    },
+    "Woody": {
+      "woodCollected": 1,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 1,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 1,
+      "craftedItems": 0,
+      "achievements": [
+        "survivor",
+        "first_wood"
+      ],
+      "lastPosition": {
+        "x": 0.5,
+        "y": 60,
+        "z": -0.5
+      }
+    },
+    "Digger": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "achievements": [],
+      "lastPosition": {
+        "x": 8.5,
+        "y": 59,
+        "z": -9.5
+      }
+    },
+    "Mason": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "achievements": [],
+      "lastPosition": {
+        "x": -9.5,
+        "y": 65,
+        "z": -4.5
+      }
+    },
+    "Flora": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "achievements": [],
+      "lastPosition": {
+        "x": -9.5,
+        "y": 65,
+        "z": -4.5
+      }
+    },
+    "Scout": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 3,
+      "deaths": 1,
+      "respawns": 1,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "achievements": [
+        "phoenix"
+      ],
+      "lastPosition": {
+        "x": 4.949807982108738,
+        "y": 62,
+        "z": 0.3288179884684623
+      }
+    },
+    "Sage": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "achievements": [],
+      "lastPosition": {
+        "x": -2.5,
+        "y": 60,
+        "z": 10.5
+      }
+    }
+  },
+  "savedAt": "2025-12-03T19:11:10.930Z"
+}

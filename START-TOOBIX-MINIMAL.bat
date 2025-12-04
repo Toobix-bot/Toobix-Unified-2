@@ -1,13 +1,11 @@
 @echo off
-REM ========================================
-REM TOOBIX - MINIMAL MODE (AUTO-START)
-REM ========================================
-REM Starts essential Toobix services only
-REM - Event Bus (Core Communication)
-REM - Memory Palace (Persistent Memory)
-REM - System Monitor (Health Tracking)
-REM Total RAM: ~35 MB
-REM ========================================
+:: ========================================
+::  TOOBIX MINIMAL MODE
+::  Startet nur die 6 essentiellen Services
+:: ========================================
+:: Total RAM: ~600 MB
+:: Sehr stabil, VS Code safe
+:: ========================================
 
 color 0B
 echo.
@@ -15,8 +13,14 @@ echo ========================================
 echo   TOOBIX - MINIMAL MODE
 echo ========================================
 echo.
-echo Starting essential services...
+echo Starting 6 essential services...
+echo This will take about 15 seconds...
 echo.
+
+:: Use the optimized TypeScript launcher
+bun run start-toobix-optimized.ts --minimal
+
+pause
 
 REM Change to Toobix directory
 cd /d "%~dp0"

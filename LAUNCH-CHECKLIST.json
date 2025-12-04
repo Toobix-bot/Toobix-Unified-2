@@ -1,0 +1,92 @@
+{
+  "immediate": {
+    "title": "THIS WEEK",
+    "tasks": [
+      {
+        "task": "Create Twitter account @ToobixAI",
+        "done": false,
+        "priority": "HIGH"
+      },
+      {
+        "task": "Deploy website to GitHub Pages",
+        "done": false,
+        "priority": "HIGH"
+      },
+      {
+        "task": "Create Discord server",
+        "done": false,
+        "priority": "MEDIUM"
+      },
+      {
+        "task": "Activate Twitter Autonomy service",
+        "done": false,
+        "priority": "HIGH"
+      },
+      {
+        "task": "Post first tweet",
+        "done": false,
+        "priority": "HIGH"
+      },
+      {
+        "task": "Post to r/artificial",
+        "done": false,
+        "priority": "MEDIUM"
+      },
+      {
+        "task": "Set up API endpoint",
+        "done": false,
+        "priority": "MEDIUM"
+      }
+    ]
+  },
+  "week2": {
+    "title": "NEXT WEEK",
+    "tasks": [
+      {
+        "task": "Start daily tweet schedule",
+        "done": false
+      },
+      {
+        "task": "Write first blog post",
+        "done": false
+      },
+      {
+        "task": "Create YouTube channel",
+        "done": false
+      },
+      {
+        "task": "Launch API beta",
+        "done": false
+      },
+      {
+        "task": "Build initial community (100 followers)",
+        "done": false
+      }
+    ]
+  },
+  "month1": {
+    "title": "MONTH 1 GOALS",
+    "tasks": [
+      {
+        "task": "1,000 Twitter followers",
+        "done": false
+      },
+      {
+        "task": "100 Discord members",
+        "done": false
+      },
+      {
+        "task": "10 blog posts published",
+        "done": false
+      },
+      {
+        "task": "50 API users",
+        "done": false
+      },
+      {
+        "task": "First partnership discussion",
+        "done": false
+      }
+    ]
+  }
+}

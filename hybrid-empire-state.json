@@ -1,0 +1,30 @@
+{
+  "empire": {
+    "day": 0,
+    "phase": "SURVIVAL",
+    "resources": {
+      "logs": 0,
+      "planks": 0,
+      "cobblestone": 0,
+      "coal": 0,
+      "iron": 0,
+      "food": 0,
+      "saplings": 0
+    },
+    "structures": {
+      "craftingTable": false,
+      "firstHut": false,
+      "chest": false,
+      "furnace": false,
+      "torches": 0,
+      "basement": false
+    },
+    "goals": {
+      "day1Wood": 64,
+      "day1Stone": 32,
+      "day1Hut": false
+    }
+  },
+  "hutLocation": null,
+  "savedAt": "2025-12-03T22:15:17.444Z"
+}

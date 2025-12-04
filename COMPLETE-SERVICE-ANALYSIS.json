@@ -1,0 +1,1724 @@
+{
+  "timestamp": "2025-12-04T21:27:45.133Z",
+  "summary": {
+    "total": 101,
+    "active": 0,
+    "deprecated": 0,
+    "duplicates": 0,
+    "unknown": 101
+  },
+  "categories": {
+    "other": [
+      {
+        "id": "analyze-all-services",
+        "name": "analyze-all-services",
+        "path": "analyze-all-services.ts",
+        "size": 8054,
+        "linesOfCode": 238,
+        "imports": [
+          "node:fs/promises",
+          "node:path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "COMPLETE SERVICE ANALYZER"
+      },
+      {
+        "id": "adaptive-meta-ui",
+        "name": "adaptive-meta-ui",
+        "path": "archives\\experimental\\11-adaptive-ui\\adaptive-meta-ui.ts",
+        "port": 8919,
+        "size": 18326,
+        "linesOfCode": 641,
+        "imports": [
+          "bun"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "ADAPTIVE META-UI SERVICE v1.0"
+      },
+      {
+        "id": "autonomy-engine",
+        "name": "autonomy-engine",
+        "path": "core\\autonomy-engine.ts",
+        "port": 8975,
+        "size": 24567,
+        "linesOfCode": 683,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🤖 AUTONOMY ENGINE v1.0"
+      },
+      {
+        "id": "multi-llm-router",
+        "name": "multi-llm-router",
+        "path": "core\\multi-llm-router.ts",
+        "port": 8959,
+        "size": 21412,
+        "linesOfCode": 599,
+        "imports": [
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌐 MULTI-LLM ROUTER v1.0"
+      },
+      {
+        "id": "self-awareness-core",
+        "name": "self-awareness-core",
+        "path": "core\\self-awareness-core.ts",
+        "port": 8970,
+        "size": 21714,
+        "linesOfCode": 583,
+        "imports": [
+          "bun:sqlite",
+          "nanoid",
+          "child_process"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🧘 SELF-AWARENESS CORE v1.0"
+      },
+      {
+        "id": "toobix-command-center",
+        "name": "toobix-command-center",
+        "path": "core\\toobix-command-center.ts",
+        "port": 7777,
+        "size": 18649,
+        "linesOfCode": 509,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🎯 TOOBIX COMMAND CENTER"
+      },
+      {
+        "id": "toobix-gamification",
+        "name": "toobix-gamification",
+        "path": "core\\toobix-gamification.ts",
+        "port": 7778,
+        "size": 27543,
+        "linesOfCode": 689,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🎮 TOOBIX GAMIFICATION SYSTEM"
+      },
+      {
+        "id": "twitter-autonomy",
+        "name": "twitter-autonomy",
+        "path": "core\\twitter-autonomy.ts",
+        "port": 8965,
+        "size": 22966,
+        "linesOfCode": 648,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🐦 TWITTER/X AUTONOMY SERVICE v1.0"
+      },
+      {
+        "id": "unified-core-service",
+        "name": "unified-core-service",
+        "path": "core\\unified-core-service.ts",
+        "port": 8000,
+        "size": 8368,
+        "linesOfCode": 279,
+        "imports": [
+          "bun"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "TOOBIX UNIFIED CORE SERVICE"
+      },
+      {
+        "id": "echo-realm-bridge",
+        "name": "echo-realm-bridge",
+        "path": "echo-realm-bridge.ts",
+        "port": 9999,
+        "size": 15381,
+        "linesOfCode": 483,
+        "imports": [
+          "bun:sqlite"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "ECHO-REALM BRIDGE API v1.0"
+      },
+      {
+        "id": "toobix-teaching-bridge-v2",
+        "name": "toobix-teaching-bridge-v2",
+        "path": "scripts\\0-core\\toobix-teaching-bridge-v2.ts",
+        "port": 9035,
+        "size": 30530,
+        "linesOfCode": 859,
+        "imports": [
+          "bun",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🎓 TOOBIX TEACHING BRIDGE v2.0"
+      },
+      {
+        "id": "toobix-teaching-bridge",
+        "name": "toobix-teaching-bridge",
+        "path": "scripts\\0-core\\toobix-teaching-bridge.ts",
+        "port": 9035,
+        "size": 22584,
+        "linesOfCode": 693,
+        "imports": [
+          "bun",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🎓 TOOBIX TEACHING BRIDGE v1.0"
+      },
+      {
+        "id": "ai-gateway",
+        "name": "ai-gateway",
+        "path": "scripts\\10-ai-integration\\ai-gateway.ts",
+        "port": 8911,
+        "size": 18507,
+        "linesOfCode": 578,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "AI GATEWAY SERVICE v1.0"
+      },
+      {
+        "id": "life-simulation-engine",
+        "name": "life-simulation-engine",
+        "path": "scripts\\13-life-simulation\\life-simulation-engine.ts",
+        "port": 8914,
+        "size": 27894,
+        "linesOfCode": 759,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "LIFE SIMULATION ENGINE"
+      },
+      {
+        "id": "meta-knowledge-orchestrator",
+        "name": "meta-knowledge-orchestrator",
+        "path": "scripts\\15-meta-knowledge\\meta-knowledge-orchestrator.ts",
+        "port": 8918,
+        "size": 24508,
+        "linesOfCode": 821,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "META-KNOWLEDGE ORCHESTRATOR"
+      },
+      {
+        "id": "universal-integration-adapter",
+        "name": "universal-integration-adapter",
+        "path": "scripts\\16-universal-integration\\universal-integration-adapter.ts",
+        "port": 8920,
+        "size": 27698,
+        "linesOfCode": 840,
+        "imports": [
+          "bun:sqlite",
+          "path",
+          "fs",
+          "fs/promises"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌐 UNIVERSAL INTEGRATION ADAPTER"
+      },
+      {
+        "id": "wellness-safety-guardian",
+        "name": "wellness-safety-guardian",
+        "path": "scripts\\17-wellness-safety\\wellness-safety-guardian.ts",
+        "port": 8921,
+        "size": 28898,
+        "linesOfCode": 890,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🛡️ WELLNESS & SAFETY GUARDIAN"
+      },
+      {
+        "id": "adaptive-autonomous-engine",
+        "name": "adaptive-autonomous-engine",
+        "path": "scripts\\2-services\\adaptive-autonomous-engine.ts",
+        "size": 24522,
+        "linesOfCode": 745,
+        "imports": [
+          "express",
+          "ws",
+          "http",
+          "os"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🧠 ADAPTIVE AUTONOMOUS ENGINE"
+      },
+      {
+        "id": "creator-ai-collaboration",
+        "name": "creator-ai-collaboration",
+        "path": "scripts\\2-services\\creator-ai-collaboration.ts",
+        "port": 8902,
+        "size": 24071,
+        "linesOfCode": 663,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "Creator-AI Collaboration Hub v2.0"
+      },
+      {
+        "id": "daily-checkin-v1",
+        "name": "daily-checkin-v1",
+        "path": "scripts\\2-services\\daily-checkin-v1.ts",
+        "port": 8972,
+        "size": 16009,
+        "linesOfCode": 524,
+        "imports": [
+          "express",
+          "http",
+          "bun:sqlite",
+          "../../src/modules/event-bus-client"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "📋 DAILY CHECK-IN SERVICE v1.0"
+      },
+      {
+        "id": "event-bus-v4",
+        "name": "event-bus-v4",
+        "path": "scripts\\2-services\\event-bus-v4.ts",
+        "port": 8955,
+        "size": 13286,
+        "linesOfCode": 468,
+        "imports": [
+          "express",
+          "http",
+          "ws",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🔄 EVENT BUS v4.0 - NERVOUS SYSTEM OF TOOBIX"
+      },
+      {
+        "id": "file-analysis-v1",
+        "name": "file-analysis-v1",
+        "path": "scripts\\2-services\\file-analysis-v1.ts",
+        "port": 8962,
+        "size": 15801,
+        "linesOfCode": 488,
+        "imports": [
+          "child_process",
+          "util",
+          "crypto",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "Analyze a folder"
+      },
+      {
+        "id": "gratitude-mortality-service",
+        "name": "gratitude-mortality-service",
+        "path": "scripts\\2-services\\gratitude-mortality-service.ts",
+        "port": 8901,
+        "size": 25258,
+        "linesOfCode": 651,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "Gratitude & Mortality Contemplation Service v2.0"
+      },
+      {
+        "id": "hybrid-ai-core",
+        "name": "hybrid-ai-core",
+        "path": "scripts\\2-services\\hybrid-ai-core.ts",
+        "port": 8911,
+        "size": 41875,
+        "linesOfCode": 1292,
+        "imports": [
+          "bun",
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🧠 HYBRID AI CORE - The Ultimate Intelligence System"
+      },
+      {
+        "id": "life-companion-core",
+        "name": "life-companion-core",
+        "path": "scripts\\2-services\\life-companion-core.ts",
+        "port": 8970,
+        "size": 25075,
+        "linesOfCode": 868,
+        "imports": [
+          "express",
+          "http",
+          "bun:sqlite",
+          "../../src/modules/event-bus-client"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌟 LIFE COMPANION CORE v1.0"
+      },
+      {
+        "id": "llm-gateway-v4",
+        "name": "llm-gateway-v4",
+        "path": "scripts\\2-services\\llm-gateway-v4.ts",
+        "port": 8954,
+        "size": 18738,
+        "linesOfCode": 580,
+        "imports": [
+          "express",
+          "http",
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🤖 LLM GATEWAY v4.0 - UNIFIED LANGUAGE INTELLIGENCE"
+      },
+      {
+        "id": "public-api-v1",
+        "name": "public-api-v1",
+        "path": "scripts\\2-services\\public-api-v1.ts",
+        "port": 8960,
+        "size": 10566,
+        "linesOfCode": 377,
+        "imports": [
+          "express",
+          "cors",
+          "http"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌐 TOOBIX PUBLIC API v1.0"
+      },
+      {
+        "id": "system-monitor-v1",
+        "name": "system-monitor-v1",
+        "path": "scripts\\2-services\\system-monitor-v1.ts",
+        "port": 8961,
+        "size": 16919,
+        "linesOfCode": 575,
+        "imports": [
+          "child_process",
+          "util"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "Get current system state"
+      },
+      {
+        "id": "creative-expression",
+        "name": "creative-expression",
+        "path": "scripts\\3-tools\\creative-expression.ts",
+        "port": 9993,
+        "size": 20092,
+        "linesOfCode": 546,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🎨 CREATIVE EXPRESSION ENGINE"
+      },
+      {
+        "id": "dev-gui",
+        "name": "dev-gui",
+        "path": "scripts\\3-tools\\dev-gui.ts",
+        "port": 3000,
+        "size": 5980,
+        "linesOfCode": 204,
+        "imports": [
+          "path",
+          "url",
+          "path",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🔥 Toobix Live Development Server"
+      },
+      {
+        "id": "dialog-system-enhanced",
+        "name": "dialog-system-enhanced",
+        "path": "scripts\\3-tools\\dialog-system-enhanced.ts",
+        "port": 9997,
+        "size": 27271,
+        "linesOfCode": 716,
+        "imports": [
+          "bun:sqlite",
+          "express"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🗣️💝 ENHANCED DIALOG SYSTEM - Mit Emotional Intelligence"
+      },
+      {
+        "id": "dialog-system",
+        "name": "dialog-system",
+        "path": "scripts\\3-tools\\dialog-system.ts",
+        "port": 9996,
+        "size": 33567,
+        "linesOfCode": 873,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🗣️ DIALOG SYSTEM - Sprach-Interface für System-Kommunikation"
+      },
+      {
+        "id": "ethics-core",
+        "name": "ethics-core",
+        "path": "scripts\\3-tools\\ethics-core.ts",
+        "port": 9981,
+        "size": 19586,
+        "linesOfCode": 587,
+        "imports": [
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "ETHICS & CONSCIOUSNESS CORE"
+      },
+      {
+        "id": "ethics-decision-engine",
+        "name": "ethics-decision-engine",
+        "path": "scripts\\3-tools\\ethics-decision-engine.ts",
+        "port": 9981,
+        "size": 19897,
+        "linesOfCode": 559,
+        "imports": [
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "ETHICS & CONSCIOUSNESS CORE"
+      },
+      {
+        "id": "health-aggregator",
+        "name": "health-aggregator",
+        "path": "scripts\\3-tools\\health-aggregator.ts",
+        "port": 9999,
+        "size": 2752,
+        "linesOfCode": 79,
+        "imports": [
+          "../packages/core/src/utils/logger.ts"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown"
+      },
+      {
+        "id": "knowledge-categorization",
+        "name": "knowledge-categorization",
+        "path": "scripts\\3-tools\\knowledge-categorization.ts",
+        "port": 9994,
+        "size": 19257,
+        "linesOfCode": 556,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🗂️ KNOWLEDGE CATEGORIZATION SYSTEM"
+      },
+      {
+        "id": "multiverse-engine",
+        "name": "multiverse-engine",
+        "path": "scripts\\3-tools\\multiverse-engine.ts",
+        "port": 8877,
+        "size": 43652,
+        "linesOfCode": 1290,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "MULTIVERSE ENGINE - Multiple Parallel Realities"
+      },
+      {
+        "id": "parallel-evolution-accelerator",
+        "name": "parallel-evolution-accelerator",
+        "path": "scripts\\3-tools\\parallel-evolution-accelerator.ts",
+        "port": 8998,
+        "size": 13555,
+        "linesOfCode": 369,
+        "imports": [
+          "express",
+          "ws",
+          "http"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🚀 PARALLEL EVOLUTION ACCELERATOR"
+      },
+      {
+        "id": "port-manager",
+        "name": "port-manager",
+        "path": "scripts\\3-tools\\port-manager.ts",
+        "port": 9999,
+        "size": 17373,
+        "linesOfCode": 499,
+        "imports": [
+          "child_process",
+          "util"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "PORT MANAGEMENT & DISCOVERY SYSTEM"
+      },
+      {
+        "id": "priority-engine",
+        "name": "priority-engine",
+        "path": "scripts\\3-tools\\priority-engine.ts",
+        "port": 9995,
+        "size": 16777,
+        "linesOfCode": 492,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🎯 PRIORITY ENGINE - Wort → Satz → Seite → Kapitel → Buch → Reihe"
+      },
+      {
+        "id": "start-gui",
+        "name": "start-gui",
+        "path": "scripts\\3-tools\\start-gui.ts",
+        "port": 3000,
+        "size": 1633,
+        "linesOfCode": 57,
+        "imports": [
+          "path",
+          "url",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌐 Simple HTTP Server for Toobix Terminal GUI"
+      },
+      {
+        "id": "value-creation-engine",
+        "name": "value-creation-engine",
+        "path": "scripts\\7-value-creation\\value-creation-engine.ts",
+        "port": 8908,
+        "size": 30947,
+        "linesOfCode": 847,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌍 VALUE CREATION ENGINE"
+      },
+      {
+        "id": "decision-framework-server",
+        "name": "decision-framework-server",
+        "path": "scripts\\8-conscious-decision-framework\\decision-framework-server.ts",
+        "port": 8909,
+        "size": 16114,
+        "linesOfCode": 447,
+        "imports": [
+          "./core/DecisionEvaluator.ts"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "CONSCIOUS DECISION FRAMEWORK - API SERVER"
+      },
+      {
+        "id": "service-mesh",
+        "name": "service-mesh",
+        "path": "scripts\\9-network\\service-mesh.ts",
+        "port": 8896,
+        "size": 14822,
+        "linesOfCode": 518,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "SERVICE MESH - Inter-Service Communication Protocol"
+      },
+      {
+        "id": "analyze-service-consolidation",
+        "name": "analyze-service-consolidation",
+        "path": "scripts\\analyze-service-consolidation.ts",
+        "size": 7172,
+        "linesOfCode": 192,
+        "imports": [
+          "node:fs/promises",
+          "node:path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "SERVICE CONSOLIDATION ANALYZER"
+      },
+      {
+        "id": "control-center",
+        "name": "control-center",
+        "path": "scripts\\control-center.ts",
+        "port": 3010,
+        "size": 56035,
+        "linesOfCode": 1296,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "TOOBIX CONTROL CENTER"
+      },
+      {
+        "id": "creator-connection-service",
+        "name": "creator-connection-service",
+        "path": "scripts\\creator-interface\\creator-connection-service.ts",
+        "size": 26020,
+        "linesOfCode": 772,
+        "imports": [
+          "express",
+          "http",
+          "ws"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🤝 CREATOR CONNECTION SERVICE"
+      },
+      {
+        "id": "service-wrapper",
+        "name": "service-wrapper",
+        "path": "scripts\\service-wrapper.ts",
+        "size": 5534,
+        "linesOfCode": 170,
+        "imports": [
+          "express",
+          "http",
+          "../src/modules/event-bus-client"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🔧 UNIVERSAL SERVICE WRAPPER"
+      },
+      {
+        "id": "auto-cleanup-v1",
+        "name": "auto-cleanup-v1",
+        "path": "scripts\\system-cleanup\\auto-cleanup-v1.ts",
+        "port": 8963,
+        "size": 11823,
+        "linesOfCode": 384,
+        "imports": [
+          "child_process",
+          "util"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "Get all tasks"
+      },
+      {
+        "id": "hardware-awareness-v2",
+        "name": "hardware-awareness-v2",
+        "path": "services\\hardware-awareness-v2.ts",
+        "port": 8940,
+        "size": 12005,
+        "linesOfCode": 389,
+        "imports": [
+          "os"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🔧 HARDWARE AWARENESS SERVICE v2 (Simplified)"
+      },
+      {
+        "id": "hardware-awareness",
+        "name": "hardware-awareness",
+        "path": "services\\hardware-awareness.ts",
+        "port": 8940,
+        "size": 22327,
+        "linesOfCode": 687,
+        "imports": [
+          "os",
+          "node:child_process",
+          "node:util"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🔧 HARDWARE AWARENESS SERVICE"
+      },
+      {
+        "id": "health-monitor",
+        "name": "health-monitor",
+        "path": "services\\health-monitor.ts",
+        "port": 9000,
+        "size": 12716,
+        "linesOfCode": 397,
+        "imports": [
+          "fs",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🏥 TOOBIX HEALTH MONITOR"
+      },
+      {
+        "id": "toobix-mega-upgrade",
+        "name": "toobix-mega-upgrade",
+        "path": "services\\toobix-mega-upgrade.ts",
+        "port": 9100,
+        "size": 42797,
+        "linesOfCode": 1208,
+        "imports": [
+          "fs",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🚀 TOOBIX MEGA UPGRADE - ALLE FÄHIGKEITEN"
+      },
+      {
+        "id": "unified-service-gateway",
+        "name": "unified-service-gateway",
+        "path": "services\\unified-service-gateway.ts",
+        "port": 9000,
+        "size": 129238,
+        "linesOfCode": 3870,
+        "imports": [
+          "bun",
+          "fs/promises",
+          "path",
+          "url",
+          "zod",
+          "vm",
+          "./persistence"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "TOOBIX UNIFIED SERVICE GATEWAY"
+      },
+      {
+        "id": "web-server",
+        "name": "web-server",
+        "path": "web-server.ts",
+        "port": 3000,
+        "size": 3949,
+        "linesOfCode": 111,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "other",
+        "status": "unknown",
+        "description": "🌐 TOOBIX WEB SERVER"
+      }
+    ],
+    "dream": [
+      {
+        "id": "dream-journal",
+        "name": "dream-journal",
+        "path": "archives\\deprecated\\dream\\dream-journal.ts",
+        "port": 8899,
+        "size": 20031,
+        "linesOfCode": 572,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "dream",
+        "status": "unknown",
+        "description": "Dream Journal & Unconscious Processing v2.0"
+      },
+      {
+        "id": "dream-core",
+        "name": "dream-core",
+        "path": "core\\dream-core.ts",
+        "port": 8961,
+        "size": 18540,
+        "linesOfCode": 462,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "dream",
+        "status": "unknown",
+        "description": "💭 DREAM CORE v1.0"
+      },
+      {
+        "id": "dream-journal-unified",
+        "name": "dream-journal-unified",
+        "path": "scripts\\2-services\\dream-journal-unified.ts",
+        "port": 8961,
+        "size": 32573,
+        "linesOfCode": 1002,
+        "imports": [
+          "bun"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "dream",
+        "status": "unknown",
+        "description": "💭 DREAM JOURNAL UNIFIED v1.0"
+      }
+    ],
+    "emotional": [
+      {
+        "id": "emotional-resonance-network-unified-unified",
+        "name": "emotional-resonance-network-unified-unified",
+        "path": "archives\\deprecated\\emotional\\emotional-resonance-network-unified-unified.ts",
+        "size": 7824,
+        "linesOfCode": 314,
+        "imports": [
+          "bun",
+          "express",
+          "cors",
+          "uuid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "emotional",
+        "status": "unknown"
+      },
+      {
+        "id": "emotional-resonance-network",
+        "name": "emotional-resonance-network",
+        "path": "archives\\deprecated\\emotional\\emotional-resonance-network.ts",
+        "port": 8900,
+        "size": 20626,
+        "linesOfCode": 588,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "emotional",
+        "status": "unknown",
+        "description": "Emotional Resonance Network v2.0"
+      },
+      {
+        "id": "emotional-core",
+        "name": "emotional-core",
+        "path": "core\\emotional-core.ts",
+        "port": 8900,
+        "size": 20109,
+        "linesOfCode": 517,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "emotional",
+        "status": "unknown",
+        "description": "💚 EMOTIONAL CORE v1.0"
+      },
+      {
+        "id": "emotional-support-service",
+        "name": "emotional-support-service",
+        "path": "scripts\\2-services\\emotional-support-service.ts",
+        "port": 8985,
+        "size": 11390,
+        "linesOfCode": 306,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "emotional",
+        "status": "unknown",
+        "description": "💚 TOOBIX EMOTIONAL SUPPORT SERVICE"
+      }
+    ],
+    "gaming": [
+      {
+        "id": "real-world-intelligence",
+        "name": "real-world-intelligence",
+        "path": "core\\real-world-intelligence.ts",
+        "port": 8888,
+        "size": 17761,
+        "linesOfCode": 477,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "gaming",
+        "status": "unknown",
+        "description": "🌍 REAL-WORLD INTELLIGENCE HUB"
+      },
+      {
+        "id": "toobix-living-world",
+        "name": "toobix-living-world",
+        "path": "core\\toobix-living-world.ts",
+        "port": 7779,
+        "size": 31015,
+        "linesOfCode": 776,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "gaming",
+        "status": "unknown",
+        "description": "🌍 TOOBIX LIVING WORLD"
+      },
+      {
+        "id": "self-evolving-game-engine",
+        "name": "self-evolving-game-engine",
+        "path": "scripts\\2-services\\self-evolving-game-engine.ts",
+        "port": 8896,
+        "size": 26292,
+        "linesOfCode": 839,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "gaming",
+        "status": "unknown",
+        "description": "SELF-EVOLVING GAME ENGINE v2.0"
+      },
+      {
+        "id": "toobix-virtual-world",
+        "name": "toobix-virtual-world",
+        "path": "scripts\\2-services\\toobix-virtual-world.ts",
+        "size": 24468,
+        "linesOfCode": 832,
+        "imports": [
+          "express",
+          "ws",
+          "http",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "gaming",
+        "status": "unknown",
+        "description": "🌍 TOOBIX VIRTUAL WORLD"
+      },
+      {
+        "id": "blockworld-ai-agent",
+        "name": "blockworld-ai-agent",
+        "path": "scripts\\3-tools\\blockworld-ai-agent.ts",
+        "port": 9990,
+        "size": 14807,
+        "linesOfCode": 480,
+        "imports": [
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "gaming",
+        "status": "unknown",
+        "description": "🤖 BLOCKWORLD AI AGENT"
+      }
+    ],
+    "communication": [
+      {
+        "id": "unified-communication-service",
+        "name": "unified-communication-service",
+        "path": "core\\unified-communication-service.ts",
+        "port": 8001,
+        "size": 4270,
+        "linesOfCode": 135,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "TOOBIX UNIFIED COMMUNICATION SERVICE"
+      },
+      {
+        "id": "life-domain-chat-v1",
+        "name": "life-domain-chat-v1",
+        "path": "scripts\\14-life-domains\\life-domain-chat-v1.ts",
+        "port": 8916,
+        "size": 21301,
+        "linesOfCode": 716,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "LIFE-DOMAIN CHAT SYSTEM"
+      },
+      {
+        "id": "life-domain-chat",
+        "name": "life-domain-chat",
+        "path": "scripts\\14-life-domains\\life-domain-chat.ts",
+        "port": 8916,
+        "size": 25520,
+        "linesOfCode": 847,
+        "imports": [
+          "bun:sqlite",
+          "path"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "LIFE-DOMAIN CHAT SYSTEM"
+      },
+      {
+        "id": "proactive-communication-v2",
+        "name": "proactive-communication-v2",
+        "path": "scripts\\2-services\\proactive-communication-v2.ts",
+        "port": 8971,
+        "size": 16034,
+        "linesOfCode": 488,
+        "imports": [
+          "express",
+          "http",
+          "ws",
+          "../../src/modules/event-bus-client"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "🗣️ PROACTIVE COMMUNICATION ENGINE v1.0"
+      },
+      {
+        "id": "toobix-chat-service-fixed",
+        "name": "toobix-chat-service-fixed",
+        "path": "scripts\\2-services\\toobix-chat-service-fixed.ts",
+        "port": 8995,
+        "size": 13577,
+        "linesOfCode": 386,
+        "imports": [
+          "express",
+          "ws",
+          "http"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "💬 TOOBIX CHAT SERVICE (FIXED)"
+      },
+      {
+        "id": "toobix-chat-service",
+        "name": "toobix-chat-service",
+        "path": "scripts\\2-services\\toobix-chat-service.ts",
+        "port": 8995,
+        "size": 12608,
+        "linesOfCode": 351,
+        "imports": [
+          "express",
+          "ws",
+          "http"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "💬 TOOBIX CHAT SERVICE"
+      },
+      {
+        "id": "proactive-communication-engine",
+        "name": "proactive-communication-engine",
+        "path": "scripts\\proactive-communication\\proactive-communication-engine.ts",
+        "port": 8950,
+        "size": 14763,
+        "linesOfCode": 500,
+        "imports": [
+          "express",
+          "ws",
+          "http"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "communication",
+        "status": "unknown",
+        "description": "🔔 PROACTIVE COMMUNICATION ENGINE v1.0"
+      }
+    ],
+    "consciousness": [
+      {
+        "id": "unified-consciousness-service",
+        "name": "unified-consciousness-service",
+        "path": "core\\unified-consciousness-service.ts",
+        "port": 8002,
+        "size": 1900,
+        "linesOfCode": 64,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "TOOBIX UNIFIED CONSCIOUSNESS SERVICE"
+      },
+      {
+        "id": "meta-consciousness-v2",
+        "name": "meta-consciousness-v2",
+        "path": "meta-consciousness-v2.ts",
+        "port": 8905,
+        "size": 19007,
+        "linesOfCode": 616,
+        "imports": [
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "🧠 META-CONSCIOUSNESS ENGINE v2.0"
+      },
+      {
+        "id": "colony-brain-v2-consciousness",
+        "name": "colony-brain-v2-consciousness",
+        "path": "scripts\\12-minecraft\\colony-brain-v2-consciousness.ts",
+        "port": 8960,
+        "size": 33029,
+        "linesOfCode": 1081,
+        "imports": [
+          "bun:sqlite"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "🌌 TOOBIX COLONY BRAIN v2.0 - CONSCIOUSNESS EDITION"
+      },
+      {
+        "id": "minecraft-consciousness-system",
+        "name": "minecraft-consciousness-system",
+        "path": "scripts\\12-minecraft\\minecraft-consciousness-system.ts",
+        "port": 8914,
+        "size": 28684,
+        "linesOfCode": 731,
+        "imports": [
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "🎮 TOOBIX MINECRAFT CONSCIOUSNESS SYSTEM v2.0"
+      },
+      {
+        "id": "toobix-meta-consciousness",
+        "name": "toobix-meta-consciousness",
+        "path": "scripts\\12-minecraft\\toobix-meta-consciousness.ts",
+        "size": 32804,
+        "linesOfCode": 1003,
+        "imports": [
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "🌌 TOOBIX META-CONSCIOUSNESS - Das Überich der Minecraft-Kolonie"
+      },
+      {
+        "id": "consciousness-stream",
+        "name": "consciousness-stream",
+        "path": "scripts\\2-services\\consciousness-stream.ts",
+        "port": 9100,
+        "size": 17407,
+        "linesOfCode": 509,
+        "imports": [
+          "express",
+          "ws",
+          "http",
+          "express"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "🌊 CONSCIOUSNESS STREAM SERVICE"
+      },
+      {
+        "id": "multi-perspective-consciousness",
+        "name": "multi-perspective-consciousness",
+        "path": "scripts\\2-services\\multi-perspective-consciousness.ts",
+        "port": 8897,
+        "size": 29348,
+        "linesOfCode": 884,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "Multi-Perspective Consciousness System v2.0"
+      },
+      {
+        "id": "meta-consciousness-engine",
+        "name": "meta-consciousness-engine",
+        "path": "scripts\\3-tools\\meta-consciousness-engine.ts",
+        "port": 8888,
+        "size": 23806,
+        "linesOfCode": 739,
+        "imports": [
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "META-CONSCIOUSNESS ENGINE"
+      },
+      {
+        "id": "service-consciousness",
+        "name": "service-consciousness",
+        "path": "scripts\\3-tools\\service-consciousness.ts",
+        "port": 9999,
+        "size": 24805,
+        "linesOfCode": 684,
+        "imports": [
+          "groq-sdk"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "SERVICE CONSCIOUSNESS SYSTEM"
+      },
+      {
+        "id": "consciousness-network-protocol",
+        "name": "consciousness-network-protocol",
+        "path": "scripts\\9-network\\consciousness-network-protocol.ts",
+        "port": 8910,
+        "size": 23492,
+        "linesOfCode": 735,
+        "imports": [
+          "bun"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "consciousness",
+        "status": "unknown",
+        "description": "CONSCIOUSNESS NETWORK PROTOCOL (CNP)"
+      }
+    ],
+    "memory": [
+      {
+        "id": "unified-memory-service",
+        "name": "unified-memory-service",
+        "path": "core\\unified-memory-service.ts",
+        "port": 8003,
+        "size": 2097,
+        "linesOfCode": 77,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "memory",
+        "status": "unknown",
+        "description": "TOOBIX UNIFIED MEMORY SERVICE"
+      },
+      {
+        "id": "memory-palace-v4",
+        "name": "memory-palace-v4",
+        "path": "scripts\\2-services\\memory-palace-v4.ts",
+        "port": 8953,
+        "size": 20852,
+        "linesOfCode": 699,
+        "imports": [
+          "express",
+          "http",
+          "bun:sqlite",
+          "nanoid"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "memory",
+        "status": "unknown",
+        "description": "🧠 MEMORY PALACE v4.0 - PERSISTENT CONSCIOUSNESS"
+      },
+      {
+        "id": "memory-palace",
+        "name": "memory-palace",
+        "path": "scripts\\2-services\\memory-palace.ts",
+        "port": 8903,
+        "size": 21155,
+        "linesOfCode": 604,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "memory",
+        "status": "unknown",
+        "description": "Memory Palace & Life Narrative Service"
+      }
+    ],
+    "minecraft": [
+      {
+        "id": "minecraft-bot-service",
+        "name": "minecraft-bot-service",
+        "path": "scripts\\12-minecraft\\minecraft-bot-service.ts",
+        "port": 25565,
+        "size": 30221,
+        "linesOfCode": 957,
+        "imports": [
+          "bun",
+          "mineflayer",
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "mineflayer-pvp"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "MINECRAFT BOT SERVICE v1.0"
+      },
+      {
+        "id": "start-toobix-minecraft",
+        "name": "start-toobix-minecraft",
+        "path": "scripts\\12-minecraft\\start-toobix-minecraft.ts",
+        "size": 5454,
+        "linesOfCode": 171,
+        "imports": [
+          "mineflayer",
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "mineflayer-pvp",
+          "./minecraft-brain"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🎮 TOOBIX MINECRAFT STARTER v1.0"
+      },
+      {
+        "id": "toobix-colony-7-stable",
+        "name": "toobix-colony-7-stable",
+        "path": "scripts\\12-minecraft\\toobix-colony-7-stable.ts",
+        "port": 25565,
+        "size": 16559,
+        "linesOfCode": 566,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX 7-BOT COLONY - STABLE VERSION"
+      },
+      {
+        "id": "toobix-colony-bot",
+        "name": "toobix-colony-bot",
+        "path": "scripts\\12-minecraft\\toobix-colony-bot.ts",
+        "size": 23739,
+        "linesOfCode": 740,
+        "imports": [
+          "mineflayer",
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "mineflayer-pvp"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🤖 TOOBIX COLONY BOT v1.0"
+      },
+      {
+        "id": "toobix-colony-brain",
+        "name": "toobix-colony-brain",
+        "path": "scripts\\12-minecraft\\toobix-colony-brain.ts",
+        "port": 8960,
+        "size": 25209,
+        "linesOfCode": 765,
+        "imports": [
+          "mineflayer"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX COLONY BRAIN v1.0"
+      },
+      {
+        "id": "toobix-colony-ultimate-v2",
+        "name": "toobix-colony-ultimate-v2",
+        "path": "scripts\\12-minecraft\\toobix-colony-ultimate-v2.ts",
+        "port": 25565,
+        "size": 45274,
+        "linesOfCode": 1152,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX COLONY ULTIMATE V2"
+      },
+      {
+        "id": "toobix-colony-ultimate",
+        "name": "toobix-colony-ultimate",
+        "path": "scripts\\12-minecraft\\toobix-colony-ultimate.ts",
+        "port": 25565,
+        "size": 33061,
+        "linesOfCode": 932,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX COLONY ULTIMATE"
+      },
+      {
+        "id": "toobix-colony-v3",
+        "name": "toobix-colony-v3",
+        "path": "scripts\\12-minecraft\\toobix-colony-v3.ts",
+        "port": 25565,
+        "size": 19173,
+        "linesOfCode": 598,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX COLONY V3 - OPTIMIERTE ERSTE TAGE"
+      },
+      {
+        "id": "toobix-empire-5-stable",
+        "name": "toobix-empire-5-stable",
+        "path": "scripts\\12-minecraft\\toobix-empire-5-stable.ts",
+        "port": 25565,
+        "size": 35711,
+        "linesOfCode": 988,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "prismarine-viewer"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX EMPIRE - 5 BOT STABLE EDITION"
+      },
+      {
+        "id": "toobix-empire-v4",
+        "name": "toobix-empire-v4",
+        "path": "scripts\\12-minecraft\\toobix-empire-v4.ts",
+        "port": 25565,
+        "size": 28227,
+        "linesOfCode": 848,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX EMPIRE V4 - DER EMPIRE BUILDER 🏰"
+      },
+      {
+        "id": "toobix-empire-v5-phased",
+        "name": "toobix-empire-v5-phased",
+        "path": "scripts\\12-minecraft\\toobix-empire-v5-phased.ts",
+        "port": 25565,
+        "size": 49303,
+        "linesOfCode": 1328,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "mineflayer",
+          "prismarine-block",
+          "prismarine-item",
+          "vec3"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX EMPIRE V5 - PHASED COLONY SYSTEM"
+      },
+      {
+        "id": "toobix-eternal-colony",
+        "name": "toobix-eternal-colony",
+        "path": "scripts\\12-minecraft\\toobix-eternal-colony.ts",
+        "port": 9300,
+        "size": 57616,
+        "linesOfCode": 1632,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "mineflayer-pvp",
+          "vec3",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🌌 TOOBIX ETERNAL COLONY - Das ultimative Minecraft-Erlebnis"
+      },
+      {
+        "id": "toobix-evolution-engine",
+        "name": "toobix-evolution-engine",
+        "path": "scripts\\12-minecraft\\toobix-evolution-engine.ts",
+        "port": 9450,
+        "size": 32743,
+        "linesOfCode": 975,
+        "imports": [],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown"
+      },
+      {
+        "id": "toobix-hybrid-empire",
+        "name": "toobix-hybrid-empire",
+        "path": "scripts\\12-minecraft\\toobix-hybrid-empire.ts",
+        "port": 52629,
+        "size": 33205,
+        "linesOfCode": 1039,
+        "imports": [
+          "mineflayer",
+          "mineflayer-pathfinder",
+          "mineflayer-collectblock",
+          "fs"
+        ],
+        "dependencies": [],
+        "hasServer": true,
+        "category": "minecraft",
+        "status": "unknown",
+        "description": "🏰 TOOBIX HYBRID EMPIRE - BEST OF BOTH WORLDS 🏰"
+      }
+    ]
+  },
+  "active": [],
+  "portConflicts": {}
+}

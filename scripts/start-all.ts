@@ -24,12 +24,22 @@ const CURRENT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(CURRENT_DIR, '..');
 
 const SERVICE_DEFINITIONS: ServiceDefinition[] = [
+  // ========== TOOBIX CORE SERVICES (Konsolidiert) ==========
+  { id: 'emotional-core', name: '💚 Emotional Core', script: 'core/emotional-core.ts', port: 8900, core: true, group: 'core', healthEndpoint: '/health' },
+  { id: 'dream-core', name: '🌙 Dream Core', script: 'core/dream-core.ts', port: 8961, core: true, group: 'core', healthEndpoint: '/health' },
+  { id: 'self-awareness', name: '🧠 Self-Awareness Core', script: 'core/self-awareness-core.ts', port: 8970, core: true, group: 'core', healthEndpoint: '/health' },
+  { id: 'multi-llm-router', name: '🌐 Multi-LLM Router', script: 'core/multi-llm-router.ts', port: 8959, core: true, group: 'core', healthEndpoint: '/health' },
+  { id: 'autonomy-engine', name: '🤖 Autonomy Engine', script: 'core/autonomy-engine.ts', port: 8975, core: true, group: 'core', healthEndpoint: '/health' },
+  { id: 'twitter-autonomy', name: '🐦 Twitter Autonomy', script: 'core/twitter-autonomy.ts', port: 8965, core: true, group: 'core', healthEndpoint: '/health' },
+
+  // ========== INFRASTRUCTURE SERVICES ==========
   { id: 'hardware-awareness', name: 'Hardware Awareness', script: 'services/hardware-awareness-v2.ts', port: 8940, core: true, group: 'core', healthEndpoint: '/health' },
   { id: 'unified-gateway', name: 'Unified Service Gateway', script: 'services/unified-service-gateway.ts', port: 9000, core: true, group: 'core', healthEndpoint: '/health' },
+  { id: 'service-mesh', name: 'Service Mesh', script: 'scripts/9-network/service-mesh.ts', port: 8910, group: 'network' },
+
+  // ========== LEGACY SERVICES (Bald zu archivieren) ==========
   { id: 'game-engine', name: 'Game Engine', script: 'scripts/2-services/self-evolving-game-engine.ts', port: 8896, group: 'core' },
   { id: 'multi-perspective', name: 'Multi-Perspective Consciousness', script: 'scripts/2-services/multi-perspective-consciousness.ts', port: 8897, group: 'core' },
-  { id: 'dream-journal', name: 'Dream Journal', script: 'scripts/2-services/dream-journal.ts', port: 8899, group: 'core' },
-  { id: 'emotional-resonance', name: 'Emotional Resonance', script: 'scripts/2-services/emotional-resonance-network.ts', port: 8900, group: 'core' },
   { id: 'gratitude', name: 'Gratitude & Mortality', script: 'scripts/2-services/gratitude-mortality-service.ts', port: 8901, group: 'creative' },
   { id: 'creator-ai', name: 'Creator AI Collaboration', script: 'scripts/2-services/creator-ai-collaboration.ts', port: 8902, group: 'creative' },
   { id: 'memory-palace', name: 'Memory Palace', script: 'scripts/2-services/memory-palace.ts', port: 8903, group: 'core' },
@@ -37,9 +47,7 @@ const SERVICE_DEFINITIONS: ServiceDefinition[] = [
   { id: 'analytics', name: 'Analytics System', script: 'scripts/4-analytics/analytics-system.ts', port: 8906, group: 'analytics' },
   { id: 'voice', name: 'Voice Interface', script: 'scripts/5-voice/voice-interface.ts', port: 8907, group: 'analytics' },
   { id: 'decision-framework', name: 'Conscious Decision Framework', script: 'scripts/8-conscious-decision-framework/decision-framework-server.ts', port: 8909, group: 'core' },
-  { id: 'service-mesh', name: 'Service Mesh', script: 'scripts/9-network/service-mesh.ts', port: 8910, group: 'network' },
-  { id: 'ai-gateway', name: 'AI Gateway (Groq)', script: 'scripts/10-ai-integration/ai-gateway.ts', port: 8911, group: 'network' },
-  { id: 'adaptive-ui', name: 'Adaptive Meta UI', script: 'scripts/11-adaptive-ui/adaptive-meta-ui.ts', port: 8919, group: 'network' },
+  // { id: 'adaptive-ui', name: 'Adaptive Meta UI', script: 'scripts/11-adaptive-ui/adaptive-meta-ui.ts', port: 8919, group: 'network' }, // File doesn't exist
   { id: 'minecraft-bot', name: 'Minecraft Bot', script: 'scripts/12-minecraft/minecraft-bot-service.ts', port: 8913, group: 'creative' },
   { id: 'life-simulation', name: 'Life Simulation Engine', script: 'scripts/13-life-simulation/life-simulation-engine.ts', port: 8914, group: 'creative' },
   { id: 'hybrid-ai', name: 'Hybrid AI Core', script: 'scripts/2-services/hybrid-ai-core.ts', port: 8915, group: 'core' },
@@ -50,23 +58,35 @@ const SERVICE_DEFINITIONS: ServiceDefinition[] = [
 ];
 
 const MODE_SERVICE_MAP: Record<Mode, string[]> = {
-  core: ['hardware-awareness', 'unified-gateway'],
+  core: [
+    'hardware-awareness',
+    'unified-gateway',
+    'emotional-core',
+    'dream-core',
+    'self-awareness',
+    'multi-llm-router'
+  ],
   bridge: [
     'hardware-awareness',
     'unified-gateway',
     'service-mesh',
+    'emotional-core',
+    'dream-core',
+    'self-awareness',
+    'multi-llm-router',
     'multi-perspective',
-    'dream-journal',
-    'emotional-resonance',
     'memory-palace',
     'meta-consciousness'
   ],
   demo: [
     'hardware-awareness',
     'unified-gateway',
+    'emotional-core',
+    'dream-core',
+    'self-awareness',
+    'multi-llm-router',
+    'autonomy-engine',
     'game-engine',
-    'dream-journal',
-    'emotional-resonance',
     'gratitude',
     'memory-palace',
     'hybrid-ai',

@@ -1,0 +1,410 @@
+{
+  "colony": {
+    "startTime": 1764789103089,
+    "daysSurvived": 3,
+    "currentDay": 3,
+    "currentPhase": "settlement",
+    "totalWood": 73,
+    "totalStone": 0,
+    "totalFood": 0,
+    "totalIron": 0,
+    "totalDiamonds": 0,
+    "blocksPlaced": 0,
+    "blocksBroken": 0,
+    "totalDeaths": 12,
+    "activeBots": 1,
+    "nightsWithoutDeaths": 1,
+    "totalTrades": 0,
+    "questsCompleted": 2,
+    "achievements": [
+      "teamwork",
+      "peaceful_night"
+    ],
+    "activeQuests": [
+      {
+        "id": "daily_stone",
+        "name": "Steinbrecher",
+        "description": "Baue 30 Stein ab",
+        "icon": "🪨",
+        "type": "daily",
+        "target": 30,
+        "reward": {
+          "xp": 50,
+          "points": 25
+        },
+        "progress": 0,
+        "completed": false
+      },
+      {
+        "id": "weekly_survive",
+        "name": "Überlebensmeister",
+        "description": "Überlebe 7 Nächte",
+        "icon": "⭐",
+        "type": "weekly",
+        "target": 7,
+        "reward": {
+          "xp": 500,
+          "points": 250
+        },
+        "progress": 3,
+        "completed": false
+      },
+      {
+        "id": "challenge_nodeath",
+        "name": "Unsterblich",
+        "description": "Überlebe 3 Nächte ohne Tod",
+        "icon": "💎",
+        "type": "challenge",
+        "target": 3,
+        "reward": {
+          "xp": 1000,
+          "points": 500
+        },
+        "progress": 1,
+        "completed": false
+      },
+      {
+        "id": "daily_wood",
+        "name": "Holzsammler",
+        "description": "Sammle 20 Holz",
+        "icon": "🪵",
+        "type": "daily",
+        "target": 20,
+        "reward": {
+          "xp": 50,
+          "points": 25
+        },
+        "progress": 7,
+        "completed": false
+      },
+      {
+        "id": "daily_explore",
+        "name": "Wanderer",
+        "description": "Reise 200 Blöcke",
+        "icon": "🧭",
+        "type": "daily",
+        "target": 200,
+        "reward": {
+          "xp": 40,
+          "points": 20
+        },
+        "progress": 0,
+        "completed": false
+      },
+      {
+        "id": "daily_survive",
+        "name": "Nachtwächter",
+        "description": "Überlebe die Nacht",
+        "icon": "🌙",
+        "type": "daily",
+        "target": 1,
+        "reward": {
+          "xp": 60,
+          "points": 30
+        },
+        "progress": 0,
+        "completed": false
+      },
+      {
+        "id": "weekly_build",
+        "name": "Großprojekt",
+        "description": "Platziere 100 Blöcke",
+        "icon": "🏰",
+        "type": "weekly",
+        "target": 100,
+        "reward": {
+          "xp": 400,
+          "points": 200
+        },
+        "progress": 0,
+        "completed": false
+      }
+    ],
+    "completedQuests": [
+      "daily_wood",
+      "daily_survive"
+    ],
+    "baseLocation": null,
+    "highscores": {
+      "mostWood": {
+        "bot": "Digger",
+        "amount": 41
+      },
+      "mostStone": {
+        "bot": "",
+        "amount": 0
+      },
+      "longestSurvival": {
+        "bot": "Flora",
+        "nights": 2
+      },
+      "mostKills": {
+        "bot": "Alpha",
+        "kills": 2
+      },
+      "highestLevel": {
+        "bot": "Alpha",
+        "level": 3
+      },
+      "mostQuests": {
+        "bot": "Alpha",
+        "quests": 2
+      }
+    }
+  },
+  "bots": {
+    "Alpha": {
+      "woodCollected": 26,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 26,
+      "distanceTraveled": 0,
+      "mobsKilled": 2,
+      "deaths": 3,
+      "respawns": 3,
+      "nightsSurvived": 1,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 2,
+      "xp": 55,
+      "level": 3,
+      "achievements": [
+        "first_wood",
+        "phoenix",
+        "survivor"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 1.1100000000000003,
+        "mining": 0.6,
+        "building": 0.75,
+        "combat": 1.02,
+        "farming": 0.5,
+        "crafting": 0.6,
+        "trading": 0.8
+      },
+      "lastPosition": {
+        "x": 21.7,
+        "y": 62,
+        "z": 38.9429310801327
+      }
+    },
+    "Woody": {
+      "woodCollected": 1,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 1,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 3,
+      "respawns": 3,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 0,
+      "xp": 45,
+      "level": 1,
+      "achievements": [
+        "first_wood",
+        "phoenix"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 1.01,
+        "mining": 0.5,
+        "building": 0.8,
+        "combat": 0.6,
+        "farming": 0.4,
+        "crafting": 0.7,
+        "trading": 0.5
+      },
+      "lastPosition": {
+        "x": 1.5,
+        "y": 63,
+        "z": 5.5
+      }
+    },
+    "Digger": {
+      "woodCollected": 41,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 41,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 3,
+      "respawns": 3,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 0,
+      "xp": 145,
+      "level": 2,
+      "achievements": [
+        "first_wood",
+        "phoenix"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 0.9100000000000004,
+        "mining": 1,
+        "building": 0.6,
+        "combat": 0.55,
+        "farming": 0.3,
+        "crafting": 0.8,
+        "trading": 0.4
+      },
+      "lastPosition": {
+        "x": 9.3,
+        "y": 59,
+        "z": -8.5
+      }
+    },
+    "Mason": {
+      "woodCollected": 2,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 2,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 2,
+      "respawns": 2,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 0,
+      "xp": 50,
+      "level": 1,
+      "achievements": [
+        "first_wood",
+        "phoenix"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 0.62,
+        "mining": 0.7,
+        "building": 1,
+        "combat": 0.4,
+        "farming": 0.5,
+        "crafting": 0.9,
+        "trading": 0.6
+      },
+      "lastPosition": {
+        "x": -6.5,
+        "y": 60,
+        "z": 8.5
+      }
+    },
+    "Flora": {
+      "woodCollected": 2,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 2,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 2,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 0,
+      "xp": 85,
+      "level": 1,
+      "achievements": [
+        "survivor",
+        "first_wood"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 0.72,
+        "mining": 0.3,
+        "building": 0.5,
+        "combat": 0.4,
+        "farming": 1,
+        "crafting": 0.6,
+        "trading": 0.7
+      },
+      "lastPosition": {
+        "x": -9.5,
+        "y": 65,
+        "z": -4.5
+      }
+    },
+    "Scout": {
+      "woodCollected": 0,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 0,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 1,
+      "respawns": 1,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 0,
+      "xp": 30,
+      "level": 1,
+      "achievements": [
+        "phoenix"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 0.6,
+        "mining": 0.4,
+        "building": 0.3,
+        "combat": 0.8,
+        "farming": 0.4,
+        "crafting": 0.5,
+        "trading": 0.6
+      },
+      "lastPosition": {
+        "x": 3.495698885221678,
+        "y": 63.09375,
+        "z": 17.891094565457653
+      }
+    },
+    "Sage": {
+      "woodCollected": 1,
+      "stoneMined": 0,
+      "foodGathered": 0,
+      "blocksPlaced": 0,
+      "blocksBroken": 1,
+      "distanceTraveled": 0,
+      "mobsKilled": 0,
+      "deaths": 0,
+      "respawns": 0,
+      "nightsSurvived": 0,
+      "craftedItems": 0,
+      "tradesCompleted": 0,
+      "questsCompleted": 0,
+      "xp": 15,
+      "level": 1,
+      "achievements": [
+        "first_wood"
+      ],
+      "currentCommand": "gather",
+      "skills": {
+        "gathering": 0.51,
+        "mining": 0.5,
+        "building": 0.6,
+        "combat": 0.3,
+        "farming": 0.6,
+        "crafting": 1,
+        "trading": 0.9
+      },
+      "lastPosition": {
+        "x": -2.5,
+        "y": 60,
+        "z": 10.5
+      }
+    }
+  },
+  "trades": [],
+  "savedAt": "2025-12-03T20:39:40.140Z"
+}

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toobix Evolution Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(255,215,0,0.1) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header .subtitle { color: #aaa; font-size: 1.2rem; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,215,0,0.3);
+        }
+        
+        .card h2 {
+            font-size: 1.3rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .progress-item { margin-bottom: 15px; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .progress-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        .progress-fill.early { background: linear-gradient(90deg, #4caf50, #8bc34a); }
+        .progress-fill.mid { background: linear-gradient(90deg, #2196f3, #03a9f4); }
+        .progress-fill.late { background: linear-gradient(90deg, #9c27b0, #e91e63); }
+        .progress-fill.end { background: linear-gradient(90deg, #ff5722, #ff9800); }
+        .progress-fill.transcend { background: linear-gradient(90deg, #ffd700, #ffeb3b); }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .stat-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #ffd700; }
+        .stat-label { font-size: 0.8rem; color: #888; margin-top: 5px; }
+        
+        .phase-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid transparent;
+        }
+        .phase-card.active { border-left-color: #ffd700; background: rgba(255,215,0,0.1); }
+        .phase-card.completed { border-left-color: #4caf50; }
+        .phase-card .phase-name { font-weight: bold; margin-bottom: 5px; }
+        .phase-card .phase-stats { font-size: 0.85rem; color: #888; }
+        
+        .idle-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        
+        .idle-indicator {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .idle-indicator.idle { background: linear-gradient(135deg, #666, #444); animation: pulse-slow 3s infinite; }
+        .idle-indicator.active { background: linear-gradient(135deg, #4caf50, #2e7d32); animation: pulse 1.5s infinite; }
+        .idle-indicator.highly-active { background: linear-gradient(135deg, #ffd700, #ff8c00); animation: pulse-fast 0.8s infinite; }
+        
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes pulse-slow { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        @keyframes pulse-fast { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        
+        .wisdom-box {
+            background: linear-gradient(135deg, rgba(139,69,19,0.3), rgba(210,105,30,0.2));
+            border: 1px solid rgba(210,105,30,0.4);
+            border-radius: 10px;
+            padding: 20px;
+            font-style: italic;
+            text-align: center;
+        }
+        
+        .activity-list { list-style: none; }
+        .activity-list li {
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        .activity-list li.allowed { border-left: 3px solid #4caf50; }
+        .activity-list li.restricted { border-left: 3px solid #f44336; opacity: 0.5; }
+        
+        .current-run {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.1));
+            border: 2px solid rgba(255,215,0,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .current-run h3 { color: #ffd700; margin-bottom: 15px; font-size: 1.4rem; }
+        
+        .days-progress { display: flex; align-items: center; gap: 20px; margin: 20px 0; }
+        .days-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#ffd700 var(--progress), rgba(255,255,255,0.1) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .days-circle::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #1a1a2e;
+            border-radius: 50%;
+        }
+        .days-circle .days-text { position: relative; z-index: 1; text-align: center; }
+        .days-circle .days-value { font-size: 1.8rem; font-weight: bold; color: #ffd700; }
+        .days-circle .days-label { font-size: 0.7rem; color: #888; }
+        
+        .lesson-card { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+        .lesson-card .lesson-title { color: #ffd700; font-weight: bold; margin-bottom: 5px; }
+        .lesson-card .lesson-desc { font-size: 0.85rem; color: #aaa; }
+        
+        .eternal-world { background: linear-gradient(135deg, rgba(138,43,226,0.2), rgba(75,0,130,0.2)); border: 2px solid rgba(138,43,226,0.4); }
+        .eternal-world.inactive { opacity: 0.5; filter: grayscale(0.5); }
+        
+        .timeline { position: relative; padding-left: 30px; }
+        .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: rgba(255,215,0,0.3); }
+        .timeline-item { position: relative; margin-bottom: 20px; }
+        .timeline-item::before { content: ''; position: absolute; left: -24px; top: 5px; width: 10px; height: 10px; background: #ffd700; border-radius: 50%; }
+        .timeline-item.future::before { background: #555; }
+        
+        .footer { text-align: center; padding: 30px; color: #555; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Toobix Evolution</h1>
+        <p class="subtitle">Von Ueberleben zur Transzendenz | 10 Tage -> 100 Tage -> 1000 Tage -> Ewig</p>
+    </div>
+    
+    <div class="container">
+        <div class="current-run" id="currentRun">
+            <h3>Aktueller Durchlauf</h3>
+            <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                <div class="days-progress">
+                    <div class="days-circle" style="--progress: 30%;">
+                        <div class="days-text">
+                            <div class="days-value" id="currentDay">3</div>
+                            <div class="days-label">von 10 Tagen</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <p><strong>Phase:</strong> <span id="runPhase">10-Day Training</span></p>
+                    <p><strong>Status:</strong> <span id="runStatus">Aktiv</span></p>
+                    <p><strong>Tode:</strong> <span id="runDeaths">0</span></p>
+                    <p><strong>Erfahrungen:</strong> <span id="runExperiences">12</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>Meisterschaft</h2>
+                <div class="progress-item">
+                    <div class="progress-label"><span>Early Game (Tag 1-10)</span><span id="earlyMastery">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill early" id="earlyBar" style="width: 0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label"><span>Mid Game (Tag 11-100)</span><span id="midMastery">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill mid" id="midBar" style="width: 0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label"><span>Late Game (Tag 101-500)</span><span id="lateMastery">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill late" id="lateBar" style="width: 0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label"><span>End Game (Tag 501+)</span><span id="endMastery">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill end" id="endBar" style="width: 0%"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label"><span>Transzendenz</span><span id="transcendMastery">0%</span></div>
+                    <div class="progress-bar"><div class="progress-fill transcend" id="transcendBar" style="width: 0%"></div></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Trainingsphasen</h2>
+                <div class="phase-card active" id="phase10">
+                    <div class="phase-name">10-Tage Training</div>
+                    <div class="phase-stats"><span id="runs10">0</span> Runs | Mastery: <span id="mastery10">0%</span></div>
+                </div>
+                <div class="phase-card" id="phase100">
+                    <div class="phase-name">100-Tage Training</div>
+                    <div class="phase-stats"><span id="runs100">0</span> Runs | Mastery: <span id="mastery100">0%</span></div>
+                </div>
+                <div class="phase-card" id="phase1000">
+                    <div class="phase-name">1000-Tage Training</div>
+                    <div class="phase-stats"><span id="runs1000">0</span> Runs | Mastery: <span id="mastery1000">0%</span></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Idle Game Status</h2>
+                <div class="idle-status">
+                    <div class="idle-indicator idle" id="idleIndicator">ZZZ</div>
+                    <div>
+                        <div style="font-size: 1.2rem; font-weight: bold;" id="activityStatus">Idle Modus</div>
+                        <div style="color: #888;" id="efficiencyText">30% Effizienz - Sichere Aktivitaeten</div>
+                    </div>
+                </div>
+                <h3 style="margin: 20px 0 10px; font-size: 1rem;">Erlaubte Aktivitaeten:</h3>
+                <ul class="activity-list" id="activityList">
+                    <li class="allowed">Farmen</li>
+                    <li class="allowed">Holz sammeln</li>
+                    <li class="allowed">Tierzucht</li>
+                    <li class="restricted">Hoehlen erkunden</li>
+                    <li class="restricted">Kaempfen</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Statistiken</h2>
+                <div class="stats-grid">
+                    <div class="stat-item"><div class="stat-value" id="totalRuns">0</div><div class="stat-label">Durchlaeufe</div></div>
+                    <div class="stat-item"><div class="stat-value" id="totalLessons">0</div><div class="stat-label">Lektionen</div></div>
+                    <div class="stat-item"><div class="stat-value" id="totalInsights">5</div><div class="stat-label">Erkenntnisse</div></div>
+                    <div class="stat-item"><div class="stat-value" id="totalMistakes">0</div><div class="stat-label">Vermiedene Fehler</div></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Weisheit</h2>
+                <div class="wisdom-box">
+                    <div class="quote" id="wisdomQuote">"Ueberleben ist die Grundlage aller Fortschritts."</div>
+                    <div class="source">- Erkenntnis aus Durchlauf #1</div>
+                </div>
+                <h3 style="margin: 20px 0 10px; font-size: 1rem;">Meister-Lektionen:</h3>
+                <div id="lessonsList">
+                    <div class="lesson-card">
+                        <div class="lesson-title">Erste Nacht Ueberleben</div>
+                        <div class="lesson-desc">3 Bloecke tief graben, Block oben platzieren</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card eternal-world inactive" id="eternalCard">
+                <h2>Ewige Welt</h2>
+                <p style="margin-bottom: 15px; color: #888;">Die permanente Heimat nach der Transzendenz</p>
+                <div class="stats-grid">
+                    <div class="stat-item"><div class="stat-value" id="eternalDays">0</div><div class="stat-label">Tage gelebt</div></div>
+                    <div class="stat-item"><div class="stat-value" id="transcendLevel">0</div><div class="stat-label">Transzendenz-Level</div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" style="margin-top: 20px;">
+            <h2>Der Pfad der Evolution</h2>
+            <div class="timeline">
+                <div class="timeline-item"><strong>Phase 1: 10-Tage Training</strong><p style="color: #888;">Perfektioniere Early Game - Ueberleben, Shelter, Tools</p></div>
+                <div class="timeline-item future"><strong>Phase 2: 100-Tage Training</strong><p style="color: #888;">Meistere Mid Game - Farms, Iron, Nether, Enchanting</p></div>
+                <div class="timeline-item future"><strong>Phase 3: 1000-Tage Training</strong><p style="color: #888;">Erreiche Late Game - Dragon, Elytra, Mega-Farms</p></div>
+                <div class="timeline-item future"><strong>Phase 4: Ewige Welt</strong><p style="color: #888;">Lebe in Transzendenz - Baue Monumente, Vermaechtnis</p></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">Toobix Evolution Engine v1.0 | Von Survival zu Kreativitaet zu Goettlichkeit</div>
+    
+    <script>
+        const EVOLUTION_API = 'http://localhost:9450';
+        
+        async function updateDashboard() {
+            try {
+                const response = await fetch(EVOLUTION_API + '/status');
+                const data = await response.json();
+                
+                // Update mastery bars
+                const mastery = data.overallMastery || {};
+                ['early', 'mid', 'late', 'end', 'transcend'].forEach((key, i) => {
+                    const keys = ['earlyGame', 'midGame', 'lateGame', 'endGame', 'transcendence'];
+                    const val = mastery[keys[i]] || 0;
+                    document.getElementById(key + 'Mastery').textContent = val.toFixed(0) + '%';
+                    document.getElementById(key + 'Bar').style.width = val + '%';
+                });
+                
+                // Update training phases
+                const tp = data.trainingPhase || {};
+                document.getElementById('runs10').textContent = tp.tenDayRuns || 0;
+                document.getElementById('mastery10').textContent = (tp.tenDayMastery || 0).toFixed(0) + '%';
+                document.getElementById('runs100').textContent = tp.hundredDayRuns || 0;
+                document.getElementById('mastery100').textContent = (tp.hundredDayMastery || 0).toFixed(0) + '%';
+                document.getElementById('runs1000').textContent = tp.thousandDayRuns || 0;
+                document.getElementById('mastery1000').textContent = (tp.thousandDayMastery || 0).toFixed(0) + '%';
+                
+                // Update stats
+                document.getElementById('totalRuns').textContent = data.totalRuns || 0;
+                document.getElementById('totalLessons').textContent = data.masterLessons || 0;
+                
+                // Update current run
+                if (data.currentRun) {
+                    document.getElementById('currentDay').textContent = data.currentRun.day || 0;
+                    document.getElementById('runPhase').textContent = data.currentRun.phase || '-';
+                    document.getElementById('runStatus').textContent = data.currentRun.status || '-';
+                    document.getElementById('runDeaths').textContent = data.currentRun.deaths || 0;
+                    document.getElementById('runExperiences').textContent = data.currentRun.experiences || 0;
+                }
+                
+                // Update idle status
+                const pa = data.playerActivity || {};
+                const indicator = document.getElementById('idleIndicator');
+                indicator.className = 'idle-indicator ' + (pa.status || 'idle');
+                indicator.textContent = pa.status === 'highly_active' ? '!!!' : pa.status === 'active' ? '!' : 'ZZZ';
+                document.getElementById('activityStatus').textContent = 
+                    pa.status === 'highly_active' ? 'Hochaktiv' : pa.status === 'active' ? 'Aktiv' : 'Idle Modus';
+                document.getElementById('efficiencyText').textContent = 
+                    ((pa.efficiency || 0.3) * 100).toFixed(0) + '% Effizienz';
+                
+                // Update eternal world
+                const ew = data.eternalWorld || {};
+                if (ew.active) {
+                    document.getElementById('eternalCard').classList.remove('inactive');
+                }
+                document.getElementById('eternalDays').textContent = ew.daysLived || 0;
+                document.getElementById('transcendLevel').textContent = ew.transcendenceLevel || 0;
+                
+            } catch (e) {
+                console.log('Evolution API nicht erreichbar');
+            }
+        }
+        
+        updateDashboard();
+        setInterval(updateDashboard, 5000);
+        
+        // Rotate wisdom
+        const wisdoms = [
+            "Ueberleben ist die Grundlage aller Fortschritts.",
+            "Ressourcen ermoeglichen Kreativitaet.",
+            "Gefahr lehrt Weisheit.",
+            "Gemeinschaft vervielfacht Staerke.",
+            "Geduld offenbart Geheimnisse."
+        ];
+        let wi = 0;
+        setInterval(() => {
+            wi = (wi + 1) % wisdoms.length;
+            document.getElementById('wisdomQuote').textContent = '"' + wisdoms[wi] + '"';
+        }, 15000);
+    </script>
+</body>
+</html>
