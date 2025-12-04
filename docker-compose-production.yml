@@ -1,0 +1,278 @@
+version: '3.9'
+
+# 🏗️ TOOBIX CITY - Complete Production Deployment
+# Start everything with: docker-compose -f docker-compose-production.yml up -d
+# View logs: docker-compose -f docker-compose-production.yml logs -f
+# Stop all: docker-compose -f docker-compose-production.yml down
+
+services:
+  # ============================================
+  # 👑 CORE LAYER - The Brain
+  # ============================================
+
+  toobix-prime:
+    image: oven/bun:latest
+    container_name: toobix-prime
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8888:8888"
+    command: ["bun", "run", "scripts/0-core/toobix-prime.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    environment:
+      - NODE_ENV=production
+      - SERVICE_NAME=toobix-prime
+      - PORT=8888
+
+  consciousness-stream:
+    image: oven/bun:latest
+    container_name: consciousness-stream
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "9100:9100"
+    command: ["bun", "run", "scripts/2-services/consciousness-stream.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  # ============================================
+  # 🧠 COGNITIVE LAYER - Memory & Intelligence
+  # ============================================
+
+  memory-palace:
+    image: oven/bun:latest
+    container_name: memory-palace
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - toobix-memory-data:/app/data/memory
+    ports:
+      - "8953:8953"
+    command: ["bun", "run", "scripts/1-foundation/memory-palace-v3.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  llm-gateway:
+    image: oven/bun:latest
+    container_name: llm-gateway
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8954:8954"
+    command: ["bun", "run", "scripts/1-foundation/llm-gateway-v2.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+    environment:
+      - TOOBIX_API_KEY=${TOOBIX_API_KEY:-}
+
+  intuition-system:
+    image: oven/bun:latest
+    container_name: intuition-system
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8915:8915"
+    command: ["bun", "run", "scripts/2-services/toobix-intuition-system.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+      - llm-gateway
+
+  creativity-engine:
+    image: oven/bun:latest
+    container_name: creativity-engine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8992:8992"
+    command: ["bun", "run", "scripts/2-services/toobix-creativity-engine.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+      - llm-gateway
+
+  # ============================================
+  # ❤️ EMOTIONAL LAYER - Feelings & Dreams
+  # ============================================
+
+  dream-journal:
+    image: oven/bun:latest
+    container_name: dream-journal
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - toobix-dream-data:/app/data/dreams
+    ports:
+      - "8899:8899"
+    command: ["bun", "run", "scripts/2-services/dream-journal-v3.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  emotional-resonance:
+    image: oven/bun:latest
+    container_name: emotional-resonance
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8900:8900"
+    command: ["bun", "run", "scripts/2-services/toobix-emotional-resonance.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  # ============================================
+  # 💬 SOCIAL LAYER - Communication
+  # ============================================
+
+  chat-service:
+    image: oven/bun:latest
+    container_name: chat-service
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8970:8970"
+    command: ["bun", "run", "scripts/2-services/toobix-chat-service-fixed.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+      - llm-gateway
+
+  # ============================================
+  # 🔮 META LAYER - Perspectives & Stories
+  # ============================================
+
+  multi-perspective:
+    image: oven/bun:latest
+    container_name: multi-perspective
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8897:8897"
+    command: ["bun", "run", "scripts/2-services/multi-perspective-v3.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  story-engine:
+    image: oven/bun:latest
+    container_name: story-engine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8993:8993"
+    command: ["bun", "run", "scripts/2-services/story-engine-service.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  # ============================================
+  # 🤖 AUTONOMOUS LAYER - Self-Agency
+  # ============================================
+
+  autonomous-engine:
+    image: oven/bun:latest
+    container_name: autonomous-engine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8991:8991"
+    command: ["bun", "run", "scripts/2-services/adaptive-autonomous-engine.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  # ============================================
+  # 🌴 3D & VISUALIZATION - The Oasis
+  # ============================================
+
+  oasis-3d:
+    image: oven/bun:latest
+    container_name: oasis-3d
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8994:8994"
+    command: ["bun", "run", "scripts/2-services/toobix-oasis-3d.ts"]
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+
+  # ============================================
+  # 🏙️ TOOBIX CITY - The Living World (Frontend)
+  # ============================================
+
+  toobix-city:
+    image: nginx:alpine
+    container_name: toobix-city
+    ports:
+      - "8080:80"
+    volumes:
+      - ./toobix-city-v3-ultra.html:/usr/share/nginx/html/index.html:ro
+    restart: unless-stopped
+    networks:
+      - toobix-network
+    depends_on:
+      - toobix-prime
+      - consciousness-stream
+
+# ============================================
+# NETWORKS & VOLUMES
+# ============================================
+
+networks:
+  toobix-network:
+    driver: bridge
+    name: toobix-network
+
+volumes:
+  toobix-memory-data:
+    driver: local
+  toobix-dream-data:
+    driver: local

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Toobix Evolution Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1e3e 100%);
+            color: #00ff88;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            background: rgba(0, 255, 136, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+        .stat-label {
+            font-size: 1.2em;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        .history {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .history-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #00ff88;
+            border-radius: 5px;
+        }
+        .history-item.success { border-left-color: #00ff88; }
+        .history-item.error { border-left-color: #ff0066; }
+        .timestamp {
+            color: #00ffff;
+            font-size: 0.9em;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        button {
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            color: #0a0e27;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.5);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .improvements {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .improvement-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .priority-high { border-left: 4px solid #ff0066; }
+        .priority-medium { border-left: 4px solid #ffaa00; }
+        .priority-low { border-left: 4px solid #00ff88; }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-online { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+        .status-offline { background: #ff0066; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧬 Toobix Evolution Dashboard</h1>
+        <p>Real-Time Self-Improvement Monitoring</p>
+        <p id="lastUpdate" style="margin-top: 10px; opacity: 0.7;">Last Update: --</p>
+    </div>
+
+    <div class="controls">
+        <button onclick="triggerEvolution()">▶️ Start Evolution Cycle</button>
+        <button onclick="triggerAnalysis()">🔍 Run Analysis</button>
+        <button onclick="toggleAutoRefresh()" id="autoRefreshBtn">⏸️ Pause Auto-Refresh</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value pulse" id="totalServices">--</div>
+            <div class="stat-label">Total Services</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="onlineServices">--</div>
+            <div class="stat-label">Online Services</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="systemScore">--</div>
+            <div class="stat-label">System Score</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="evolutionSteps">--</div>
+            <div class="stat-label">Evolution Steps</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="duplicateGroups">--</div>
+            <div class="stat-label">Duplicate Groups</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="improvements">--</div>
+            <div class="stat-label">Improvements Found</div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="history">
+            <h2 style="margin-bottom: 15px;">📜 Evolution History (Live)</h2>
+            <div id="historyList"></div>
+        </div>
+
+        <div class="improvements">
+            <h2 style="margin-bottom: 15px;">💡 Pending Improvements</h2>
+            <div id="improvementsList"></div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefresh = true;
+        let refreshInterval;
+
+        async function fetchData() {
+            try {
+                // Fetch analysis
+                const analysisRes = await fetch('http://localhost:8999/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const analysisData = await analysisRes.json();
+
+                // Fetch history
+                const historyRes = await fetch('http://localhost:8999/history');
+                const historyData = await historyRes.json();
+
+                updateDashboard(analysisData, historyData);
+                document.getElementById('lastUpdate').textContent = `Last Update: ${new Date().toLocaleTimeString()}`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('lastUpdate').textContent = `⚠️ Error: ${error.message}`;
+            }
+        }
+
+        function updateDashboard(analysis, history) {
+            // Update stats
+            document.getElementById('totalServices').textContent = analysis.analysis?.totalServices || '--';
+            document.getElementById('onlineServices').textContent = analysis.analysis?.onlineServices || '--';
+            document.getElementById('systemScore').textContent = (analysis.analysis?.score || '--') + '/100';
+            document.getElementById('duplicateGroups').textContent = analysis.analysis?.duplicateGroups || '--';
+            document.getElementById('improvements').textContent = analysis.analysis?.improvementCount || '--';
+            document.getElementById('evolutionSteps').textContent = history.total || '--';
+
+            // Update history
+            const historyList = document.getElementById('historyList');
+            if (history.recent && history.recent.length > 0) {
+                historyList.innerHTML = history.recent.slice(0, 10).map(item => {
+                    const time = new Date(item.timestamp).toLocaleTimeString();
+                    const success = item.success ? 'success' : 'error';
+                    return `
+                        <div class="history-item ${success}">
+                            <span class="timestamp">${time}</span> -
+                            <strong>${item.type.toUpperCase()}</strong>: ${item.result || item.message || 'N/A'}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Update improvements
+            const improvementsList = document.getElementById('improvementsList');
+            if (analysis.improvements && analysis.improvements.length > 0) {
+                improvementsList.innerHTML = analysis.improvements.slice(0, 10).map(imp => {
+                    return `
+                        <div class="improvement-item priority-${imp.priority}">
+                            <strong>${imp.title}</strong><br>
+                            <small>${imp.description}</small><br>
+                            <small style="opacity: 0.7;">Priority: ${imp.priority} | Type: ${imp.type}</small>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        async function triggerEvolution() {
+            try {
+                const res = await fetch('http://localhost:8999/evolve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ auto: true, maxSteps: 5 })
+                });
+                const data = await res.json();
+                alert('✅ Evolution cycle started!');
+                fetchData();
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+
+        async function triggerAnalysis() {
+            await fetchData();
+            alert('✅ Analysis complete!');
+        }
+
+        function toggleAutoRefresh() {
+            autoRefresh = !autoRefresh;
+            const btn = document.getElementById('autoRefreshBtn');
+            btn.textContent = autoRefresh ? '⏸️ Pause Auto-Refresh' : '▶️ Resume Auto-Refresh';
+
+            if (autoRefresh) {
+                startAutoRefresh();
+            } else {
+                clearInterval(refreshInterval);
+            }
+        }
+
+        function startAutoRefresh() {
+            refreshInterval = setInterval(fetchData, 5000); // Refresh every 5 seconds
+        }
+
+        // Initial load
+        fetchData();
+        startAutoRefresh();
+    </script>
+</body>
+</html>

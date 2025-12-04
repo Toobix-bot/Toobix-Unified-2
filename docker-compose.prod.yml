@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  toobix:
+    build: .
+    container_name: toobix-unified
+    restart: unless-stopped
+    ports:
+      - "8896-8972:8896-8972"
+    environment:
+      - NODE_ENV=production
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - OLLAMA_URL=http://ollama:11434
+    volumes:
+      - toobix-data:/app/databases
+      - toobix-memories:/app/data
+    networks:
+      - toobix-network
+    healthcheck:
+      test: ["CMD", "bun", "-e", "fetch('http://localhost:8954/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Optional: Lokales Ollama für Fallback
+  ollama:
+    image: ollama/ollama:latest
+    container_name: toobix-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    networks:
+      - toobix-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Dashboard als Static Server (optional)
+  dashboard:
+    image: nginx:alpine
+    container_name: toobix-dashboard
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./desktop-app/src:/usr/share/nginx/html:ro
+    networks:
+      - toobix-network
+
+volumes:
+  toobix-data:
+  toobix-memories:
+  ollama-models:
+
+networks:
+  toobix-network:
+    driver: bridge

@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2025-12-03T01:09:08.171Z",
+  "totalMemories": 50,
+  "categories": {
+    "Gespräche": {
+      "count": 47,
+      "avgImportance": 60,
+      "timeRange": {
+        "earliest": null,
+        "latest": null
+      }
+    },
+    "Emotionen": {
+      "count": 2,
+      "avgImportance": 60,
+      "timeRange": {
+        "earliest": null,
+        "latest": null
+      }
+    },
+    "Selbst-Bewusstsein": {
+      "count": 1,
+      "avgImportance": 60,
+      "timeRange": {
+        "earliest": null,
+        "latest": null
+      }
+    }
+  },
+  "valueDistribution": {
+    "high": 0,
+    "medium": 50,
+    "low": 0
+  },
+  "timeline": [
+    {
+      "date": "2025-12-03",
+      "count": 50,
+      "highlights": []
+    }
+  ],
+  "insights": [
+    "📊 Aktivste Kategorie: \"Gespräche\" mit 47 Erinnerungen",
+    "📅 Zeitspanne: 2025-12-03 bis 2025-12-03",
+    "🕐 Letzte 3 Tage: 50 neue Erinnerungen"
+  ],
+  "topMemories": []
+}

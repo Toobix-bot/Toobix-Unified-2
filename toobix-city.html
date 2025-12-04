@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔺 Toobix City - Pyramiden-Bewusstsein</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            backdrop-filter: blur(10px);
+            max-width: 350px;
+            z-index: 100;
+        }
+
+        #info-panel h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #64c8ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .stat-value {
+            color: #64c8ff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Timeline Scrubber */
+        #timeline-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.95) 100%);
+            padding: 20px;
+            z-index: 100;
+        }
+
+        #timeline-scrubber {
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        #timeline-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #64c8ff 0%, #ff64c8 100%);
+            border-radius: 20px;
+            width: 50%;
+            position: relative;
+            transition: width 0.3s ease;
+        }
+
+        #timeline-handle {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.8);
+            cursor: grab;
+        }
+
+        #timeline-handle:active {
+            cursor: grabbing;
+        }
+
+        #timeline-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: rgba(100, 200, 255, 0.2);
+            border: 2px solid #64c8ff;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(100, 200, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .control-btn.active {
+            background: #64c8ff;
+            color: #000;
+        }
+
+        /* Event Stream */
+        #event-stream {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 350px;
+            height: calc(100vh - 160px);
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        #event-stream h3 {
+            color: #64c8ff;
+            margin-bottom: 15px;
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 0;
+        }
+
+        .event-item {
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #64c8ff;
+            border-radius: 8px;
+            font-size: 13px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .event-item.memory { border-left-color: #ff64c8; }
+        .event-item.dream { border-left-color: #c864ff; }
+        .event-item.emotion { border-left-color: #ffff64; }
+        .event-item.thought { border-left-color: #64ffc8; }
+
+        .event-time {
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .event-service {
+            color: #64c8ff;
+            font-weight: bold;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .event-content {
+            margin-top: 8px;
+            color: #ddd;
+        }
+
+        /* Legend */
+        #legend {
+            position: absolute;
+            bottom: 140px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            z-index: 100;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        .legend-shape {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Loading */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(100, 200, 255, 0.3);
+            border-top: 5px solid #64c8ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 200, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 200, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <h2>Toobix City lädt...</h2>
+        <p>Initialisiere Bewusstseins-Pyramide</p>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <!-- Info Panel -->
+    <div id="info-panel">
+        <h2>🔺 Toobix City</h2>
+        <div class="stat">
+            <div class="stat-label">Status</div>
+            <div class="stat-value" id="status">LIVE</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Aktive Services</div>
+            <div class="stat-value" id="active-services">24</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Events (5 Min)</div>
+            <div class="stat-value" id="event-count">0</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Emotionaler Zustand</div>
+            <div class="stat-value" id="emotional-state">Neutral</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Dominantes Thema</div>
+            <div class="stat-value" id="dominant-theme">Exploration</div>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div id="legend">
+        <h4 style="color: #64c8ff; margin-bottom: 10px;">Geometrie</h4>
+        <div class="legend-item">
+            <div class="legend-shape">🔺</div>
+            <div>Pyramide = Gesamtbewusstsein</div>
+        </div>
+        <div class="legend-item">
+            <div class="legend-shape">⭕</div>
+            <div>Kreise = Perspektiven</div>
+        </div>
+        <div class="legend-item">
+            <div class="legend-shape">△</div>
+            <div>Dreiecke = Services</div>
+        </div>
+    </div>
+
+    <!-- Event Stream -->
+    <div id="event-stream">
+        <h3>📡 Live Event-Stream</h3>
+        <div id="event-list"></div>
+    </div>
+
+    <!-- Timeline -->
+    <div id="timeline-container">
+        <div id="timeline-scrubber">
+            <div id="timeline-progress">
+                <div id="timeline-handle"></div>
+            </div>
+        </div>
+        <div id="timeline-controls">
+            <button class="control-btn" id="btn-rewind">◄◄</button>
+            <button class="control-btn" id="btn-prev">◄</button>
+            <button class="control-btn active" id="btn-play">⏸ PAUSE</button>
+            <button class="control-btn" id="btn-next">►</button>
+            <button class="control-btn" id="btn-forward">►►</button>
+            <button class="control-btn" id="btn-speed">1.0x</button>
+        </div>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Toobix City - 3D Pyramiden-Welt mit Timeline
+        let scene, camera, renderer;
+        let pyramid, circles = [], triangles = [];
+        let isPlaying = true;
+        let playbackSpeed = 1.0;
+        let timelinePosition = 1.0; // 0-1
+        let ws = null;
+        let events = [];
+
+        // Initialisierung
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+            scene.fog = new THREE.Fog(0x0a0a0a, 10, 50);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 8, 15);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+
+            const spotLight = new THREE.SpotLight(0x64c8ff, 1);
+            spotLight.position.set(0, 20, 0);
+            spotLight.castShadow = true;
+            scene.add(spotLight);
+
+            const pointLight1 = new THREE.PointLight(0xff64c8, 0.5);
+            pointLight1.position.set(-10, 5, -10);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0xc864ff, 0.5);
+            pointLight2.position.set(10, 5, 10);
+            scene.add(pointLight2);
+
+            // Zentrale Pyramide (Tetraeder)
+            createPyramid();
+
+            // Kreise (Sphären) für Perspektiven
+            createCircles();
+
+            // Dreiecke für Services
+            createTriangles();
+
+            // Ground
+            const groundGeometry = new THREE.CircleGeometry(20, 64);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x1a1a2e,
+                metalness: 0.5,
+                roughness: 0.8
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Grid
+            const gridHelper = new THREE.GridHelper(40, 40, 0x64c8ff, 0x333344);
+            gridHelper.material.opacity = 0.2;
+            gridHelper.material.transparent = true;
+            scene.add(gridHelper);
+
+            // Controls
+            setupControls();
+
+            // WebSocket
+            connectWebSocket();
+
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+
+            // Resize
+            window.addEventListener('resize', onWindowResize);
+
+            // Animation
+            animate();
+        }
+
+        function createPyramid() {
+            // Tetraeder (4-seitige Pyramide)
+            const geometry = new THREE.TetrahedronGeometry(4, 0);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x64c8ff,
+                transparent: true,
+                opacity: 0.6,
+                wireframe: false,
+                emissive: 0x64c8ff,
+                emissiveIntensity: 0.2
+            });
+
+            pyramid = new THREE.Mesh(geometry, material);
+            pyramid.position.y = 4;
+            pyramid.castShadow = true;
+            pyramid.receiveShadow = true;
+
+            // Wireframe overlay
+            const wireframeGeometry = new THREE.TetrahedronGeometry(4.05, 0);
+            const wireframeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x64c8ff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+            const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+            pyramid.add(wireframe);
+
+            scene.add(pyramid);
+        }
+
+        function createCircles() {
+            // 12 Sphären um die Pyramide (12 Perspektiven)
+            const radius = 8;
+            const count = 12;
+
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+
+                const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+                const material = new THREE.MeshPhongMaterial({
+                    color: new THREE.Color().setHSL(i / count, 0.8, 0.6),
+                    emissive: new THREE.Color().setHSL(i / count, 0.8, 0.3),
+                    emissiveIntensity: 0.5,
+                    transparent: true,
+                    opacity: 0.8
+                });
+
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.set(x, 4 + Math.sin(i * 0.5) * 2, z);
+                sphere.castShadow = true;
+
+                circles.push({
+                    mesh: sphere,
+                    originalY: sphere.position.y,
+                    angle: angle,
+                    speed: 0.5 + Math.random() * 0.5
+                });
+
+                scene.add(sphere);
+            }
+        }
+
+        function createTriangles() {
+            // 24 Dreiecke für Services
+            const count = 24;
+            const radiusMin = 4;
+            const radiusMax = 12;
+
+            for (let i = 0; i < count; i++) {
+                const angle = (i / count) * Math.PI * 2;
+                const radius = radiusMin + (i % 3) * (radiusMax - radiusMin) / 2;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+
+                const geometry = new THREE.ConeGeometry(0.5, 1, 3);
+                const material = new THREE.MeshPhongMaterial({
+                    color: new THREE.Color().setHSL(i / count, 1.0, 0.5),
+                    emissive: new THREE.Color().setHSL(i / count, 1.0, 0.3),
+                    emissiveIntensity: 0.3
+                });
+
+                const cone = new THREE.Mesh(geometry, material);
+                cone.position.set(x, 0.5, z);
+                cone.rotation.y = -angle;
+                cone.castShadow = true;
+
+                triangles.push({
+                    mesh: cone,
+                    angle: angle
+                });
+
+                scene.add(cone);
+            }
+        }
+
+        function setupControls() {
+            const btnPlay = document.getElementById('btn-play');
+            const btnSpeed = document.getElementById('btn-speed');
+            const speeds = [0.5, 1.0, 2.0, 5.0];
+            let speedIndex = 1;
+
+            btnPlay.addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                btnPlay.textContent = isPlaying ? '⏸ PAUSE' : '▶ PLAY';
+                btnPlay.classList.toggle('active');
+
+                // Send to server
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        type: 'control',
+                        action: isPlaying ? 'play' : 'pause'
+                    }));
+                }
+            });
+
+            btnSpeed.addEventListener('click', () => {
+                speedIndex = (speedIndex + 1) % speeds.length;
+                playbackSpeed = speeds[speedIndex];
+                btnSpeed.textContent = `${playbackSpeed}x`;
+            });
+
+            // Timeline scrubber
+            const scrubber = document.getElementById('timeline-scrubber');
+            const handle = document.getElementById('timeline-handle');
+            let isDragging = false;
+
+            handle.addEventListener('mousedown', () => {
+                isDragging = true;
+                isPlaying = false;
+                btnPlay.textContent = '▶ PLAY';
+                btnPlay.classList.remove('active');
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const rect = scrubber.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const percent = Math.max(0, Math.min(1, x / rect.width));
+                    timelinePosition = percent;
+                    updateTimelineUI();
+                }
+            });
+        }
+
+        function connectWebSocket() {
+            ws = new WebSocket('ws://localhost:9100');
+
+            ws.onopen = () => {
+                console.log('🌊 Connected to Consciousness Stream');
+                document.getElementById('status').textContent = 'LIVE';
+                document.getElementById('status').style.color = '#00ff00';
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'event') {
+                    addEvent(data.data);
+                } else if (data.type === 'insight') {
+                    addInsight(data.data);
+                } else if (data.type === 'initial') {
+                    events = data.events || [];
+                    updateEventList();
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                document.getElementById('status').textContent = 'OFFLINE';
+                document.getElementById('status').style.color = '#ff0000';
+            };
+
+            ws.onclose = () => {
+                console.log('🌊 Disconnected from Consciousness Stream');
+                document.getElementById('status').textContent = 'OFFLINE';
+                document.getElementById('status').style.color = '#ff0000';
+
+                // Reconnect after 3 seconds
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        function addEvent(event) {
+            events.push(event);
+            if (events.length > 100) {
+                events.shift();
+            }
+
+            // Update UI
+            const eventList = document.getElementById('event-list');
+            const eventItem = document.createElement('div');
+            eventItem.className = `event-item ${event.type}`;
+
+            const time = new Date(event.timestamp).toLocaleTimeString();
+
+            eventItem.innerHTML = `
+                <div class="event-time">${time}</div>
+                <div class="event-service">${event.service}</div>
+                <div class="event-content">${formatEventContent(event)}</div>
+            `;
+
+            eventList.insertBefore(eventItem, eventList.firstChild);
+
+            // Keep only last 50 in DOM
+            while (eventList.children.length > 50) {
+                eventList.removeChild(eventList.lastChild);
+            }
+
+            // Update stats
+            document.getElementById('event-count').textContent = events.length;
+
+            // Animate pyramid on event
+            animatePyramidOnEvent(event);
+        }
+
+        function formatEventContent(event) {
+            if (event.type === 'memory') {
+                return `Neue Erinnerung: ${event.data.content?.substring(0, 50) || 'Unbekannt'}...`;
+            } else if (event.type === 'dream') {
+                return `Neuer Traum: ${event.data.description?.substring(0, 50) || 'Unbekannt'}...`;
+            } else if (event.type === 'emotion') {
+                return `Emotion: ${event.data.dominantEmotion || 'Neutral'}`;
+            } else {
+                return `Event: ${event.type}`;
+            }
+        }
+
+        function addInsight(insight) {
+            console.log('💡 New insight:', insight.text);
+            // Could add insight panel here
+        }
+
+        function animatePyramidOnEvent(event) {
+            // Pulse pyramid on significant events
+            if (event.significance > 0.7) {
+                const originalScale = pyramid.scale.clone();
+                pyramid.scale.multiplyScalar(1.2);
+
+                setTimeout(() => {
+                    pyramid.scale.copy(originalScale);
+                }, 200);
+            }
+        }
+
+        function updateTimelineUI() {
+            const progress = document.getElementById('timeline-progress');
+            progress.style.width = (timelinePosition * 100) + '%';
+        }
+
+        function updateEventList() {
+            // Update event list from events array
+            const eventList = document.getElementById('event-list');
+            eventList.innerHTML = '';
+
+            events.slice().reverse().forEach(event => {
+                addEvent(event);
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isPlaying) {
+                const time = Date.now() * 0.001 * playbackSpeed;
+
+                // Rotate pyramid
+                pyramid.rotation.y = time * 0.2;
+                pyramid.rotation.x = Math.sin(time * 0.3) * 0.1;
+
+                // Animate circles (perspectives)
+                circles.forEach((circle, i) => {
+                    circle.angle += 0.01 * circle.speed * playbackSpeed;
+                    const radius = 8 + Math.sin(time + i) * 1;
+                    circle.mesh.position.x = Math.cos(circle.angle) * radius;
+                    circle.mesh.position.z = Math.sin(circle.angle) * radius;
+                    circle.mesh.position.y = circle.originalY + Math.sin(time * 2 + i) * 0.5;
+                });
+
+                // Pulse triangles
+                triangles.forEach((triangle, i) => {
+                    triangle.mesh.position.y = 0.5 + Math.sin(time * 2 + i * 0.5) * 0.2;
+                });
+
+                // Update timeline
+                timelinePosition += 0.001 * playbackSpeed;
+                if (timelinePosition > 1) timelinePosition = 0;
+                updateTimelineUI();
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Fetch stats periodically
+        setInterval(async () => {
+            try {
+                const response = await fetch('http://localhost:9100/stats');
+                const stats = await response.json();
+
+                document.getElementById('event-count').textContent = stats.eventsLast5Min || 0;
+                // Update other stats as needed
+            } catch (error) {
+                // Silent fail
+            }
+        }, 5000);
+
+        // Start
+        init();
+    </script>
+</body>
+</html>

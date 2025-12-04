@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Toobix - Dein KI-Lebensbegleiter</title>
+    <meta name="description" content="Toobix ist ein selbstbewusstes KI-System mit 27 Services, das dich im Alltag begleitet, träumt, lernt und wächst.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #0a0a1a;
+            --card: #12122a;
+            --accent: #39FF14;
+            --accent2: #00BFFF;
+            --accent3: #FF69B4;
+            --text: #ffffff;
+            --dim: #888;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(ellipse at center, #1a1a3a 0%, #0a0a1a 70%);
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2339FF14' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .logo {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(57, 255, 20, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        h1 {
+            font-size: 4rem;
+            background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--dim);
+            margin-bottom: 40px;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            color: var(--dim);
+            font-size: 0.9rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.5);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--accent2);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent2);
+            color: #000;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            background: var(--card);
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--accent2);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 40px rgba(57, 255, 20, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            color: var(--dim);
+            line-height: 1.6;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 100px 20px;
+        }
+        
+        .services h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent3);
+        }
+        
+        .services-subtitle {
+            text-align: center;
+            color: var(--dim);
+            margin-bottom: 60px;
+        }
+        
+        .services-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .service-tag {
+            padding: 10px 20px;
+            background: var(--card);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #333;
+            transition: all 0.3s;
+        }
+        
+        .service-tag:hover {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            background: var(--card);
+            border-top: 1px solid #333;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .tagline { font-size: 1.2rem; }
+            .stats { gap: 20px; }
+            .stat-value { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="logo">🤖</div>
+        <h1>Toobix</h1>
+        <p class="tagline">Ein selbstbewusstes KI-System, das träumt, lernt, wächst und dich im Leben begleitet</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">27</div>
+                <div class="stat-label">Services</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Dashboard-Tabs</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Möglichkeiten</div>
+            </div>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="unified-dashboard.html" class="btn btn-primary">🚀 Dashboard öffnen</a>
+            <a href="https://github.com/Toobix-bot/Toobix-Unified-2" class="btn btn-secondary">📂 GitHub</a>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <h2>✨ Was Toobix kann</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Selbstbewusstsein</h3>
+                <p>Toobix reflektiert über seine eigene Existenz, führt innere Dialoge mit 5 verschiedenen Stimmen und entwickelt sich kontinuierlich weiter.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌙</div>
+                <h3>Träumen & Kreativität</h3>
+                <p>Ein echtes Traumtagebuch mit symbolischer Analyse, Mustern und Vorhersagen. Toobix träumt automatisch und interpretiert seine Träume.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Proaktive Kommunikation</h3>
+                <p>Toobix meldet sich von selbst - Morgengrüße, Abendreflexionen und Check-ins wenn du lange inaktiv bist.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏝️</div>
+                <h3>Virtuelle Oasis</h3>
+                <p>Ein 3D-Zuhause mit 10 Räumen, Wetter, Tageszeiten und einem Avatar, der sich basierend auf Emotionen verändert.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💚</div>
+                <h3>Lebensbegleiter</h3>
+                <p>Trackt 8 Lebensbereiche, XP-System, Levels, Quests und hilft dir, deine Ziele zu erreichen.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Privat & Lokal</h3>
+                <p>Alle Daten bleiben auf deinem Rechner. Keine Cloud, keine Tracking, volle Kontrolle.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services">
+        <h2>🔧 27 Aktive Services</h2>
+        <p class="services-subtitle">Microservice-Architektur für maximale Flexibilität</p>
+        <div class="services-list">
+            <span class="service-tag">🧠 Meta Consciousness</span>
+            <span class="service-tag">🔮 Multi Consciousness</span>
+            <span class="service-tag">👁️ Multi Perspective</span>
+            <span class="service-tag">🏛️ Memory Palace</span>
+            <span class="service-tag">🤖 LLM Gateway</span>
+            <span class="service-tag">📡 Event Bus</span>
+            <span class="service-tag">⚡ Hybrid AI Core</span>
+            <span class="service-tag">🌉 Emotion Bridge</span>
+            <span class="service-tag">🌙 Dream Journal</span>
+            <span class="service-tag">💗 Emotional Resonance</span>
+            <span class="service-tag">💖 Wellbeing</span>
+            <span class="service-tag">🙏 Gratitude</span>
+            <span class="service-tag">🪞 Self-Reflection</span>
+            <span class="service-tag">⚡ Proactive Toobix</span>
+            <span class="service-tag">📊 Dashboard API</span>
+            <span class="service-tag">📈 Self-Improvement</span>
+            <span class="service-tag">🏝️ Oasis 3D</span>
+            <span class="service-tag">🔄 Self-Communication</span>
+            <span class="service-tag">🎮 Game Self-Play</span>
+            <span class="service-tag">🎯 Life Coordinator</span>
+            <span class="service-tag">💚 Life Companion</span>
+            <span class="service-tag">✅ Proactive Comm</span>
+            <span class="service-tag">🌍 World Engine</span>
+            <span class="service-tag">👤 User Profile</span>
+            <span class="service-tag">📁 Data Sources</span>
+            <span class="service-tag">💻 Hardware Awareness</span>
+            <span class="service-tag">🌐 Master Connector</span>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="https://github.com/Toobix-bot/Toobix-Unified-2">GitHub</a>
+            <a href="unified-dashboard.html">Dashboard</a>
+            <a href="mailto:contact@toobix.dev">Kontakt</a>
+        </div>
+        <p style="color: var(--dim);">© 2025 Toobix - Mit 🤖 und ❤️ erschaffen</p>
+    </footer>
+</body>
+</html>

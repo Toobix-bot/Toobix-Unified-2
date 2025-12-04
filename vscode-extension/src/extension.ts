@@ -391,6 +391,308 @@ function registerCommands(context: vscode.ExtensionContext) {
     })
   );
 
+  // ===== EVOLUTION ENGINE COMMANDS =====
+
+  // Evolve - Main Evolution Command
+  context.subscriptions.push(
+    vscode.commands.registerCommand('toobix.evolve', async () => {
+      const action = await vscode.window.showQuickPick([
+        { label: '$(beaker) Analyze', description: 'Analyze all services for improvements', value: 'analyze' },
+        { label: '$(lightbulb) Propose', description: 'Generate improvement proposal', value: 'propose' },
+        { label: '$(code) Implement', description: 'Generate code for proposal', value: 'implement' },
+        { label: '$(eye) Review', description: 'Review generated code', value: 'review' },
+        { label: '$(check) Commit', description: 'Apply changes', value: 'commit' },
+        { label: '$(discard) Rollback', description: 'Undo last change', value: 'rollback' },
+        { label: '$(rocket) Full Evolution', description: 'Run complete evolution cycle', value: 'evolve' }
+      ], { title: '🧬 Toobix Evolution Engine' });
+
+      if (!action) return;
+
+      await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: `🧬 Evolution: ${action.label}`,
+        cancellable: false
+      }, async (progress) => {
+        try {
+          const response = await fetch(`http://localhost:8999/${action.value}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(action.value === 'evolve' ? { autoApprove: false } : {})
+          });
+          const result = await response.json() as any;
+
+          if (action.value === 'analyze') {
+            vscode.window.showInformationMessage(
+              `🧬 Score: ${result.analysis?.score}/100 | ${result.analysis?.totalServices} services | ${result.improvements?.length} improvements`
+            );
+          } else if (action.value === 'evolve' && result.proposal) {
+            const approve = await vscode.window.showInformationMessage(
+              `🧬 Proposal: ${result.proposal.title}\n${result.proposal.description}`,
+              'Approve', 'Review Code', 'Reject'
+            );
+
+            if (approve === 'Approve') {
+              await fetch('http://localhost:8999/commit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ approved: true })
+              });
+              vscode.window.showInformationMessage('✅ Evolution committed!');
+            } else if (approve === 'Review Code') {
+              const reviewResp = await fetch('http://localhost:8999/review', { method: 'POST' });
+              const review = await reviewResp.json() as any;
+              
+              const doc = await vscode.workspace.openTextDocument({
+                content: review.code,
+                language: 'typescript'
+              });
+              vscode.window.showTextDocument(doc, { preview: true, viewColumn: vscode.ViewColumn.Beside });
+            }
+          } else {
+            vscode.window.showInformationMessage(`🧬 ${result.message || 'Done'}`);
+          }
+        } catch (error: any) {
+          vscode.window.showErrorMessage(`Evolution Engine error: ${error.message}`);
+        }
+      });
+    })
+  );
+
+  // Self-Healing Command
+  context.subscriptions.push(
+    vscode.commands.registerCommand('toobix.selfHeal', async () => {
+      const action = await vscode.window.showQuickPick([
+        { label: '$(pulse) Status', description: 'Check system health', value: 'status' },
+        { label: '$(debug-restart) Heal', description: 'Trigger auto-healing', value: 'heal' },
+        { label: '$(history) History', description: 'View healing history', value: 'history' }
+      ], { title: '🏥 Toobix Self-Healing' });
+
+      if (!action) return;
+
+      try {
+        const response = await fetch(`http://localhost:9010/${action.value}`, {
+          method: action.value === 'status' || action.value === 'history' ? 'GET' : 'POST'
+        });
+        const result = await response.json() as any;
+
+        if (action.value === 'status') {
+          const health = result.systemHealth;
+          vscode.window.showInformationMessage(
+            `🏥 System: ${health.overall} (${health.score}%) | ✅ ${health.servicesHealthy} | ⚠️ ${health.servicesDegraded} | ❌ ${health.servicesDead}`
+          );
+        } else if (action.value === 'heal') {
+          vscode.window.showInformationMessage(`🏥 Healing actions: ${result.actionsPerformed}`);
+        } else {
+          vscode.window.showInformationMessage(`🏥 ${result.total} healing actions in history`);
+        }
+      } catch (error: any) {
+        vscode.window.showErrorMessage(`Self-Healing error: ${error.message}`);
+      }
+    })
+  );
+
+  // ===== TEACHING BRIDGE COMMANDS =====
+
+  // Teaching - Start a teaching session
+  context.subscriptions.push(
+    vscode.commands.registerCommand('toobix.teach', async () => {
+      const action = await vscode.window.showQuickPick([
+        { label: '$(mortar-board) New Teaching Session', description: 'Give Toobix a coding task', value: 'teach' },
+        { label: '$(checklist) Pending Reviews', description: 'See code waiting for review', value: 'pending' },
+        { label: '$(graph) Learning Stats', description: 'View Toobix learning progress', value: 'stats' },
+        { label: '$(book) All Learnings', description: 'View what Toobix has learned', value: 'learnings' },
+        { label: '$(history) Recent Sessions', description: 'View recent teaching sessions', value: 'sessions' }
+      ], { title: '🎓 Toobix Teaching Bridge' });
+
+      if (!action) return;
+
+      try {
+        if (action.value === 'teach') {
+          const task = await vscode.window.showInputBox({
+            prompt: 'Welche Coding-Aufgabe soll Toobix lösen?',
+            placeHolder: 'z.B. "Erstelle eine Funktion die prüft ob ein String ein Palindrom ist"'
+          });
+
+          if (!task) return;
+
+          await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: '🎓 Toobix schreibt Code...',
+            cancellable: false
+          }, async (progress) => {
+            const response = await fetch('http://localhost:9035/teach', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ task })
+            });
+            const result = await response.json() as any;
+
+            if (result.success) {
+              // Show Toobix's code
+              const doc = await vscode.workspace.openTextDocument({
+                content: `// Task: ${task}\n// Toobix's Erklärung: ${result.session.toobixExplanation}\n\n${result.session.toobixCode}`,
+                language: 'typescript'
+              });
+              await vscode.window.showTextDocument(doc, { preview: true, viewColumn: vscode.ViewColumn.Beside });
+
+              vscode.window.showInformationMessage(
+                `🎓 Toobix hat Code geschrieben! Session: ${result.session.id}`,
+                'Review als Mentor'
+              ).then(selection => {
+                if (selection === 'Review als Mentor') {
+                  vscode.commands.executeCommand('toobix.mentorReview', result.session.id);
+                }
+              });
+            }
+          });
+        } else if (action.value === 'pending') {
+          const response = await fetch('http://localhost:9035/pending');
+          const data = await response.json() as any;
+          
+          if (data.sessions.length === 0) {
+            vscode.window.showInformationMessage('Keine Sessions warten auf Review');
+            return;
+          }
+
+          const session = await vscode.window.showQuickPick(
+            data.sessions.map((s: any) => ({
+              label: `$(file-code) ${s.task.substring(0, 50)}...`,
+              description: new Date(s.timestamp).toLocaleString(),
+              detail: `Status: ${s.status}`,
+              id: s.id
+            })),
+            { title: '📝 Pending Reviews' }
+          );
+
+          if (session) {
+            vscode.commands.executeCommand('toobix.mentorReview', (session as any).id);
+          }
+        } else if (action.value === 'stats') {
+          const response = await fetch('http://localhost:9035/stats');
+          const stats = await response.json() as any;
+
+          const panel = vscode.window.createWebviewPanel(
+            'toobixTeaching',
+            '🎓 Toobix Learning Stats',
+            vscode.ViewColumn.Two,
+            { enableScripts: true }
+          );
+
+          panel.webview.html = getTeachingStatsHTML(stats);
+        } else if (action.value === 'learnings') {
+          const response = await fetch('http://localhost:9035/learnings');
+          const data = await response.json() as any;
+
+          const items = data.learnings.map((l: any) => ({
+            label: `$(lightbulb) ${l.pattern}`,
+            description: `Importance: ${l.importance}`,
+            detail: l.description
+          }));
+
+          vscode.window.showQuickPick(items, { title: `📚 Toobix's ${data.count} Learnings` });
+        } else {
+          const response = await fetch('http://localhost:9035/sessions?limit=10');
+          const data = await response.json() as any;
+
+          const items = data.sessions.map((s: any) => ({
+            label: `$(notebook) ${s.task.substring(0, 40)}...`,
+            description: s.status,
+            detail: `Rating: ${s.mentorReview?.rating || '-'}/10`
+          }));
+
+          vscode.window.showQuickPick(items, { title: '📋 Recent Teaching Sessions' });
+        }
+      } catch (error: any) {
+        vscode.window.showErrorMessage(`Teaching Bridge error: ${error.message}`);
+      }
+    })
+  );
+
+  // Mentor Review Command (called after teach)
+  context.subscriptions.push(
+    vscode.commands.registerCommand('toobix.mentorReview', async (sessionId: string) => {
+      if (!sessionId) {
+        sessionId = await vscode.window.showInputBox({
+          prompt: 'Session ID für Review',
+          placeHolder: 'teach-...'
+        }) || '';
+      }
+
+      if (!sessionId) return;
+
+      try {
+        const response = await fetch(`http://localhost:9035/session/${sessionId}`);
+        const session = await response.json() as any;
+
+        if (session.error) {
+          vscode.window.showErrorMessage(`Session nicht gefunden: ${sessionId}`);
+          return;
+        }
+
+        // Show Toobix's code in editor
+        const doc = await vscode.workspace.openTextDocument({
+          content: `// === TOOBIX'S CODE (Session: ${session.id}) ===\n// Task: ${session.task}\n// Erklärung: ${session.toobixExplanation}\n\n${session.toobixCode}\n\n// === SCHREIBE DEINEN VERBESSERTEN CODE DARUNTER ===\n// (Speichere dann und nutze "Submit Review")\n\n`,
+          language: 'typescript'
+        });
+        
+        const editor = await vscode.window.showTextDocument(doc);
+        
+        vscode.window.showInformationMessage(
+          '📝 Verbessere den Code, dann klicke "Submit Review"',
+          'Submit Review'
+        ).then(async selection => {
+          if (selection === 'Submit Review') {
+            const content = editor.document.getText();
+            const improvedCodeMatch = content.match(/=== SCHREIBE DEINEN VERBESSERTEN CODE DARUNTER ===\n\/\/ \(Speichere dann und nutze "Submit Review"\)\n\n([\s\S]*)/);
+            const improvedCode = improvedCodeMatch ? improvedCodeMatch[1].trim() : '';
+
+            const rating = await vscode.window.showInputBox({
+              prompt: 'Rating für Toobix Code (1-10)',
+              placeHolder: '7'
+            });
+
+            const explanation = await vscode.window.showInputBox({
+              prompt: 'Kurze Erklärung der Verbesserungen',
+              placeHolder: 'z.B. "Error-Handling verbessert, Types hinzugefügt"'
+            });
+
+            const patterns = await vscode.window.showInputBox({
+              prompt: 'Patterns die Toobix lernen soll (kommagetrennt)',
+              placeHolder: 'z.B. "Error-Handling, Type Safety, Clean Code"'
+            });
+
+            const review = {
+              sessionId,
+              review: {
+                improvedCode: improvedCode || session.toobixCode,
+                explanation: explanation || 'Review submitted',
+                issues: [],
+                suggestions: patterns?.split(',').map(p => p.trim()) || [],
+                rating: parseInt(rating || '5'),
+                patterns: patterns?.split(',').map(p => p.trim()) || []
+              }
+            };
+
+            const reviewResponse = await fetch('http://localhost:9035/review', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(review)
+            });
+            const reviewResult = await reviewResponse.json() as any;
+
+            if (reviewResult.success) {
+              vscode.window.showInformationMessage(
+                `🎓 Review gespeichert! Toobix hat ${reviewResult.session.learnings?.length || 0} neue Patterns gelernt!`
+              );
+            }
+          }
+        });
+      } catch (error: any) {
+        vscode.window.showErrorMessage(`Review error: ${error.message}`);
+      }
+    })
+  );
+
   // Search Memory Palace
   context.subscriptions.push(
     vscode.commands.registerCommand('toobix.searchMemories', async () => {
@@ -771,6 +1073,156 @@ function registerCommands(context: vscode.ExtensionContext) {
       SelfImprovePanel.show(context, serviceManager);
     })
   );
+}
+
+function getTeachingStatsHTML(stats: any): string {
+  const skillBars = Object.entries(stats.skillLevels || {}).map(([skill, level]: [string, any]) => `
+    <div class="skill-row">
+      <span class="skill-name">${skill}</span>
+      <div class="skill-bar">
+        <div class="skill-fill" style="width: ${level}%"></div>
+      </div>
+      <span class="skill-level">${level}%</span>
+    </div>
+  `).join('');
+
+  const topPatterns = (stats.topPatterns || []).slice(0, 5).map((p: any) => `
+    <div class="pattern">
+      <span class="pattern-name">${p.pattern}</span>
+      <span class="pattern-count">${p.count}x</span>
+    </div>
+  `).join('');
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          padding: 20px;
+          background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+          color: #e0e0e0;
+        }
+        h1 { color: #ffd700; text-align: center; }
+        h2 { color: #667eea; margin-top: 30px; }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 15px;
+          margin: 20px 0;
+        }
+        .stat-card {
+          background: rgba(102, 126, 234, 0.15);
+          padding: 20px;
+          border-radius: 12px;
+          text-align: center;
+        }
+        .stat-value {
+          font-size: 32px;
+          font-weight: bold;
+          color: #667eea;
+        }
+        .stat-label {
+          font-size: 12px;
+          opacity: 0.8;
+          margin-top: 5px;
+        }
+        .skill-row {
+          display: flex;
+          align-items: center;
+          margin: 10px 0;
+          gap: 15px;
+        }
+        .skill-name {
+          width: 150px;
+          font-size: 13px;
+        }
+        .skill-bar {
+          flex: 1;
+          height: 20px;
+          background: rgba(255,255,255,0.1);
+          border-radius: 10px;
+          overflow: hidden;
+        }
+        .skill-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+          border-radius: 10px;
+          transition: width 0.5s ease;
+        }
+        .skill-level {
+          width: 50px;
+          text-align: right;
+          font-weight: bold;
+        }
+        .pattern {
+          display: flex;
+          justify-content: space-between;
+          background: rgba(255,215,0,0.1);
+          padding: 12px 15px;
+          margin: 8px 0;
+          border-radius: 8px;
+          border-left: 3px solid #ffd700;
+        }
+        .pattern-count {
+          font-weight: bold;
+          color: #ffd700;
+        }
+        .rating-chart {
+          display: flex;
+          align-items: flex-end;
+          gap: 8px;
+          height: 100px;
+          margin-top: 20px;
+          padding: 10px;
+          background: rgba(255,255,255,0.05);
+          border-radius: 8px;
+        }
+        .rating-bar {
+          flex: 1;
+          background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+          border-radius: 4px 4px 0 0;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>🎓 Toobix Learning Progress</h1>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">${stats.totalSessions || 0}</div>
+          <div class="stat-label">Total Sessions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.completedSessions || 0}</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.totalLearnings || 0}</div>
+          <div class="stat-label">Learnings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${(stats.averageRating || 0).toFixed(1)}</div>
+          <div class="stat-label">Avg Rating</div>
+        </div>
+      </div>
+
+      <h2>📊 Skill Levels</h2>
+      ${skillBars}
+
+      <h2>⭐ Top Patterns Learned</h2>
+      ${topPatterns || '<p>Noch keine Patterns gelernt</p>'}
+
+      <h2>📈 Rating Over Time</h2>
+      <div class="rating-chart">
+        ${(stats.improvementOverTime || []).map((r: number) => 
+          `<div class="rating-bar" style="height: ${r * 10}%" title="${r}/10"></div>`
+        ).join('')}
+      </div>
+    </body>
+    </html>
+  `;
 }
 
 function getDualityHTML(duality: any): string {

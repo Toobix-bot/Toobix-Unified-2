@@ -57,6 +57,26 @@
         "icon": "$(tools)"
       },
       {
+        "command": "toobix.evolve",
+        "title": "Toobix: Evolution Engine 🧬",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "toobix.selfHeal",
+        "title": "Toobix: Self-Healing 🏥",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "toobix.teach",
+        "title": "Toobix: Teaching Bridge 🎓",
+        "icon": "$(mortar-board)"
+      },
+      {
+        "command": "toobix.mentorReview",
+        "title": "Toobix: Mentor Review 📝",
+        "icon": "$(edit)"
+      },
+      {
         "command": "toobix.chat",
         "title": "Toobix: Chat",
         "icon": "$(comment)"

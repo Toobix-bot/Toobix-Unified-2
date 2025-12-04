@@ -1,0 +1,92 @@
+# fly.toml - Fly.io Konfiguration für Toobix Unified
+# Deployment: flyctl deploy
+
+app = "toobix-unified"
+primary_region = "fra"  # Frankfurt für niedrige Latenz in DE
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+
+[http_service]
+  internal_port = 8954  # LLM Gateway als Hauptport
+  force_https = true
+  auto_stop_machines = false  # Immer laufen lassen
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 100
+    soft_limit = 80
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8896
+  [[services.ports]]
+    port = 8896
+    handlers = ["http"]
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8897
+  [[services.ports]]
+    port = 8897
+    handlers = ["http"]
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8899
+  [[services.ports]]
+    port = 8899
+    handlers = ["http"]
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8953
+  [[services.ports]]
+    port = 8953
+    handlers = ["http"]
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8955
+  [[services.ports]]
+    port = 8955
+    handlers = ["http"]
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8970
+  [[services.ports]]
+    port = 8970
+    handlers = ["http"]
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8971
+  [[services.ports]]
+    port = 8971
+    handlers = ["http"]
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 2
+
+[mounts]
+  source = "toobix_data"
+  destination = "/app/data"
+
+[checks]
+  [checks.health]
+    port = 8954
+    type = "http"
+    interval = "30s"
+    timeout = "10s"
+    grace_period = "60s"
+    method = "GET"
+    path = "/health"

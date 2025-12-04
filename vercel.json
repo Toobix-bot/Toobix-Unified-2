@@ -1,0 +1,34 @@
+# Toobix Unified - Vercel Konfiguration
+# Für statisches Dashboard Hosting
+
+{
+  "version": 2,
+  "name": "toobix-dashboard",
+  "builds": [
+    {
+      "src": "desktop-app/src/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/desktop-app/src/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        }
+      ]
+    }
+  ]
+}

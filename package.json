@@ -55,7 +55,13 @@
         "gui": "bun run scripts/start-gui.ts",
         "universal": "bun run scripts/spiritual-interface.ts",
         "start:all": "bun run scripts/start-all.ts",
+        "start:unified": "bun run scripts/start-toobix-unified.ts",
+        "start:unified:minimal": "bun run scripts/start-toobix-unified.ts --minimal",
+        "start:unified:full": "bun run scripts/start-toobix-unified.ts --full",
+        "life": "bun run scripts/2-services/life-companion-core.ts",
+        "life:companion": "bun run scripts/2-services/life-companion-core.ts",
         "health": "curl http://localhost:3337/health",
+
         "deploy": "vercel",
         "deploy:prod": "vercel --prod",
         "self:loop": "bun run scripts/self-loop.ts",

@@ -78,6 +78,21 @@ export class ToobixSidebarProvider implements vscode.WebviewViewProvider, vscode
         case 'analyzeDream':
           await this.handleAnalyzeDream(data.dreamId);
           break;
+        case 'lifeAction':
+          await this.handleLifeAction(data.action);
+          break;
+        case 'lifeHabitDice':
+          await this.handleLifeHabitDice();
+          break;
+        case 'quickCheckin':
+          await this.handleQuickCheckin();
+          break;
+        case 'fullCheckin':
+          await this.handleFullCheckin();
+          break;
+        case 'triggerProactive':
+          await this.handleTriggerProactive();
+          break;
       }
     });
 
@@ -260,6 +275,162 @@ export class ToobixSidebarProvider implements vscode.WebviewViewProvider, vscode
     } catch (error) {
       console.error('Failed to analyze dream:', error);
       this.notifyWebview('Traumanalyse derzeit nicht verfuegbar.');
+    }
+  }
+
+  private async handleLifeAction(action: string) {
+    try {
+      const response = await fetch(`http://localhost:8970/action/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (response.ok) {
+        const result = await response.json() as { success: boolean; message: string; state: any; suggestion: string };
+        if (result.success) {
+          this.notifyWebview(result.message);
+          this.postMessage('updateLifeCompanion', {
+            ...result.state,
+            suggestion: result.suggestion
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to perform life action:', error);
+      this.notifyWebview('Life Companion nicht erreichbar.');
+    }
+  }
+
+  private async handleLifeHabitDice() {
+    try {
+      const response = await fetch('http://localhost:8970/habit-dice');
+      
+      if (response.ok) {
+        const result = await response.json() as { suggestion: string };
+        this.notifyWebview(`🎲 Habit Dice: ${result.suggestion}`);
+        this.postMessage('updateLifeCompanion', { suggestion: result.suggestion });
+      }
+    } catch (error) {
+      console.error('Failed to roll habit dice:', error);
+      this.notifyWebview('Life Companion nicht erreichbar.');
+    }
+  }
+
+  private async handleQuickCheckin() {
+    const mood = await vscode.window.showQuickPick(
+      ['10 - Fantastisch', '8 - Gut', '6 - Okay', '4 - Nicht so gut', '2 - Schlecht'],
+      { placeHolder: '😊 Wie ist deine Stimmung?' }
+    );
+    if (!mood) return;
+
+    const energy = await vscode.window.showQuickPick(
+      ['10 - Voller Energie', '8 - Gut', '6 - Okay', '4 - Müde', '2 - Erschöpft'],
+      { placeHolder: '⚡ Wie ist dein Energielevel?' }
+    );
+    if (!energy) return;
+
+    const stress = await vscode.window.showQuickPick(
+      ['1 - Entspannt', '3 - Leicht', '5 - Mittel', '7 - Hoch', '10 - Sehr gestresst'],
+      { placeHolder: '😰 Wie gestresst bist du?' }
+    );
+    if (!stress) return;
+
+    try {
+      const response = await fetch('http://localhost:8972/quick', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mood: parseInt(mood.split(' ')[0]),
+          energy: parseInt(energy.split(' ')[0]),
+          stress: parseInt(stress.split(' ')[0])
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json() as { message: string };
+        this.notifyWebview(`✅ ${result.message}`);
+        await this.updateDashboard();
+      }
+    } catch (error) {
+      console.error('Quick check-in failed:', error);
+      this.notifyWebview('Daily Check-in Service nicht erreichbar.');
+    }
+  }
+
+  private async handleFullCheckin() {
+    // Open a multi-step input for full check-in
+    const mood = await vscode.window.showInputBox({
+      prompt: '😊 Stimmung (1-10)',
+      placeHolder: '7',
+      validateInput: (v) => {
+        const n = parseInt(v);
+        return (n >= 1 && n <= 10) ? null : 'Bitte eine Zahl von 1-10';
+      }
+    });
+    if (!mood) return;
+
+    const energy = await vscode.window.showInputBox({
+      prompt: '⚡ Energie (1-10)',
+      placeHolder: '6'
+    });
+    if (!energy) return;
+
+    const stress = await vscode.window.showInputBox({
+      prompt: '😰 Stress (1-10, 1=entspannt)',
+      placeHolder: '4'
+    });
+    if (!stress) return;
+
+    const wins = await vscode.window.showInputBox({
+      prompt: '🏆 Was lief heute gut? (kommagetrennt)',
+      placeHolder: 'Projekt fertig, Sport gemacht'
+    });
+
+    const gratitude = await vscode.window.showInputBox({
+      prompt: '🙏 Wofür bist du dankbar?',
+      placeHolder: 'Familie, Gesundheit'
+    });
+
+    try {
+      const response = await fetch('http://localhost:8972/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mood: parseInt(mood),
+          energy: parseInt(energy),
+          stress: parseInt(stress),
+          wins: wins ? wins.split(',').map(w => w.trim()) : [],
+          gratitude: gratitude ? gratitude.split(',').map(g => g.trim()) : []
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json() as { message: string };
+        this.notifyWebview(`🎉 ${result.message}`);
+        await this.updateDashboard();
+      }
+    } catch (error) {
+      console.error('Full check-in failed:', error);
+      this.notifyWebview('Daily Check-in Service nicht erreichbar.');
+    }
+  }
+
+  private async handleTriggerProactive() {
+    try {
+      const response = await fetch('http://localhost:8971/trigger/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (response.ok) {
+        const result = await response.json() as { message?: { content: string } };
+        if (result.message) {
+          vscode.window.showInformationMessage(`💬 Toobix: ${result.message.content}`);
+        }
+      }
+    } catch (error) {
+      console.error('Trigger proactive failed:', error);
+      this.notifyWebview('Proactive Communication nicht erreichbar.');
     }
   }
 
@@ -645,6 +816,89 @@ export class ToobixSidebarProvider implements vscode.WebviewViewProvider, vscode
     </div>
   </div>
 
+  <!-- Life Companion -->
+  <div class="status-card" id="life-companion-section">
+    <h3>🌟 Life Companion</h3>
+    <div class="hardware-stats">
+      <div class="stat">
+        <span>⚡ Energy</span>
+        <span class="stat-value" id="life-energy">--</span>
+      </div>
+      <div class="stat">
+        <span>😊 Mood</span>
+        <span class="stat-value" id="life-mood">--</span>
+      </div>
+      <div class="stat">
+        <span>🧠 Curiosity</span>
+        <span class="stat-value" id="life-curiosity">--</span>
+      </div>
+      <div class="stat">
+        <span>⭐ Level</span>
+        <span class="stat-value" id="life-level">--</span>
+      </div>
+    </div>
+    <div style="margin-top: 10px; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 5px; font-size: 11px;">
+      <strong>🌱 Season:</strong> <span id="life-season">--</span> · 
+      <strong>XP:</strong> <span id="life-xp">--</span>
+    </div>
+    <div style="margin-top: 8px; font-size: 10px; opacity: 0.8;" id="life-suggestion">
+      💡 Tip: --
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px;">
+      <button onclick="lifeAction('explore')" style="font-size: 10px; padding: 6px;">🌍 Explore</button>
+      <button onclick="lifeAction('learn')" style="font-size: 10px; padding: 6px;">📚 Learn</button>
+      <button onclick="lifeAction('create')" style="font-size: 10px; padding: 6px;">🎨 Create</button>
+      <button onclick="lifeAction('connect')" style="font-size: 10px; padding: 6px;">🤝 Connect</button>
+      <button onclick="lifeAction('rest')" style="font-size: 10px; padding: 6px;">😴 Rest</button>
+      <button onclick="lifeAction('observe')" style="font-size: 10px; padding: 6px;">👁️ Observe</button>
+    </div>
+    <div style="margin-top: 8px;">
+      <button onclick="lifeHabitDice()" style="width: 100%; font-size: 11px;">🎲 Habit Dice</button>
+    </div>
+  </div>
+
+  <!-- Daily Check-in -->
+  <div class="status-card" id="daily-checkin-section">
+    <h3>📋 Daily Check-in</h3>
+    <div id="checkin-status" style="font-size: 11px; margin-bottom: 10px;">
+      <span id="checkin-today">⏳ Checking...</span>
+    </div>
+    <div class="hardware-stats">
+      <div class="stat">
+        <span>😊 Mood</span>
+        <span class="stat-value" id="checkin-mood">--</span>
+      </div>
+      <div class="stat">
+        <span>⚡ Energy</span>
+        <span class="stat-value" id="checkin-energy">--</span>
+      </div>
+      <div class="stat">
+        <span>😰 Stress</span>
+        <span class="stat-value" id="checkin-stress">--</span>
+      </div>
+      <div class="stat">
+        <span>🔥 Streak</span>
+        <span class="stat-value" id="checkin-streak">--</span>
+      </div>
+    </div>
+    <div id="checkin-areas" style="margin-top: 10px; font-size: 10px;">
+      <!-- Traffic lights will be rendered here -->
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px;">
+      <button onclick="quickCheckin()" style="font-size: 10px; padding: 6px;">⚡ Quick</button>
+      <button onclick="fullCheckin()" style="font-size: 10px; padding: 6px;">📋 Full Check-in</button>
+    </div>
+  </div>
+
+  <!-- Proactive Messages -->
+  <div class="status-card" id="proactive-section">
+    <h3>🗣️ Toobix sagt...</h3>
+    <div id="proactive-messages" style="font-size: 11px; max-height: 100px; overflow-y: auto;">
+      <p style="opacity: 0.6;">Warte auf Nachricht...</p>
+    </div>
+    <button onclick="triggerCheckin()" style="width: 100%; margin-top: 8px; font-size: 11px;">💬 Mit Toobix sprechen</button>
+  </div>
+
   <!-- Quick Actions -->
   <div class="status-card">
     <h3>⚡ Quick Actions</h3>
@@ -717,8 +971,16 @@ export class ToobixSidebarProvider implements vscode.WebviewViewProvider, vscode
         case 'updateGratitudes':
           updateGratitudes(message.data);
           break;
+        case 'updateLifeCompanion':
+          updateLifeCompanion(message.data);
+          break;
         case 'newMessage':
           addMessage(message.data);
+          break;
+        case 'notification':
+          if (message.data && message.data.message) {
+            addMessage({ from: 'toobix', text: message.data.message });
+          }
           break;
       }
     });
@@ -1022,6 +1284,158 @@ export class ToobixSidebarProvider implements vscode.WebviewViewProvider, vscode
         recordGratitude();
       }
     });
+
+    // === LIFE COMPANION FUNCTIONS ===
+    
+    function updateLifeCompanion(data) {
+      if (!data) return;
+      document.getElementById('life-energy').textContent = data.energy + '%';
+      document.getElementById('life-mood').textContent = data.mood || '--';
+      document.getElementById('life-curiosity').textContent = data.curiosity + '%';
+      document.getElementById('life-level').textContent = data.level || 1;
+      document.getElementById('life-season').textContent = data.season || 'spring';
+      document.getElementById('life-xp').textContent = data.xp || 0;
+      
+      if (data.suggestion) {
+        document.getElementById('life-suggestion').textContent = '💡 ' + data.suggestion;
+      }
+    }
+
+    function lifeAction(action) {
+      vscode.postMessage({ type: 'lifeAction', action });
+    }
+
+    function lifeHabitDice() {
+      vscode.postMessage({ type: 'lifeHabitDice' });
+    }
+
+    // === DAILY CHECK-IN FUNCTIONS ===
+    
+    function updateDailyCheckin(data) {
+      if (!data) return;
+      
+      document.getElementById('checkin-mood').textContent = data.mood || '--';
+      document.getElementById('checkin-energy').textContent = data.energy || '--';
+      document.getElementById('checkin-stress').textContent = data.stress || '--';
+      document.getElementById('checkin-streak').textContent = data.streak + ' 🔥';
+      
+      if (data.hasCheckedIn) {
+        document.getElementById('checkin-today').innerHTML = '✅ Heute eingecheckt';
+        document.getElementById('checkin-today').style.color = '#4CAF50';
+      } else {
+        document.getElementById('checkin-today').innerHTML = '⏳ Noch kein Check-in heute';
+        document.getElementById('checkin-today').style.color = '#ff9800';
+      }
+      
+      // Render traffic lights for life areas
+      if (data.lifeAreas) {
+        const areasHtml = Object.entries(data.lifeAreas).map(([key, status]) => {
+          const colors = { green: '🟢', yellow: '🟡', red: '🔴' };
+          const names = {
+            health_recovery: '❤️ Gesundheit',
+            education_career: '📚 Karriere',
+            finances_order: '💰 Finanzen',
+            relationships: '👨‍👩‍👧‍👦 Beziehungen',
+            spirituality_growth: '🙏 Wachstum',
+            projects_creativity: '🎨 Projekte',
+            productivity_daily: '⚡ Produktivität'
+          };
+          return '<span style="margin-right: 8px;">' + (colors[status] || '⚪') + ' ' + (names[key] || key) + '</span>';
+        }).join('');
+        document.getElementById('checkin-areas').innerHTML = areasHtml;
+      }
+    }
+
+    function quickCheckin() {
+      vscode.postMessage({ type: 'quickCheckin' });
+    }
+
+    function fullCheckin() {
+      vscode.postMessage({ type: 'fullCheckin' });
+    }
+
+    // === PROACTIVE MESSAGES ===
+    
+    function updateProactiveMessages(messages) {
+      const container = document.getElementById('proactive-messages');
+      if (!messages || messages.length === 0) {
+        container.innerHTML = '<p style="opacity: 0.6;">Warte auf Nachricht...</p>';
+        return;
+      }
+      
+      container.innerHTML = messages.slice(-3).map(msg => \`
+        <div style="
+          background: rgba(102, 126, 234, 0.1);
+          padding: 6px 8px;
+          margin: 4px 0;
+          border-radius: 4px;
+          border-left: 2px solid #667eea;
+        ">
+          <div style="opacity: 0.6; font-size: 9px;">\${new Date(msg.timestamp).toLocaleTimeString()}</div>
+          <div>\${msg.content}</div>
+        </div>
+      \`).join('');
+    }
+
+    function triggerCheckin() {
+      vscode.postMessage({ type: 'triggerProactive' });
+    }
+
+    // Fetch Daily Check-in state on load
+    (async function initDailyCheckin() {
+      try {
+        const [todayRes, statsRes] = await Promise.all([
+          fetch('http://localhost:8972/today'),
+          fetch('http://localhost:8972/stats')
+        ]);
+        
+        if (todayRes.ok && statsRes.ok) {
+          const todayData = await todayRes.json();
+          const statsData = await statsRes.json();
+          
+          updateDailyCheckin({
+            hasCheckedIn: todayData.hasCheckedIn,
+            mood: todayData.checkIn?.mood,
+            energy: todayData.checkIn?.energy,
+            stress: todayData.checkIn?.stress,
+            lifeAreas: todayData.checkIn?.lifeAreas,
+            streak: statsData.stats?.currentStreak || 0
+          });
+        }
+      } catch (e) {
+        console.log('Daily Check-in not available');
+      }
+    })();
+
+    // Fetch proactive messages on load
+    (async function initProactive() {
+      try {
+        const response = await fetch('http://localhost:8971/messages/delivered');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.messages) {
+            updateProactiveMessages(data.messages);
+          }
+        }
+      } catch (e) {
+        console.log('Proactive Communication not available');
+      }
+    })();
+
+    // Fetch Life Companion state on load
+    (async function initLifeCompanion() {
+      try {
+        const response = await fetch('http://localhost:8970/state');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.state) {
+            updateLifeCompanion(data.state);
+          }
+        }
+      } catch (e) {
+        console.log('Life Companion not available');
+      }
+    })();
   </script>
 </body>
 </html>`;

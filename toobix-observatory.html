@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔭 Toobix Observatory - Complete System Transparency</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .layer-container {
+            position: relative;
+            height: 100vh;
+            perspective: 2000px;
+        }
+
+        .layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            display: none;
+        }
+
+        .layer.active {
+            display: block;
+            transform: translateZ(0) scale(1);
+            opacity: 1;
+        }
+
+        .layer.above {
+            transform: translateZ(500px) scale(0.8);
+            opacity: 0.3;
+        }
+
+        .layer.below {
+            transform: translateZ(-500px) scale(0.8);
+            opacity: 0.3;
+        }
+
+        .layer-header {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.2), rgba(0, 255, 136, 0.2));
+            border: 2px solid #0f0;
+            padding: 20px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+        }
+
+        .navigation {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .nav-button {
+            display: block;
+            width: 60px;
+            height: 60px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #0f0, #0ff);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #0f0;
+        }
+
+        .nav-label {
+            font-size: 0.8em;
+            text-align: center;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .service-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            background: rgba(0, 255, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .service-card.online {
+            border-color: #0f0;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .service-card.offline {
+            border-color: #f00;
+            opacity: 0.5;
+        }
+
+        .code-viewer {
+            background: #000;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .graph-container {
+            position: relative;
+            height: calc(100vh - 150px);
+            margin: 20px;
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .evolution-feed {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .feed-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 4px solid #0f0;
+            background: rgba(0, 255, 0, 0.05);
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stats-overlay {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 250px;
+            z-index: 999;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 5px;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .control-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            padding: 15px 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #0f0, #0ff);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 255, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Stats Overlay -->
+    <div class="stats-overlay">
+        <div class="stat-row">
+            <span>Layer:</span>
+            <span id="currentLayerName" class="pulse">--</span>
+        </div>
+        <div class="stat-row">
+            <span>Services:</span>
+            <span id="servicesCount">--</span>
+        </div>
+        <div class="stat-row">
+            <span>Score:</span>
+            <span id="systemScore">--</span>
+        </div>
+        <div class="stat-row">
+            <span>Evolution:</span>
+            <span id="evolutionStatus">--</span>
+        </div>
+        <div class="stat-row">
+            <span>Auto-Mode:</span>
+            <span id="autoMode">ACTIVE ✅</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-button" onclick="navigateLayer(0)" title="Layer 0: UI">🎨</button>
+        <div class="nav-label">UI</div>
+
+        <button class="nav-button" onclick="navigateLayer(1)" title="Layer 1: Services">🔷</button>
+        <div class="nav-label">Services</div>
+
+        <button class="nav-button" onclick="navigateLayer(2)" title="Layer 2: Core">⚙️</button>
+        <div class="nav-label">Core</div>
+
+        <button class="nav-button" onclick="navigateLayer(3)" title="Layer 3: Code">💻</button>
+        <div class="nav-label">Code</div>
+
+        <button class="nav-button" onclick="navigateLayer(4)" title="Layer 4: Meta">🔮</button>
+        <div class="nav-label">Meta</div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" onclick="triggerEvolution()">🧬 Evolve</button>
+        <button class="control-btn" onclick="autoFix()">🔧 Auto-Fix</button>
+        <button class="control-btn" onclick="toggleAutoMode()">⚡ Toggle Auto</button>
+        <button class="control-btn" onclick="exportState()">💾 Export</button>
+    </div>
+
+    <!-- Layer Container -->
+    <div class="layer-container">
+        <!-- LAYER 0: UI/Frontend -->
+        <div class="layer active" id="layer0">
+            <div class="layer-header">🎨 LAYER 0: FRONTEND / USER INTERFACE</div>
+            <div class="grid-container">
+                <div class="service-card online" onclick="openDashboard()">
+                    <h3>Evolution Dashboard</h3>
+                    <p>Real-time monitoring</p>
+                    <small>Port: N/A</small>
+                </div>
+                <div class="service-card online" onclick="openCity()">
+                    <h3>Toobix City</h3>
+                    <p>3D Visualization</p>
+                    <small>Port: 8080</small>
+                </div>
+                <div class="service-card online">
+                    <h3>Observatory</h3>
+                    <p>This Interface</p>
+                    <small>Current View</small>
+                </div>
+                <div class="service-card online">
+                    <h3>Desktop App</h3>
+                    <p>Electron Wrapper</p>
+                    <small>Standalone</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- LAYER 1: Services -->
+        <div class="layer" id="layer1">
+            <div class="layer-header">🔷 LAYER 1: SERVICE MESH (72 Services)</div>
+            <div class="grid-container" id="serviceGrid"></div>
+        </div>
+
+        <!-- LAYER 2: Core Systems -->
+        <div class="layer" id="layer2">
+            <div class="layer-header">⚙️ LAYER 2: CORE SYSTEMS</div>
+            <div class="grid-container">
+                <div class="service-card online" onclick="inspectService('toobix-prime')">
+                    <h3>👑 Toobix Prime</h3>
+                    <p>Meta-Consciousness</p>
+                    <small>Port: 8888</small>
+                    <div style="margin-top:10px; font-size:0.8em; color:#0ff;">
+                        Orchestrator • Decision Maker • Context Aggregator
+                    </div>
+                </div>
+                <div class="service-card online" onclick="inspectService('evolution-engine')">
+                    <h3>🧬 Evolution Engine</h3>
+                    <p>Self-Improvement</p>
+                    <small>Port: 8999</small>
+                    <div style="margin-top:10px; font-size:0.8em; color:#0ff;">
+                        Code Generation • Analysis • Auto-Evolution
+                    </div>
+                </div>
+                <div class="service-card online" onclick="inspectService('llm-gateway')">
+                    <h3>🤖 LLM Gateway</h3>
+                    <p>AI Model Access</p>
+                    <small>Port: 8954</small>
+                    <div style="margin-top:10px; font-size:0.8em; color:#0ff;">
+                        Groq • Ollama • Code Generation
+                    </div>
+                </div>
+                <div class="service-card online" onclick="inspectService('consciousness-stream')">
+                    <h3>🌊 Consciousness Stream</h3>
+                    <p>Event Timeline</p>
+                    <small>Port: 9100</small>
+                    <div style="margin-top:10px; font-size:0.8em; color:#0ff;">
+                        Event Aggregation • Timeline • Snapshots
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LAYER 3: Code View -->
+        <div class="layer" id="layer3">
+            <div class="layer-header">💻 LAYER 3: LIVE CODE INSPECTION</div>
+            <div class="code-viewer" id="codeViewer">
+                <h3 style="color:#0ff; margin-bottom:15px;">Select a service to view code...</h3>
+                <p style="opacity:0.7;">Click any service card in Layer 1 or Layer 2 to inspect its code.</p>
+            </div>
+        </div>
+
+        <!-- LAYER 4: Meta/Analytics -->
+        <div class="layer" id="layer4">
+            <div class="layer-header">🔮 LAYER 4: META LAYER - Evolution Analytics</div>
+            <div class="evolution-feed" id="evolutionFeed">
+                <h3 style="color:#0ff; margin-bottom:15px;">🔄 Live Evolution Stream</h3>
+                <div id="feedContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLayer = 0;
+        let autoMode = true;
+        let services = [];
+        let evolutionHistory = [];
+
+        const layerNames = [
+            '🎨 UI Layer',
+            '🔷 Services',
+            '⚙️ Core',
+            '💻 Code',
+            '🔮 Meta'
+        ];
+
+        function navigateLayer(layerIndex) {
+            const layers = document.querySelectorAll('.layer');
+            layers.forEach((layer, index) => {
+                layer.classList.remove('active', 'above', 'below');
+                if (index === layerIndex) {
+                    layer.classList.add('active');
+                } else if (index < layerIndex) {
+                    layer.classList.add('below');
+                } else {
+                    layer.classList.add('above');
+                }
+            });
+            currentLayer = layerIndex;
+            document.getElementById('currentLayerName').textContent = layerNames[layerIndex];
+        }
+
+        async function fetchSystemData() {
+            try {
+                const [analysisRes, historyRes] = await Promise.all([
+                    fetch('http://localhost:8999/analyze', { method: 'POST' }),
+                    fetch('http://localhost:8999/history')
+                ]);
+
+                const analysis = await analysisRes.json();
+                const history = await historyRes.json();
+
+                updateStats(analysis);
+                updateServices(analysis);
+                updateEvolutionFeed(history);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function updateStats(analysis) {
+            const { totalServices, onlineServices, score } = analysis.analysis || {};
+            document.getElementById('servicesCount').textContent = `${onlineServices || 0}/${totalServices || 0}`;
+            document.getElementById('systemScore').textContent = `${score || 0}/100`;
+            document.getElementById('evolutionStatus').textContent = evolutionHistory.length + ' steps';
+        }
+
+        function updateServices(analysis) {
+            const grid = document.getElementById('serviceGrid');
+            if (!analysis.analysis?.services) return;
+
+            grid.innerHTML = analysis.analysis.services.map(service => {
+                const status = service.online ? 'online' : 'offline';
+                return `
+                    <div class="service-card ${status}" onclick="inspectService('${service.name}')">
+                        <h3>${service.name}</h3>
+                        <p>${service.description || 'Service'}</p>
+                        <small>Port: ${service.port || 'N/A'}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateEvolutionFeed(history) {
+            if (!history.recent) return;
+
+            evolutionHistory = history.recent;
+            const feed = document.getElementById('feedContent');
+
+            feed.innerHTML = history.recent.slice(0, 20).map(item => {
+                const time = new Date(item.timestamp).toLocaleTimeString();
+                return `
+                    <div class="feed-item">
+                        <strong>${time}</strong> -
+                        <span style="color:#0ff;">${item.type.toUpperCase()}</span>:
+                        ${item.result || item.message || 'Processing...'}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function inspectService(serviceName) {
+            navigateLayer(3);
+            const viewer = document.getElementById('codeViewer');
+            viewer.innerHTML = `
+                <h3 style="color:#0ff; margin-bottom:15px;">🔍 Inspecting: ${serviceName}</h3>
+                <p style="opacity:0.7;">Loading code...</p>
+            `;
+
+            // Simulate code fetch (würde in real world den tatsächlichen Code laden)
+            setTimeout(() => {
+                viewer.innerHTML = `
+                    <h3 style="color:#0ff; margin-bottom:15px;">🔍 ${serviceName}</h3>
+                    <pre style="color:#0f0; line-height:1.8;">
+// Service: ${serviceName}
+// Status: RUNNING
+// Port: 8xxx
+
+class ${serviceName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('')} {
+    constructor() {
+        this.initialize();
+    }
+
+    async initialize() {
+        console.log('Service starting...');
+        this.startServer();
+    }
+
+    // Service endpoints...
+}
+
+export default ${serviceName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('')};
+                    </pre>
+                    <p style="margin-top:20px; color:#0ff;">💡 Code is being continuously improved by Evolution Engine</p>
+                `;
+            }, 500);
+        }
+
+        async function triggerEvolution() {
+            try {
+                await fetch('http://localhost:8999/evolve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ auto: true, maxSteps: 10 })
+                });
+                alert('✅ Evolution cycle started!');
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+
+        async function autoFix() {
+            alert('🔧 Auto-Fix activated! System will self-repair detected issues.');
+            // Trigger auto-fix logic
+            await triggerEvolution();
+        }
+
+        function toggleAutoMode() {
+            autoMode = !autoMode;
+            document.getElementById('autoMode').textContent = autoMode ? 'ACTIVE ✅' : 'PAUSED ⏸️';
+        }
+
+        function exportState() {
+            const state = {
+                services,
+                evolutionHistory,
+                timestamp: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `toobix-state-${Date.now()}.json`;
+            a.click();
+        }
+
+        function openDashboard() {
+            window.open('evolution-dashboard.html', '_blank');
+        }
+
+        function openCity() {
+            window.open('toobix-city-v3-ultra.html', '_blank');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' && currentLayer > 0) {
+                navigateLayer(currentLayer - 1);
+            } else if (e.key === 'ArrowDown' && currentLayer < 4) {
+                navigateLayer(currentLayer + 1);
+            }
+        });
+
+        // Initialize
+        fetchSystemData();
+        setInterval(fetchSystemData, 3000); // Update every 3 seconds
+
+        // Add animated background
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.zIndex = '-1';
+        canvas.style.opacity = '0.1';
+        document.body.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Animated grid background
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#0f0';
+            ctx.lineWidth = 1;
+
+            const gridSize = 50;
+            const offset = (Date.now() / 50) % gridSize;
+
+            for (let x = -offset; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = -offset; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(drawGrid);
+        }
+
+        drawGrid();
+    </script>
+</body>
+</html>

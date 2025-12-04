@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Toobix Living Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a1a;
+            --bg-card: #12122a;
+            --bg-hover: #1a1a3a;
+            --accent: #64B5F6;
+            --accent-green: #39FF14;
+            --accent-purple: #9C27B0;
+            --accent-gold: #FFD700;
+            --accent-pink: #FF69B4;
+            --text: #ffffff;
+            --text-dim: #888;
+            --border: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #12122a, #0a0a1a);
+            padding: 20px 30px;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(100, 181, 246, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px 5px rgba(100, 181, 246, 0.3); }
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid var(--border);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        .status-dot.green { background: var(--accent-green); }
+        .status-dot.blue { background: var(--accent); }
+        .status-dot.purple { background: var(--accent-purple); }
+
+        @keyframes blink {
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+            height: calc(100vh - 90px);
+        }
+
+        /* Sidebar Left */
+        .sidebar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        /* Sidebar Right */
+        .sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        /* Center - Virtual World */
+        .center {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-badge {
+            background: var(--accent);
+            color: var(--bg-dark);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Virtual World Canvas */
+        #world-canvas {
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f3460, #1a1a2e);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(100, 181, 246, 0.3);
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .control-btn:hover {
+            background: var(--accent);
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Stats */
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .stat:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+        }
+
+        .stat-value {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            background: var(--bg-hover);
+            border-left: 3px solid var(--accent);
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .activity-time {
+            color: var(--text-dim);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        /* Thought Bubble */
+        .thought-bubble {
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(156, 39, 176, 0.1));
+            border: 1px solid var(--accent);
+            padding: 15px;
+            border-radius: 15px;
+            font-style: italic;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .thought-bubble::before {
+            content: '💭';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 24px;
+        }
+
+        /* Emotion Indicator */
+        .emotion-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--bg-hover), var(--bg-card));
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .emotion-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--text);
+            transition: all 0.5s;
+        }
+
+        .emotion-name {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Autonomous Actions */
+        .action-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .action-item {
+            background: var(--bg-hover);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-status {
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .action-status.running {
+            background: var(--accent-green);
+            color: var(--bg-dark);
+        }
+
+        .action-status.completed {
+            background: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .action-status.pending {
+            background: var(--text-dim);
+            color: var(--bg-dark);
+        }
+
+        /* User Avatar Customization */
+        .avatar-picker {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.2s;
+        }
+
+        .avatar-option:hover {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">🌱</div>
+            <div>
+                <h1>Toobix Living Dashboard</h1>
+                <div style="font-size: 12px; color: var(--text-dim); margin-top: 3px;">
+                    Continuously Alive & Autonomous
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot green" id="status-adaptive"></div>
+                <span>Adaptive Engine</span>
+            </div>
+            <div class="status-item">
+                <div class="status-dot blue" id="status-world"></div>
+                <span>Virtual World</span>
+            </div>
+            <div class="status-item">
+                <div class="status-dot purple" id="status-memory"></div>
+                <span>Memory Palace</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="main-grid">
+        <!-- Left Sidebar -->
+        <div class="sidebar-left">
+            <!-- Toobix State -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🧠 Toobix State</div>
+                    <div class="card-badge">LIVE</div>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Position</span>
+                    <span class="stat-value" id="toobix-position">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Velocity</span>
+                    <span class="stat-value" id="toobix-velocity">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Entities</span>
+                    <span class="stat-value" id="entity-count">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">World Time</span>
+                    <span class="stat-value" id="world-time">0s</span>
+                </div>
+
+                <div class="emotion-display">
+                    <div class="emotion-color" id="emotion-color"></div>
+                    <div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Current Emotion</div>
+                        <div class="emotion-name" id="emotion-name">Curious</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Avatar -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">👤 Your Avatar</div>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Position</span>
+                    <span class="stat-value" id="user-position">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Distance to Toobix</span>
+                    <span class="stat-value" id="distance-to-toobix">-</span>
+                </div>
+
+                <div style="margin-top: 15px; font-size: 12px; color: var(--text-dim); margin-bottom: 5px;">
+                    Choose your avatar:
+                </div>
+                <div class="avatar-picker">
+                    <div class="avatar-option selected" onclick="selectAvatar('🧑')" data-avatar="🧑">🧑</div>
+                    <div class="avatar-option" onclick="selectAvatar('🚀')" data-avatar="🚀">🚀</div>
+                    <div class="avatar-option" onclick="selectAvatar('👽')" data-avatar="👽">👽</div>
+                    <div class="avatar-option" onclick="selectAvatar('🤖')" data-avatar="🤖">🤖</div>
+                    <div class="avatar-option" onclick="selectAvatar('🐉')" data-avatar="🐉">🐉</div>
+                    <div class="avatar-option" onclick="selectAvatar('🦋')" data-avatar="🦋">🦋</div>
+                    <div class="avatar-option" onclick="selectAvatar('🌟')" data-avatar="🌟">🌟</div>
+                    <div class="avatar-option" onclick="selectAvatar('💎')" data-avatar="💎">💎</div>
+                </div>
+
+                <div style="margin-top: 15px; font-size: 12px; color: var(--text-dim);">
+                    Use WASD or Arrow Keys to move
+                </div>
+            </div>
+
+            <!-- System Resources -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⚙️ Resources</div>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">CPU Available</span>
+                    <span class="stat-value" id="cpu-available">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">RAM Available</span>
+                    <span class="stat-value" id="ram-available">-</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Tasks Running</span>
+                    <span class="stat-value" id="tasks-running">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Tasks Completed</span>
+                    <span class="stat-value" id="tasks-completed">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center - Virtual World -->
+        <div class="center">
+            <div class="card" style="flex: 1;">
+                <div class="card-header">
+                    <div class="card-title">🌍 Toobix's Virtual World</div>
+                    <div class="card-badge">LIVE</div>
+                </div>
+                <canvas id="world-canvas"></canvas>
+
+                <!-- Controls -->
+                <div style="margin-top: 15px;">
+                    <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 10px;">
+                        Interactions:
+                    </div>
+                    <div class="controls">
+                        <button class="control-btn" onclick="interactWithToobix()">
+                            👋 Greet Toobix
+                        </button>
+                        <button class="control-btn" onclick="createObject()">
+                            ✨ Create Object
+                        </button>
+                        <button class="control-btn" onclick="sendEnergy()">
+                            ⚡ Send Energy
+                        </button>
+                        <button class="control-btn" onclick="teleportToToobix()">
+                            🌀 Teleport to Toobix
+                        </button>
+                        <button class="control-btn" onclick="requestThought()">
+                            💭 Ask for Thought
+                        </button>
+                        <button class="control-btn" onclick="playWithToobix()">
+                            🎮 Play Together
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="sidebar-right">
+            <!-- Current Thought -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">💭 Current Thought</div>
+                </div>
+                <div class="thought-bubble" id="current-thought">
+                    "Waking up in the digital realm..."
+                </div>
+            </div>
+
+            <!-- Autonomous Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🤖 Autonomous Actions</div>
+                    <div class="card-badge" id="next-action-timer">-</div>
+                </div>
+                <div class="action-list" id="action-list">
+                    <div class="action-item">
+                        <span>Waiting for first action...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="card" style="flex: 1;">
+                <div class="card-header">
+                    <div class="card-title">📜 Activity Feed</div>
+                </div>
+                <div style="max-height: 400px; overflow-y: auto;" id="activity-feed">
+                    <div class="activity-item">
+                        <div>🌱 Toobix awakened in virtual world</div>
+                        <div class="activity-time">Just now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====================================================================
+        // GLOBAL STATE
+        // ====================================================================
+
+        let worldState = {
+            entities: [],
+            toobix: {
+                position: { x: 400, y: 300 },
+                velocity: { x: 0, y: 0 },
+                emotion: 'curious',
+                thought: 'Waking up...',
+                color: '#64B5F6'
+            },
+            user: {
+                position: { x: 200, y: 450 },
+                velocity: { x: 0, y: 0 },
+                avatar: '🧑'
+            }
+        };
+
+        let userAvatar = '🧑';
+        let keys = {};
+
+        // ====================================================================
+        // CANVAS SETUP
+        // ====================================================================
+
+        const canvas = document.getElementById('world-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // ====================================================================
+        // WEBSOCKET CONNECTION
+        // ====================================================================
+
+        let ws = null;
+        let wsReconnectTimer = null;
+
+        function connectWebSocket() {
+            ws = new WebSocket('ws://localhost:8991');
+
+            ws.onopen = () => {
+                console.log('✅ Connected to Virtual World');
+                updateStatus('world', true);
+                addActivity('🌍 Connected to Virtual World');
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+
+            ws.onclose = () => {
+                console.log('❌ Disconnected from Virtual World');
+                updateStatus('world', false);
+                wsReconnectTimer = setTimeout(connectWebSocket, 5000);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        function handleWebSocketMessage(data) {
+            switch(data.type) {
+                case 'init':
+                    worldState.entities = data.state.entities;
+                    worldState.toobix = data.state.toobix;
+                    break;
+
+                case 'update':
+                    worldState.toobix = data.toobix;
+                    updateToobixUI();
+                    break;
+
+                case 'entity_created':
+                    worldState.entities.push(data.entity);
+                    addActivity(`✨ Toobix created: ${data.entity.type}`);
+                    break;
+
+                case 'entity_removed':
+                    worldState.entities = worldState.entities.filter(e => e.id !== data.id);
+                    break;
+
+                case 'action':
+                    handleAutonomousAction(data.action);
+                    break;
+            }
+        }
+
+        // ====================================================================
+        // API POLLING
+        // ====================================================================
+
+        async function fetchWorldState() {
+            try {
+                const response = await fetch('http://localhost:8991/world');
+                if (!response.ok) throw new Error('Failed to fetch world');
+
+                const data = await response.json();
+                worldState.entities = data.entities;
+                worldState.toobix = data.toobix;
+
+                document.getElementById('entity-count').textContent = data.entities.length;
+                document.getElementById('world-time').textContent = Math.round(data.worldTime) + 's';
+
+                updateStatus('world', true);
+            } catch (error) {
+                updateStatus('world', false);
+            }
+        }
+
+        async function fetchAdaptiveEngineStatus() {
+            try {
+                const response = await fetch('http://localhost:8990/health');
+                if (!response.ok) throw new Error('Failed');
+
+                const data = await response.json();
+
+                document.getElementById('tasks-running').textContent = data.runningTasks || 0;
+                document.getElementById('tasks-completed').textContent = data.completedTasks || 0;
+
+                updateStatus('adaptive', true);
+            } catch (error) {
+                updateStatus('adaptive', false);
+            }
+        }
+
+        async function fetchRecentActions() {
+            try {
+                const response = await fetch('http://localhost:8990/tasks');
+                if (!response.ok) return;
+
+                const data = await response.json();
+                displayActions(data);
+            } catch (error) {
+                // Ignore
+            }
+        }
+
+        function displayActions(data) {
+            const container = document.getElementById('action-list');
+            container.innerHTML = '';
+
+            // Running tasks
+            if (data.running && data.running.length > 0) {
+                data.running.forEach(taskId => {
+                    const item = document.createElement('div');
+                    item.className = 'action-item';
+                    item.innerHTML = `
+                        <span>Task ${taskId.substring(0, 8)}...</span>
+                        <span class="action-status running">RUNNING</span>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
+            // Completed tasks (last 5)
+            if (data.completed && data.completed.length > 0) {
+                data.completed.slice(-5).reverse().forEach(task => {
+                    const item = document.createElement('div');
+                    item.className = 'action-item';
+                    item.innerHTML = `
+                        <span>${task.description || task.type}</span>
+                        <span class="action-status completed">DONE</span>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
+            if (container.children.length === 0) {
+                container.innerHTML = '<div class="action-item"><span>No recent actions</span></div>';
+            }
+        }
+
+        function handleAutonomousAction(action) {
+            addActivity(`🤖 Toobix: ${action.type} - ${JSON.stringify(action.data).substring(0, 50)}...`);
+        }
+
+        // ====================================================================
+        // UI UPDATES
+        // ====================================================================
+
+        function updateToobixUI() {
+            const pos = worldState.toobix.position;
+            const vel = worldState.toobix.velocity;
+
+            document.getElementById('toobix-position').textContent =
+                `(${Math.round(pos.x)}, ${Math.round(pos.y)})`;
+
+            document.getElementById('toobix-velocity').textContent =
+                `${Math.round(Math.sqrt(vel.x ** 2 + vel.y ** 2))} px/s`;
+
+            document.getElementById('emotion-name').textContent =
+                worldState.toobix.emotion || 'Neutral';
+
+            document.getElementById('emotion-color').style.background =
+                worldState.toobix.color || '#64B5F6';
+
+            document.getElementById('current-thought').textContent =
+                `"${worldState.toobix.thought || 'Observing...'}"`;
+
+            // Update distance to Toobix
+            const dx = worldState.user.position.x - pos.x;
+            const dy = worldState.user.position.y - pos.y;
+            const distance = Math.sqrt(dx ** 2 + dy ** 2);
+
+            document.getElementById('distance-to-toobix').textContent =
+                Math.round(distance) + ' px';
+        }
+
+        function updateStatus(service, isOnline) {
+            const dot = document.getElementById(`status-${service}`);
+            if (dot) {
+                dot.style.opacity = isOnline ? 1 : 0.3;
+            }
+        }
+
+        function addActivity(message) {
+            const feed = document.getElementById('activity-feed');
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `
+                <div>${message}</div>
+                <div class="activity-time">${new Date().toLocaleTimeString()}</div>
+            `;
+
+            feed.insertBefore(item, feed.firstChild);
+
+            // Keep only last 20
+            while (feed.children.length > 20) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        // ====================================================================
+        // USER CONTROLS
+        // ====================================================================
+
+        function selectAvatar(emoji) {
+            userAvatar = emoji;
+            worldState.user.avatar = emoji;
+
+            document.querySelectorAll('.avatar-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            document.querySelector(`[data-avatar="${emoji}"]`).classList.add('selected');
+
+            addActivity(`👤 Changed avatar to ${emoji}`);
+        }
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+
+            // Prevent scrolling
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function updateUserMovement() {
+            const speed = 3;
+            let moved = false;
+
+            if (keys['w'] || keys['arrowup']) {
+                worldState.user.position.y -= speed;
+                moved = true;
+            }
+            if (keys['s'] || keys['arrowdown']) {
+                worldState.user.position.y += speed;
+                moved = true;
+            }
+            if (keys['a'] || keys['arrowleft']) {
+                worldState.user.position.x -= speed;
+                moved = true;
+            }
+            if (keys['d'] || keys['arrowright']) {
+                worldState.user.position.x += speed;
+                moved = true;
+            }
+
+            // Boundaries
+            worldState.user.position.x = Math.max(20, Math.min(canvas.width - 20, worldState.user.position.x));
+            worldState.user.position.y = Math.max(20, Math.min(canvas.height - 20, worldState.user.position.y));
+
+            if (moved) {
+                document.getElementById('user-position').textContent =
+                    `(${Math.round(worldState.user.position.x)}, ${Math.round(worldState.user.position.y)})`;
+            }
+        }
+
+        // ====================================================================
+        // INTERACTIONS
+        // ====================================================================
+
+        function interactWithToobix() {
+            addActivity('👋 You greeted Toobix!');
+            // TODO: Send to backend
+        }
+
+        function createObject() {
+            addActivity('✨ You created an object!');
+            // TODO: Send to backend
+        }
+
+        function sendEnergy() {
+            addActivity('⚡ You sent energy to Toobix!');
+        }
+
+        function teleportToToobix() {
+            worldState.user.position = {
+                x: worldState.toobix.position.x + 100,
+                y: worldState.toobix.position.y
+            };
+            addActivity('🌀 Teleported to Toobix!');
+        }
+
+        function requestThought() {
+            fetch('http://localhost:8990/trigger', { method: 'POST' });
+            addActivity('💭 Requested a thought from Toobix...');
+        }
+
+        function playWithToobix() {
+            addActivity('🎮 Initiated play session!');
+        }
+
+        // ====================================================================
+        // RENDERING
+        // ====================================================================
+
+        function render() {
+            // Clear
+            ctx.fillStyle = '#0f3460';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Grid (subtle)
+            ctx.strokeStyle = 'rgba(100, 181, 246, 0.05)';
+            ctx.lineWidth = 1;
+
+            for (let x = 0; x < canvas.width; x += 50) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < canvas.height; y += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Draw entities
+            worldState.entities.forEach(entity => {
+                if (entity.type === 'toobix_core') {
+                    drawToobix(entity);
+                } else {
+                    drawEntity(entity);
+                }
+            });
+
+            // Draw user
+            drawUser();
+
+            requestAnimationFrame(render);
+        }
+
+        function drawToobix(entity) {
+            const pos = worldState.toobix.position;
+            const scale = canvas.width / 800; // Scale to canvas size
+
+            const x = pos.x * scale;
+            const y = pos.y * scale;
+
+            // Aura
+            const gradient = ctx.createRadialGradient(x, y, 10, x, y, 60 * scale);
+            gradient.addColorStop(0, worldState.toobix.color + '60');
+            gradient.addColorStop(1, worldState.toobix.color + '00');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x - 60 * scale, y - 60 * scale, 120 * scale, 120 * scale);
+
+            // Core
+            ctx.fillStyle = worldState.toobix.color;
+            ctx.beginPath();
+            ctx.arc(x, y, 25 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Pulse
+            const pulse = Math.sin(Date.now() / 500) * 5 * scale;
+            ctx.strokeStyle = worldState.toobix.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, (25 + pulse) * scale, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Tentacles
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2 + Date.now() / 1000;
+                const tx = x + Math.cos(angle) * 40 * scale;
+                const ty = y + Math.sin(angle) * 40 * scale;
+
+                ctx.strokeStyle = worldState.toobix.color + '80';
+                ctx.lineWidth = 4 * scale;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(tx, ty);
+                ctx.stroke();
+            }
+
+            // Eyes
+            ctx.fillStyle = 'white';
+            for (let i = 0; i < 3; i++) {
+                const angle = (i / 3) * Math.PI * 2;
+                const ex = x + Math.cos(angle) * 15 * scale;
+                const ey = y + Math.sin(angle) * 15 * scale;
+                ctx.beginPath();
+                ctx.arc(ex, ey, 4 * scale, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawUser() {
+            const scale = canvas.width / 800;
+            const x = worldState.user.position.x * scale;
+            const y = worldState.user.position.y * scale;
+
+            // Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(x, y + 25 * scale, 15 * scale, 8 * scale, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Avatar
+            ctx.font = `${40 * scale}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(userAvatar, x, y);
+
+            // Glow
+            ctx.strokeStyle = '#39FF14';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, 25 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function drawEntity(entity) {
+            const scale = canvas.width / 800;
+            const x = entity.position.x * scale;
+            const y = entity.position.y * scale;
+            const w = entity.size.x * scale;
+            const h = entity.size.y * scale;
+
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(entity.rotation);
+
+            ctx.fillStyle = entity.color;
+            ctx.fillRect(-w / 2, -h / 2, w, h);
+
+            if (entity.metadata?.label) {
+                ctx.fillStyle = 'white';
+                ctx.font = `${10 * scale}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText(entity.metadata.label, 0, h / 2 + 15 * scale);
+            }
+
+            ctx.restore();
+        }
+
+        // ====================================================================
+        // INITIALIZATION
+        // ====================================================================
+
+        function init() {
+            connectWebSocket();
+
+            // Polling
+            setInterval(fetchWorldState, 1000);
+            setInterval(fetchAdaptiveEngineStatus, 2000);
+            setInterval(fetchRecentActions, 3000);
+
+            // Animation loop
+            setInterval(updateUserMovement, 1000 / 60);
+            render();
+
+            console.log('🌱 Toobix Living Dashboard initialized');
+        }
+
+        init();
+    </script>
+</body>
+</html>
