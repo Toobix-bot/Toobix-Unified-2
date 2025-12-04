@@ -49,31 +49,32 @@ services:
       - key: GROQ_API_KEY
         sync: false
 
-  # Twitter Autonomy Worker
-  - type: worker
-    name: toobix-twitter
-    env: node
-    region: frankfurt
-    buildCommand: |
-      curl -fsSL https://bun.sh/install | bash
-      export PATH="$HOME/.bun/bin:$PATH"
-      bun install
-    startCommand: bun run core/twitter-autonomy.ts
-    plan: free
-    autoDeploy: true
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: GROQ_API_KEY
-        sync: false
-      - key: TWITTER_API_KEY
-        sync: false
-      - key: TWITTER_API_SECRET
-        sync: false
-      - key: TWITTER_ACCESS_TOKEN
-        sync: false
-      - key: TWITTER_ACCESS_SECRET
-        sync: false
+  # Twitter Autonomy Worker (OPTIONAL - Free Plan unterstützt keine Worker)
+  # Falls du Paid Plan hast, aktiviere das:
+  # - type: worker
+  #   name: toobix-twitter
+  #   env: node
+  #   region: frankfurt
+  #   buildCommand: |
+  #     curl -fsSL https://bun.sh/install | bash
+  #     export PATH="$HOME/.bun/bin:$PATH"
+  #     bun install
+  #   startCommand: bun run core/twitter-autonomy.ts
+  #   plan: free
+  #   autoDeploy: true
+  #   envVars:
+  #     - key: NODE_ENV
+  #       value: production
+  #     - key: GROQ_API_KEY
+  #       sync: false
+  #     - key: TWITTER_API_KEY
+  #       sync: false
+  #     - key: TWITTER_API_SECRET
+  #       sync: false
+  #     - key: TWITTER_ACCESS_TOKEN
+  #       sync: false
+  #     - key: TWITTER_ACCESS_SECRET
+  #       sync: false
 
 databases:
   # PostgreSQL für persistente Daten
