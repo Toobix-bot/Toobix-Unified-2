@@ -1,4 +1,25 @@
 services:
+  # Website Chat Proxy (PRIORITY - makes website interactive!)
+  - type: web
+    name: toobix-chat-proxy
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run services/chat-proxy.ts
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GROQ_API_KEY
+        sync: false
+
   # Main API Gateway
   - type: web
     name: toobix-api
@@ -16,7 +37,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
+        value: 10001
       - key: GROQ_API_KEY
         sync: false
       - key: TWITTER_API_KEY
@@ -45,7 +66,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10001
+        value: 10002
       - key: GROQ_API_KEY
         sync: false
 

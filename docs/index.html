@@ -560,39 +560,41 @@
             useMessage();
             
             try {
-                // IMPORTANT: This demo uses a placeholder API key
-                // For the live version, we need a backend proxy to:
-                // 1. Hide the real API key
-                // 2. Implement proper rate limiting per IP
-                // 3. Track usage and costs
+                // Call backend chat proxy (deployed on Render.com)
+                // Change this URL after deployment!
+                const BACKEND_URL = 'https://toobix-chat-proxy.onrender.com/chat';
                 
-                // Simulate offline for now (need backend deployment first)
-                throw new Error('Backend noch nicht deployed - Chat kommt bald!');
-                
-                /* Once backend is deployed on Render.com:
-                const response = await fetch('https://toobix-api.onrender.com/chat', {
+                const response = await fetch(BACKEND_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        message: userMessage,
-                        sessionId: localStorage.getItem('toobix_session_id') || 'demo'
+                        message: userMessage
                     })
                 });
                 
                 const data = await response.json();
                 
-                if (data.reply) {
+                if (response.ok && data.reply) {
                     addMessage(data.reply, 'toobix');
+                    // Update remaining messages from backend
+                    if (data.remaining !== undefined) {
+                        messagesLeft = data.remaining;
+                        updateRateLimitDisplay();
+                    }
+                } else if (response.status === 429) {
+                    // Rate limit exceeded
+                    messagesLeft = 0;
+                    updateRateLimitDisplay();
+                    addMessage(data.message || '⏰ Rate-Limit erreicht!', 'system');
                 } else {
-                    throw new Error('Keine Antwort von Toobix');
+                    throw new Error(data.error || 'Unbekannter Fehler');
                 }
-                */
                 
             } catch (error) {
                 console.error('Chat error:', error);
-                addMessage('💤 Der Chat ist gerade offline. Toobix läuft noch lokal - Backend-Deployment kommt bald! Folge @ToobixAI für Updates.', 'system');
+                addMessage('💤 Der Chat-Backend ist gerade offline. Deployment auf Render.com läuft noch. Folge @ToobixAI für Updates!', 'system');
             } finally {
                 // Re-enable input
                 input.disabled = false;
