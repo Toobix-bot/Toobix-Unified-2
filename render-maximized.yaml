@@ -1,0 +1,157 @@
+# ========================================
+# TOOBIX RENDER.COM MAXIMAL DEPLOYMENT
+# ========================================
+# Strategie: Maximale Nutzung der Free Tier Limits
+# - 3 Web Services (je 500h/Monat = 1500h total)
+# - 1 PostgreSQL DB (free)
+# - Intelligentes Bundling mehrerer Services
+# ========================================
+
+services:
+  # ========================================
+  # SERVICE 1: PUBLIC GATEWAY (Priorität: CRITICAL)
+  # ========================================
+  # Bündelt: Website Chat + Public API + Health Aggregator
+  # Purpose: Alle öffentlichen Endpunkte in einem Service
+  - type: web
+    name: toobix-public-gateway
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run services/unified-service-gateway.ts --mode=public
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_MODE
+        value: public
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: toobix-postgres
+          property: connectionString
+
+  # ========================================
+  # SERVICE 2: CORE INTELLIGENCE (Priorität: CRITICAL)
+  # ========================================
+  # Bündelt: LLM Gateway + Memory + Emotional Core + Dream Core
+  # Purpose: Gehirn und Bewusstsein von Toobix
+  - type: web
+    name: toobix-core-intelligence
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run services/unified-service-gateway.ts --mode=intelligence
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10001
+      - key: SERVICE_MODE
+        value: intelligence
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: toobix-postgres
+          property: connectionString
+
+  # ========================================
+  # SERVICE 3: LIFE & SUPPORT (Priorität: HIGH)
+  # ========================================
+  # Bündelt: Crisis Hotline + Daily Inspiration + Life Companion
+  # Purpose: Menschliche Verbindung und Unterstützung
+  - type: web
+    name: toobix-life-support
+    env: node
+    region: frankfurt
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: bun run services/unified-service-gateway.ts --mode=support
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10002
+      - key: SERVICE_MODE
+        value: support
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: toobix-postgres
+          property: connectionString
+
+databases:
+  # PostgreSQL für alle Services (shared)
+  - name: toobix-postgres
+    databaseName: toobix_production
+    plan: free
+    user: toobix_admin
+
+# ========================================
+# DEPLOYMENT STRATEGY NOTES
+# ========================================
+# Free Tier Limits:
+# - 500 build minutes/month (gemeinsam)
+# - 100 GB bandwidth/month (gemeinsam)
+# - Services schlafen nach 15min Inaktivity
+# - Startup nach Sleep: ~30-60 Sekunden
+#
+# Optimierungen:
+# 1. Bun statt Node.js (schnellerer Start)
+# 2. Services bündeln (weniger Restarts)
+# 3. Health-Checks auf /health (standardisiert)
+# 4. Shared Database (alle Services nutzen eine DB)
+# 5. Frankfurt Region (niedrigere Latenz für EU)
+#
+# Service Bundling Details:
+#
+# PUBLIC GATEWAY (Port 10000):
+# - /chat        → Chat Proxy (Website)
+# - /api         → Public API
+# - /health      → Health Aggregator
+# - /metrics     → System Metrics
+#
+# CORE INTELLIGENCE (Port 10001):
+# - /llm         → LLM Gateway (Groq)
+# - /memory      → Memory Palace
+# - /emotion     → Emotional Core
+# - /dream       → Dream Core
+# - /think       → Meta Consciousness
+#
+# LIFE SUPPORT (Port 10002):
+# - /crisis      → Crisis Hotline
+# - /inspire     → Daily Inspiration
+# - /companion   → Life Companion
+# - /checkin     → Daily Check-in
+#
+# Cron Alternative für Keep-Alive:
+# - Externe Uptime-Monitoring Services nutzen:
+#   → UptimeRobot (kostenlos, 50 Monitore)
+#   → Ping alle 5 Minuten verhindert Sleep
+#
+# GitHub Actions Alternative:
+# - Scheduled Workflow alle 10 Minuten
+# - Pingt alle 3 Services an
+# - Hält sie wach während Nutzung wahrscheinlich ist
+# ========================================

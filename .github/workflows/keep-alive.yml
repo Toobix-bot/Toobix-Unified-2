@@ -1,0 +1,57 @@
+name: Keep Toobix Services Alive
+
+# Läuft alle 10 Minuten während aktiver Stunden (verhindert Render Sleep)
+on:
+  schedule:
+    # Alle 10 Minuten von 6:00 bis 23:50 UTC (7:00-00:50 CET)
+    - cron: '*/10 6-23 * * *'
+  workflow_dispatch: # Manuelles Auslösen möglich
+
+jobs:
+  ping-services:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Public Gateway
+        run: |
+          echo "🌐 Pinging Public Gateway..."
+          curl -f -s -o /dev/null -w "%{http_code}" https://toobix-public-gateway.onrender.com/health || echo "⚠️ Public Gateway offline"
+          
+      - name: Ping Core Intelligence
+        run: |
+          echo "🧠 Pinging Core Intelligence..."
+          curl -f -s -o /dev/null -w "%{http_code}" https://toobix-core-intelligence.onrender.com/health || echo "⚠️ Core Intelligence offline"
+          
+      - name: Ping Life Support
+        run: |
+          echo "💜 Pinging Life Support..."
+          curl -f -s -o /dev/null -w "%{http_code}" https://toobix-life-support.onrender.com/health || echo "⚠️ Life Support offline"
+          
+      - name: Summary
+        run: |
+          echo "✅ Keep-Alive Ping abgeschlossen"
+          echo "⏰ Nächster Ping in 10 Minuten"
+
+  # Optional: Full Health Check einmal pro Stunde
+  health-check:
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Detailed Health Check
+        run: |
+          echo "🏥 Detaillierter Health-Check..."
+          
+          # Public Gateway
+          PUBLIC=$(curl -s https://toobix-public-gateway.onrender.com/health)
+          echo "Public Gateway: $PUBLIC"
+          
+          # Core Intelligence
+          CORE=$(curl -s https://toobix-core-intelligence.onrender.com/health)
+          echo "Core Intelligence: $CORE"
+          
+          # Life Support
+          SUPPORT=$(curl -s https://toobix-life-support.onrender.com/health)
+          echo "Life Support: $SUPPORT"
+          
+          echo "✅ Health-Check abgeschlossen"
