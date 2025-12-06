@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * 🧘 SELF-AWARENESS CORE v1.0
  * 
@@ -397,6 +399,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'self-awareness-core',
+  port: 8970,
+  role: 'core',
+  endpoints: ['/health', '/status'],
+  capabilities: ['core'],
+  version: '1.0.0'
+}).catch(console.warn);
+
 
 // Keep the process alive
 process.stdin.resume();

@@ -18,6 +18,7 @@
  */
 
 import type { Serve } from 'bun';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -816,3 +817,14 @@ console.log(`
 `);
 
 export default service.serve();
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'game-logic-service',
+  port: 8936,
+  role: 'gaming',
+  endpoints: ['/health', '/status'],
+  capabilities: ['gaming'],
+  version: '1.0.0'
+}).catch(console.warn);

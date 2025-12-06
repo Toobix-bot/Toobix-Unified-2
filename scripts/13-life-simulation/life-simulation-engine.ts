@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
+
 /**
  * LIFE SIMULATION ENGINE
  *
@@ -679,6 +681,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'life-simulation-engine',
+  port: 8914,
+  role: 'simulation',
+  endpoints: ['/health', '/status'],
+  capabilities: ['simulation'],
+  version: '1.0.0'
+}).catch(console.warn);
+
     }
 
     // Routes

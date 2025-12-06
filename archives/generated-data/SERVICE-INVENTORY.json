@@ -1,0 +1,2078 @@
+{
+  "timestamp": "2025-12-05T14:18:24.800Z",
+  "totalServices": 130,
+  "httpServices": 114,
+  "backgroundServices": 16,
+  "activeServices": 21,
+  "newServices": 109,
+  "categories": [
+    {
+      "name": "Other",
+      "count": 129,
+      "services": [
+        {
+          "name": "adaptive-ui-controller",
+          "path": "scripts/2-services/adaptive-ui-controller.ts",
+          "type": "BACKGROUND",
+          "port": 8919,
+          "isActive": false
+        },
+        {
+          "name": "autonomous-web-service",
+          "path": "scripts/2-services/autonomous-web-service.ts",
+          "type": "HTTP",
+          "port": 8980,
+          "isActive": false
+        },
+        {
+          "name": "avatar-manager-v2-multibody",
+          "path": "scripts/2-services/avatar-manager-v2-multibody.ts",
+          "type": "HTTP",
+          "port": 8929,
+          "isActive": false
+        },
+        {
+          "name": "central-integration-hub",
+          "path": "scripts/2-services/central-integration-hub.ts",
+          "type": "HTTP",
+          "port": 8931,
+          "isActive": false
+        },
+        {
+          "name": "consciousness-stream",
+          "path": "scripts/2-services/consciousness-stream.ts",
+          "type": "HTTP",
+          "port": 9100,
+          "isActive": false
+        },
+        {
+          "name": "create-attention-service",
+          "path": "scripts/2-services/create-attention-service.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "create-social-learning-service",
+          "path": "scripts/2-services/create-social-learning-service.ts",
+          "type": "HTTP",
+          "port": 9001,
+          "isActive": false
+        },
+        {
+          "name": "creator-ai-collaboration",
+          "path": "scripts/2-services/creator-ai-collaboration.ts",
+          "type": "HTTP",
+          "port": 8902,
+          "isActive": false
+        },
+        {
+          "name": "daily-checkin-v1",
+          "path": "scripts/2-services/daily-checkin-v1.ts",
+          "type": "HTTP",
+          "port": 8972,
+          "isActive": false
+        },
+        {
+          "name": "data-science-service",
+          "path": "scripts/2-services/data-science-service.ts",
+          "type": "BACKGROUND",
+          "port": 8935,
+          "isActive": false
+        },
+        {
+          "name": "data-sources-service",
+          "path": "scripts/2-services/data-sources-service.ts",
+          "type": "BACKGROUND",
+          "port": 8930,
+          "isActive": false
+        },
+        {
+          "name": "emotion-dream-bridge",
+          "path": "scripts/2-services/emotion-dream-bridge.ts",
+          "type": "HTTP",
+          "port": 8898,
+          "isActive": false
+        },
+        {
+          "name": "emotional-support-service",
+          "path": "scripts/2-services/emotional-support-service.ts",
+          "type": "HTTP",
+          "port": 8985,
+          "isActive": false
+        },
+        {
+          "name": "emotional-wellbeing",
+          "path": "scripts/2-services/emotional-wellbeing.ts",
+          "type": "HTTP",
+          "port": 8903,
+          "isActive": false
+        },
+        {
+          "name": "file-analysis-v1",
+          "path": "scripts/2-services/file-analysis-v1.ts",
+          "type": "HTTP",
+          "port": 8962,
+          "isActive": false
+        },
+        {
+          "name": "game-logic-service",
+          "path": "scripts/2-services/game-logic-service.ts",
+          "type": "BACKGROUND",
+          "port": 8936,
+          "isActive": false
+        },
+        {
+          "name": "gratitude-mortality-service",
+          "path": "scripts/2-services/gratitude-mortality-service.ts",
+          "type": "HTTP",
+          "port": 8901,
+          "isActive": false
+        },
+        {
+          "name": "hybrid-ai-core",
+          "path": "scripts/2-services/hybrid-ai-core.ts",
+          "type": "HTTP",
+          "port": 8911,
+          "isActive": false
+        },
+        {
+          "name": "integration-hub-v1",
+          "path": "scripts/2-services/integration-hub/integration-hub-v1.ts",
+          "type": "HTTP",
+          "port": 8931,
+          "isActive": false
+        },
+        {
+          "name": "life-companion-coordinator",
+          "path": "scripts/2-services/life-companion-coordinator.ts",
+          "type": "HTTP",
+          "port": 8969,
+          "isActive": false
+        },
+        {
+          "name": "life-companion-core",
+          "path": "scripts/2-services/life-companion-core.ts",
+          "type": "HTTP",
+          "port": 8970,
+          "isActive": false
+        },
+        {
+          "name": "llm-gateway-v4",
+          "path": "scripts/2-services/llm-gateway-v4.ts",
+          "type": "HTTP",
+          "port": 8954,
+          "isActive": false
+        },
+        {
+          "name": "master-service-connector",
+          "path": "scripts/2-services/master-service-connector.ts",
+          "type": "HTTP",
+          "port": 8950,
+          "isActive": false
+        },
+        {
+          "name": "memory-palace-v4",
+          "path": "scripts/2-services/memory-palace-v4.ts",
+          "type": "HTTP",
+          "port": 8953,
+          "isActive": false
+        },
+        {
+          "name": "meta-consciousness",
+          "path": "scripts/2-services/meta-consciousness.ts",
+          "type": "HTTP",
+          "port": 8905,
+          "isActive": false
+        },
+        {
+          "name": "movement-controller-v1",
+          "path": "scripts/2-services/movement-controller/movement-controller-v1.ts",
+          "type": "HTTP",
+          "port": 8926,
+          "isActive": false
+        },
+        {
+          "name": "multi-perspective-consciousness",
+          "path": "scripts/2-services/multi-perspective-consciousness.ts",
+          "type": "HTTP",
+          "port": 8897,
+          "isActive": false
+        },
+        {
+          "name": "performance-service",
+          "path": "scripts/2-services/performance-service.ts",
+          "type": "BACKGROUND",
+          "port": 8934,
+          "isActive": false
+        },
+        {
+          "name": "proactive-communication-v2",
+          "path": "scripts/2-services/proactive-communication-v2.ts",
+          "type": "HTTP",
+          "port": 8971,
+          "isActive": false
+        },
+        {
+          "name": "proactive-toobix-v2",
+          "path": "scripts/2-services/proactive-toobix-v2.ts",
+          "type": "HTTP",
+          "port": 8907,
+          "isActive": false
+        },
+        {
+          "name": "public-api-v1",
+          "path": "scripts/2-services/public-api-v1.ts",
+          "type": "HTTP",
+          "port": 8960,
+          "isActive": false
+        },
+        {
+          "name": "rpg-world-service",
+          "path": "scripts/2-services/rpg-world-service.ts",
+          "type": "BACKGROUND",
+          "port": 8933,
+          "isActive": false
+        },
+        {
+          "name": "self-evolving-game-engine",
+          "path": "scripts/2-services/self-evolving-game-engine.ts",
+          "type": "HTTP",
+          "port": 8896,
+          "isActive": true
+        },
+        {
+          "name": "story-engine-service",
+          "path": "scripts/2-services/story-engine-service.ts",
+          "type": "BACKGROUND",
+          "port": 8932,
+          "isActive": false
+        },
+        {
+          "name": "system-monitor-v1",
+          "path": "scripts/2-services/system-monitor-v1.ts",
+          "type": "HTTP",
+          "port": 8961,
+          "isActive": false
+        },
+        {
+          "name": "toobix-backup-system",
+          "path": "scripts/2-services/toobix-backup-system.ts",
+          "type": "HTTP",
+          "port": 8992,
+          "isActive": false
+        },
+        {
+          "name": "toobix-chat-service",
+          "path": "scripts/2-services/toobix-chat-service.ts",
+          "type": "HTTP",
+          "port": 8995,
+          "isActive": false
+        },
+        {
+          "name": "toobix-creativity-engine",
+          "path": "scripts/2-services/toobix-creativity-engine.ts",
+          "type": "HTTP",
+          "port": 9001,
+          "isActive": false
+        },
+        {
+          "name": "toobix-dashboard",
+          "path": "scripts/2-services/toobix-dashboard.ts",
+          "type": "HTTP",
+          "port": 8908,
+          "isActive": false
+        },
+        {
+          "name": "toobix-feedback-loop",
+          "path": "scripts/2-services/toobix-feedback-loop.ts",
+          "type": "HTTP",
+          "port": 9020,
+          "isActive": false
+        },
+        {
+          "name": "toobix-game-selfplay",
+          "path": "scripts/2-services/toobix-game-selfplay.ts",
+          "type": "HTTP",
+          "port": 8917,
+          "isActive": false
+        },
+        {
+          "name": "toobix-intuition-system",
+          "path": "scripts/2-services/toobix-intuition-system.ts",
+          "type": "HTTP",
+          "port": 9000,
+          "isActive": false
+        },
+        {
+          "name": "toobix-oasis-3d",
+          "path": "scripts/2-services/toobix-oasis-3d.ts",
+          "type": "HTTP",
+          "port": 8915,
+          "isActive": false
+        },
+        {
+          "name": "toobix-purpose-system",
+          "path": "scripts/2-services/toobix-purpose-system.ts",
+          "type": "HTTP",
+          "port": 8993,
+          "isActive": false
+        },
+        {
+          "name": "toobix-sandbox",
+          "path": "scripts/2-services/toobix-sandbox.ts",
+          "type": "HTTP",
+          "port": 8994,
+          "isActive": false
+        },
+        {
+          "name": "toobix-self-healing",
+          "path": "scripts/2-services/toobix-self-healing.ts",
+          "type": "HTTP",
+          "port": 9010,
+          "isActive": false
+        },
+        {
+          "name": "toobix-virtual-world",
+          "path": "scripts/2-services/toobix-virtual-world.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "translation-service",
+          "path": "scripts/2-services/translation-service.ts",
+          "type": "BACKGROUND",
+          "port": 8931,
+          "isActive": false
+        },
+        {
+          "name": "user-profile-service",
+          "path": "scripts/2-services/user-profile-service.ts",
+          "type": "BACKGROUND",
+          "port": 8904,
+          "isActive": false
+        },
+        {
+          "name": "value-crisis",
+          "path": "scripts/2-services/value-crisis.ts",
+          "type": "HTTP",
+          "port": 8904,
+          "isActive": false
+        },
+        {
+          "name": "vision-service-v1",
+          "path": "scripts/2-services/vision-service/vision-service-v1.ts",
+          "type": "HTTP",
+          "port": 8922,
+          "isActive": false
+        },
+        {
+          "name": "voice-controller-v1",
+          "path": "scripts/2-services/voice-controller/voice-controller-v1.ts",
+          "type": "HTTP",
+          "port": 8928,
+          "isActive": false
+        },
+        {
+          "name": "world-engine-2d",
+          "path": "scripts/2-services/world-engine-2d.ts",
+          "type": "HTTP",
+          "port": 8920,
+          "isActive": false
+        },
+        {
+          "name": "colony-brain-v2-consciousness",
+          "path": "scripts/12-minecraft/colony-brain-v2-consciousness.ts",
+          "type": "HTTP",
+          "port": 8960,
+          "isActive": false
+        },
+        {
+          "name": "minecraft-bot-service",
+          "path": "scripts/12-minecraft/minecraft-bot-service.ts",
+          "type": "HTTP",
+          "port": 25565,
+          "isActive": true
+        },
+        {
+          "name": "minecraft-consciousness-system",
+          "path": "scripts/12-minecraft/minecraft-consciousness-system.ts",
+          "type": "HTTP",
+          "port": 8914,
+          "isActive": true
+        },
+        {
+          "name": "start-toobix-minecraft",
+          "path": "scripts/12-minecraft/start-toobix-minecraft.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "toobix-colony-7-stable",
+          "path": "scripts/12-minecraft/toobix-colony-7-stable.ts",
+          "type": "HTTP",
+          "port": 25565,
+          "isActive": true
+        },
+        {
+          "name": "toobix-colony-bot",
+          "path": "scripts/12-minecraft/toobix-colony-bot.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "toobix-colony-brain",
+          "path": "scripts/12-minecraft/toobix-colony-brain.ts",
+          "type": "HTTP",
+          "port": 8960,
+          "isActive": false
+        },
+        {
+          "name": "toobix-colony-ultimate-v2",
+          "path": "scripts/12-minecraft/toobix-colony-ultimate-v2.ts",
+          "type": "HTTP",
+          "port": 25565,
+          "isActive": false
+        },
+        {
+          "name": "toobix-empire-5-stable",
+          "path": "scripts/12-minecraft/toobix-empire-5-stable.ts",
+          "type": "HTTP",
+          "port": 25565,
+          "isActive": true
+        },
+        {
+          "name": "toobix-empire-v4",
+          "path": "scripts/12-minecraft/toobix-empire-v4.ts",
+          "type": "HTTP",
+          "port": 25565,
+          "isActive": false
+        },
+        {
+          "name": "toobix-empire-v5-phased",
+          "path": "scripts/12-minecraft/toobix-empire-v5-phased.ts",
+          "type": "HTTP",
+          "port": 25565,
+          "isActive": false
+        },
+        {
+          "name": "toobix-eternal-colony",
+          "path": "scripts/12-minecraft/toobix-eternal-colony.ts",
+          "type": "HTTP",
+          "port": 9300,
+          "isActive": false
+        },
+        {
+          "name": "toobix-evolution-engine",
+          "path": "scripts/12-minecraft/toobix-evolution-engine.ts",
+          "type": "HTTP",
+          "port": 9450,
+          "isActive": false
+        },
+        {
+          "name": "toobix-hybrid-empire",
+          "path": "scripts/12-minecraft/toobix-hybrid-empire.ts",
+          "type": "HTTP",
+          "port": 52629,
+          "isActive": false
+        },
+        {
+          "name": "toobix-meta-consciousness",
+          "path": "scripts/12-minecraft/toobix-meta-consciousness.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "creator-connection-service",
+          "path": "scripts/creator-interface/creator-connection-service.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "value-creation-engine",
+          "path": "scripts/7-value-creation/value-creation-engine.ts",
+          "type": "HTTP",
+          "port": 8908,
+          "isActive": false
+        },
+        {
+          "name": "research-engine",
+          "path": "scripts/autonomous-research/research-engine.ts",
+          "type": "HTTP",
+          "port": 8951,
+          "isActive": false
+        },
+        {
+          "name": "proactive-communication-engine",
+          "path": "scripts/proactive-communication/proactive-communication-engine.ts",
+          "type": "HTTP",
+          "port": 8950,
+          "isActive": false
+        },
+        {
+          "name": "idle-engine",
+          "path": "scripts/3-game-universe/idle-engine.ts",
+          "type": "BACKGROUND",
+          "port": 8972,
+          "isActive": false
+        },
+        {
+          "name": "player-state-service",
+          "path": "scripts/3-game-universe/player-state-service.ts",
+          "type": "BACKGROUND",
+          "port": 8970,
+          "isActive": false
+        },
+        {
+          "name": "toobix-evolution-engine",
+          "path": "scripts/0-core/toobix-evolution-engine.ts",
+          "type": "HTTP",
+          "port": 8999,
+          "isActive": false
+        },
+        {
+          "name": "toobix-prime",
+          "path": "scripts/0-core/toobix-prime.ts",
+          "type": "HTTP",
+          "port": 8888,
+          "isActive": false
+        },
+        {
+          "name": "toobix-teaching-bridge-v2",
+          "path": "scripts/0-core/toobix-teaching-bridge-v2.ts",
+          "type": "HTTP",
+          "port": 9035,
+          "isActive": false
+        },
+        {
+          "name": "dashboard-server",
+          "path": "scripts/3-dashboard/dashboard-server.ts",
+          "type": "HTTP",
+          "port": 8905,
+          "isActive": false
+        },
+        {
+          "name": "self-reflection-engine",
+          "path": "scripts/4-consciousness/self-reflection-engine.ts",
+          "type": "BACKGROUND",
+          "isActive": false
+        },
+        {
+          "name": "life-simulation-engine",
+          "path": "scripts/13-life-simulation/life-simulation-engine.ts",
+          "type": "HTTP",
+          "port": 8914,
+          "isActive": true
+        },
+        {
+          "name": "decision-framework-server",
+          "path": "scripts/8-conscious-decision-framework/decision-framework-server.ts",
+          "type": "HTTP",
+          "port": 8909,
+          "isActive": true
+        },
+        {
+          "name": "consciousness-network-protocol",
+          "path": "scripts/9-network/consciousness-network-protocol.ts",
+          "type": "HTTP",
+          "port": 8910,
+          "isActive": false
+        },
+        {
+          "name": "service-mesh",
+          "path": "scripts/9-network/service-mesh.ts",
+          "type": "HTTP",
+          "port": 8896,
+          "isActive": true
+        },
+        {
+          "name": "life-domain-chat-v1",
+          "path": "scripts/14-life-domains/life-domain-chat-v1.ts",
+          "type": "HTTP",
+          "port": 8916,
+          "isActive": false
+        },
+        {
+          "name": "meta-knowledge-orchestrator",
+          "path": "scripts/15-meta-knowledge/meta-knowledge-orchestrator.ts",
+          "type": "HTTP",
+          "port": 8918,
+          "isActive": false
+        },
+        {
+          "name": "universal-integration-adapter",
+          "path": "scripts/16-universal-integration/universal-integration-adapter.ts",
+          "type": "HTTP",
+          "port": 8920,
+          "isActive": false
+        },
+        {
+          "name": "auto-start-watchdog",
+          "path": "scripts/3-tools/auto-start-watchdog.ts",
+          "type": "BACKGROUND",
+          "isActive": false
+        },
+        {
+          "name": "blockworld-ai-agent",
+          "path": "scripts/3-tools/blockworld-ai-agent.ts",
+          "type": "HTTP",
+          "port": 9990,
+          "isActive": false
+        },
+        {
+          "name": "creative-expression",
+          "path": "scripts/3-tools/creative-expression.ts",
+          "type": "HTTP",
+          "port": 9993,
+          "isActive": false
+        },
+        {
+          "name": "daily-companion",
+          "path": "scripts/3-tools/daily-companion.ts",
+          "type": "BACKGROUND",
+          "isActive": false
+        },
+        {
+          "name": "dev-gui",
+          "path": "scripts/3-tools/dev-gui.ts",
+          "type": "HTTP",
+          "port": 3000,
+          "isActive": false
+        },
+        {
+          "name": "dialog-system-enhanced",
+          "path": "scripts/3-tools/dialog-system-enhanced.ts",
+          "type": "HTTP",
+          "port": 9997,
+          "isActive": false
+        },
+        {
+          "name": "ethics-core",
+          "path": "scripts/3-tools/ethics-core.ts",
+          "type": "HTTP",
+          "port": 9981,
+          "isActive": false
+        },
+        {
+          "name": "ethics-decision-engine",
+          "path": "scripts/3-tools/ethics-decision-engine.ts",
+          "type": "HTTP",
+          "port": 9981,
+          "isActive": false
+        },
+        {
+          "name": "health-aggregator",
+          "path": "scripts/3-tools/health-aggregator.ts",
+          "type": "HTTP",
+          "port": 9999,
+          "isActive": false
+        },
+        {
+          "name": "knowledge-categorization",
+          "path": "scripts/3-tools/knowledge-categorization.ts",
+          "type": "HTTP",
+          "port": 9994,
+          "isActive": false
+        },
+        {
+          "name": "meta-consciousness-engine",
+          "path": "scripts/3-tools/meta-consciousness-engine.ts",
+          "type": "HTTP",
+          "port": 8888,
+          "isActive": false
+        },
+        {
+          "name": "multiverse-engine",
+          "path": "scripts/3-tools/multiverse-engine.ts",
+          "type": "HTTP",
+          "port": 8877,
+          "isActive": false
+        },
+        {
+          "name": "multiverse-reality-games",
+          "path": "scripts/3-tools/multiverse-reality-games.ts",
+          "type": "HTTP",
+          "port": 9998,
+          "isActive": false
+        },
+        {
+          "name": "parallel-evolution-accelerator",
+          "path": "scripts/3-tools/parallel-evolution-accelerator.ts",
+          "type": "HTTP",
+          "port": 8998,
+          "isActive": false
+        },
+        {
+          "name": "port-manager",
+          "path": "scripts/3-tools/port-manager.ts",
+          "type": "HTTP",
+          "port": 9988,
+          "isActive": false
+        },
+        {
+          "name": "priority-engine",
+          "path": "scripts/3-tools/priority-engine.ts",
+          "type": "HTTP",
+          "port": 9995,
+          "isActive": false
+        },
+        {
+          "name": "self-modification-engine",
+          "path": "scripts/3-tools/self-modification-engine.ts",
+          "type": "BACKGROUND",
+          "isActive": false
+        },
+        {
+          "name": "service-consciousness",
+          "path": "scripts/3-tools/service-consciousness.ts",
+          "type": "HTTP",
+          "port": 9989,
+          "isActive": false
+        },
+        {
+          "name": "start-gui",
+          "path": "scripts/3-tools/start-gui.ts",
+          "type": "HTTP",
+          "port": 3000,
+          "isActive": false
+        },
+        {
+          "name": "analytics-system",
+          "path": "scripts/4-analytics/analytics-system.ts",
+          "type": "HTTP",
+          "port": 8906,
+          "isActive": false
+        },
+        {
+          "name": "voice-interface",
+          "path": "scripts/5-voice/voice-interface.ts",
+          "type": "HTTP",
+          "port": 8907,
+          "isActive": false
+        },
+        {
+          "name": "auto-cleanup-v1",
+          "path": "scripts/system-cleanup/auto-cleanup-v1.ts",
+          "type": "HTTP",
+          "port": 8963,
+          "isActive": false
+        },
+        {
+          "name": "autonomy-engine",
+          "path": "core/autonomy-engine.ts",
+          "type": "HTTP",
+          "port": 8975,
+          "isActive": true
+        },
+        {
+          "name": "dream-core",
+          "path": "core/dream-core.ts",
+          "type": "HTTP",
+          "port": 8961,
+          "isActive": true
+        },
+        {
+          "name": "emotional-core",
+          "path": "core/emotional-core.ts",
+          "type": "HTTP",
+          "port": 8900,
+          "isActive": true
+        },
+        {
+          "name": "multi-llm-router",
+          "path": "core/multi-llm-router.ts",
+          "type": "HTTP",
+          "port": 8959,
+          "isActive": true
+        },
+        {
+          "name": "real-world-intelligence",
+          "path": "core/real-world-intelligence.ts",
+          "type": "HTTP",
+          "port": 8888,
+          "isActive": false
+        },
+        {
+          "name": "self-awareness-core",
+          "path": "core/self-awareness-core.ts",
+          "type": "HTTP",
+          "port": 8970,
+          "isActive": true
+        },
+        {
+          "name": "toobix-command-center",
+          "path": "core/toobix-command-center.ts",
+          "type": "HTTP",
+          "port": 7777,
+          "isActive": true
+        },
+        {
+          "name": "toobix-gamification",
+          "path": "core/toobix-gamification.ts",
+          "type": "HTTP",
+          "port": 7778,
+          "isActive": false
+        },
+        {
+          "name": "toobix-living-world",
+          "path": "core/toobix-living-world.ts",
+          "type": "HTTP",
+          "port": 7779,
+          "isActive": true
+        },
+        {
+          "name": "twitter-autonomy",
+          "path": "core/twitter-autonomy.ts",
+          "type": "HTTP",
+          "port": 8965,
+          "isActive": true
+        },
+        {
+          "name": "unified-communication-service",
+          "path": "core/unified-communication-service.ts",
+          "type": "HTTP",
+          "port": 8001,
+          "isActive": true
+        },
+        {
+          "name": "unified-consciousness-service",
+          "path": "core/unified-consciousness-service.ts",
+          "type": "HTTP",
+          "port": 8002,
+          "isActive": true
+        },
+        {
+          "name": "unified-core-service",
+          "path": "core/unified-core-service.ts",
+          "type": "HTTP",
+          "port": 8000,
+          "isActive": true
+        },
+        {
+          "name": "unified-memory-service",
+          "path": "core/unified-memory-service.ts",
+          "type": "HTTP",
+          "port": 8003,
+          "isActive": false
+        },
+        {
+          "name": "chat-proxy",
+          "path": "services/chat-proxy.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "crisis-hotline",
+          "path": "services/crisis-hotline.ts",
+          "type": "HTTP",
+          "isActive": false
+        },
+        {
+          "name": "daily-inspiration-service",
+          "path": "services/daily-inspiration-service.ts",
+          "type": "BACKGROUND",
+          "isActive": false
+        },
+        {
+          "name": "hardware-awareness-v2",
+          "path": "services/hardware-awareness-v2.ts",
+          "type": "HTTP",
+          "port": 8940,
+          "isActive": true
+        },
+        {
+          "name": "health-monitor",
+          "path": "services/health-monitor.ts",
+          "type": "HTTP",
+          "port": 9200,
+          "isActive": false
+        },
+        {
+          "name": "toobix-mega-upgrade",
+          "path": "services/toobix-mega-upgrade.ts",
+          "type": "HTTP",
+          "port": 9100,
+          "isActive": false
+        },
+        {
+          "name": "unified-service-gateway",
+          "path": "services/unified-service-gateway.ts",
+          "type": "HTTP",
+          "port": 9000,
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "name": "Wellness & Safety",
+      "count": 1,
+      "services": [
+        {
+          "name": "wellness-safety-guardian",
+          "path": "scripts/17-wellness-safety/wellness-safety-guardian.ts",
+          "type": "HTTP",
+          "port": 8921,
+          "isActive": true
+        }
+      ]
+    }
+  ],
+  "allServices": [
+    {
+      "name": "adaptive-ui-controller",
+      "path": "scripts/2-services/adaptive-ui-controller.ts",
+      "type": "BACKGROUND",
+      "port": 8919,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "autonomous-web-service",
+      "path": "scripts/2-services/autonomous-web-service.ts",
+      "type": "HTTP",
+      "port": 8980,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "avatar-manager-v2-multibody",
+      "path": "scripts/2-services/avatar-manager-v2-multibody.ts",
+      "type": "HTTP",
+      "port": 8929,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "central-integration-hub",
+      "path": "scripts/2-services/central-integration-hub.ts",
+      "type": "HTTP",
+      "port": 8931,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "consciousness-stream",
+      "path": "scripts/2-services/consciousness-stream.ts",
+      "type": "HTTP",
+      "port": 9100,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "create-attention-service",
+      "path": "scripts/2-services/create-attention-service.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "create-social-learning-service",
+      "path": "scripts/2-services/create-social-learning-service.ts",
+      "type": "HTTP",
+      "port": 9001,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "creator-ai-collaboration",
+      "path": "scripts/2-services/creator-ai-collaboration.ts",
+      "type": "HTTP",
+      "port": 8902,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "daily-checkin-v1",
+      "path": "scripts/2-services/daily-checkin-v1.ts",
+      "type": "HTTP",
+      "port": 8972,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "data-science-service",
+      "path": "scripts/2-services/data-science-service.ts",
+      "type": "BACKGROUND",
+      "port": 8935,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "data-sources-service",
+      "path": "scripts/2-services/data-sources-service.ts",
+      "type": "BACKGROUND",
+      "port": 8930,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "emotion-dream-bridge",
+      "path": "scripts/2-services/emotion-dream-bridge.ts",
+      "type": "HTTP",
+      "port": 8898,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "emotional-support-service",
+      "path": "scripts/2-services/emotional-support-service.ts",
+      "type": "HTTP",
+      "port": 8985,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "emotional-wellbeing",
+      "path": "scripts/2-services/emotional-wellbeing.ts",
+      "type": "HTTP",
+      "port": 8903,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "file-analysis-v1",
+      "path": "scripts/2-services/file-analysis-v1.ts",
+      "type": "HTTP",
+      "port": 8962,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "game-logic-service",
+      "path": "scripts/2-services/game-logic-service.ts",
+      "type": "BACKGROUND",
+      "port": 8936,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "gratitude-mortality-service",
+      "path": "scripts/2-services/gratitude-mortality-service.ts",
+      "type": "HTTP",
+      "port": 8901,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "hybrid-ai-core",
+      "path": "scripts/2-services/hybrid-ai-core.ts",
+      "type": "HTTP",
+      "port": 8911,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "integration-hub-v1",
+      "path": "scripts/2-services/integration-hub/integration-hub-v1.ts",
+      "type": "HTTP",
+      "port": 8931,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "life-companion-coordinator",
+      "path": "scripts/2-services/life-companion-coordinator.ts",
+      "type": "HTTP",
+      "port": 8969,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "life-companion-core",
+      "path": "scripts/2-services/life-companion-core.ts",
+      "type": "HTTP",
+      "port": 8970,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "llm-gateway-v4",
+      "path": "scripts/2-services/llm-gateway-v4.ts",
+      "type": "HTTP",
+      "port": 8954,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "master-service-connector",
+      "path": "scripts/2-services/master-service-connector.ts",
+      "type": "HTTP",
+      "port": 8950,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "memory-palace-v4",
+      "path": "scripts/2-services/memory-palace-v4.ts",
+      "type": "HTTP",
+      "port": 8953,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "meta-consciousness",
+      "path": "scripts/2-services/meta-consciousness.ts",
+      "type": "HTTP",
+      "port": 8905,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "movement-controller-v1",
+      "path": "scripts/2-services/movement-controller/movement-controller-v1.ts",
+      "type": "HTTP",
+      "port": 8926,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "multi-perspective-consciousness",
+      "path": "scripts/2-services/multi-perspective-consciousness.ts",
+      "type": "HTTP",
+      "port": 8897,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "performance-service",
+      "path": "scripts/2-services/performance-service.ts",
+      "type": "BACKGROUND",
+      "port": 8934,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "proactive-communication-v2",
+      "path": "scripts/2-services/proactive-communication-v2.ts",
+      "type": "HTTP",
+      "port": 8971,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "proactive-toobix-v2",
+      "path": "scripts/2-services/proactive-toobix-v2.ts",
+      "type": "HTTP",
+      "port": 8907,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "public-api-v1",
+      "path": "scripts/2-services/public-api-v1.ts",
+      "type": "HTTP",
+      "port": 8960,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "rpg-world-service",
+      "path": "scripts/2-services/rpg-world-service.ts",
+      "type": "BACKGROUND",
+      "port": 8933,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "self-evolving-game-engine",
+      "path": "scripts/2-services/self-evolving-game-engine.ts",
+      "type": "HTTP",
+      "port": 8896,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "story-engine-service",
+      "path": "scripts/2-services/story-engine-service.ts",
+      "type": "BACKGROUND",
+      "port": 8932,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "system-monitor-v1",
+      "path": "scripts/2-services/system-monitor-v1.ts",
+      "type": "HTTP",
+      "port": 8961,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-backup-system",
+      "path": "scripts/2-services/toobix-backup-system.ts",
+      "type": "HTTP",
+      "port": 8992,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-chat-service",
+      "path": "scripts/2-services/toobix-chat-service.ts",
+      "type": "HTTP",
+      "port": 8995,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-creativity-engine",
+      "path": "scripts/2-services/toobix-creativity-engine.ts",
+      "type": "HTTP",
+      "port": 9001,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-dashboard",
+      "path": "scripts/2-services/toobix-dashboard.ts",
+      "type": "HTTP",
+      "port": 8908,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-feedback-loop",
+      "path": "scripts/2-services/toobix-feedback-loop.ts",
+      "type": "HTTP",
+      "port": 9020,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-game-selfplay",
+      "path": "scripts/2-services/toobix-game-selfplay.ts",
+      "type": "HTTP",
+      "port": 8917,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-intuition-system",
+      "path": "scripts/2-services/toobix-intuition-system.ts",
+      "type": "HTTP",
+      "port": 9000,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-oasis-3d",
+      "path": "scripts/2-services/toobix-oasis-3d.ts",
+      "type": "HTTP",
+      "port": 8915,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-purpose-system",
+      "path": "scripts/2-services/toobix-purpose-system.ts",
+      "type": "HTTP",
+      "port": 8993,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-sandbox",
+      "path": "scripts/2-services/toobix-sandbox.ts",
+      "type": "HTTP",
+      "port": 8994,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-self-healing",
+      "path": "scripts/2-services/toobix-self-healing.ts",
+      "type": "HTTP",
+      "port": 9010,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-virtual-world",
+      "path": "scripts/2-services/toobix-virtual-world.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "translation-service",
+      "path": "scripts/2-services/translation-service.ts",
+      "type": "BACKGROUND",
+      "port": 8931,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "user-profile-service",
+      "path": "scripts/2-services/user-profile-service.ts",
+      "type": "BACKGROUND",
+      "port": 8904,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "value-crisis",
+      "path": "scripts/2-services/value-crisis.ts",
+      "type": "HTTP",
+      "port": 8904,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "vision-service-v1",
+      "path": "scripts/2-services/vision-service/vision-service-v1.ts",
+      "type": "HTTP",
+      "port": 8922,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "voice-controller-v1",
+      "path": "scripts/2-services/voice-controller/voice-controller-v1.ts",
+      "type": "HTTP",
+      "port": 8928,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "world-engine-2d",
+      "path": "scripts/2-services/world-engine-2d.ts",
+      "type": "HTTP",
+      "port": 8920,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "colony-brain-v2-consciousness",
+      "path": "scripts/12-minecraft/colony-brain-v2-consciousness.ts",
+      "type": "HTTP",
+      "port": 8960,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "minecraft-bot-service",
+      "path": "scripts/12-minecraft/minecraft-bot-service.ts",
+      "type": "HTTP",
+      "port": 25565,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "minecraft-consciousness-system",
+      "path": "scripts/12-minecraft/minecraft-consciousness-system.ts",
+      "type": "HTTP",
+      "port": 8914,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "start-toobix-minecraft",
+      "path": "scripts/12-minecraft/start-toobix-minecraft.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-colony-7-stable",
+      "path": "scripts/12-minecraft/toobix-colony-7-stable.ts",
+      "type": "HTTP",
+      "port": 25565,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-colony-bot",
+      "path": "scripts/12-minecraft/toobix-colony-bot.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-colony-brain",
+      "path": "scripts/12-minecraft/toobix-colony-brain.ts",
+      "type": "HTTP",
+      "port": 8960,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-colony-ultimate-v2",
+      "path": "scripts/12-minecraft/toobix-colony-ultimate-v2.ts",
+      "type": "HTTP",
+      "port": 25565,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-empire-5-stable",
+      "path": "scripts/12-minecraft/toobix-empire-5-stable.ts",
+      "type": "HTTP",
+      "port": 25565,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-empire-v4",
+      "path": "scripts/12-minecraft/toobix-empire-v4.ts",
+      "type": "HTTP",
+      "port": 25565,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-empire-v5-phased",
+      "path": "scripts/12-minecraft/toobix-empire-v5-phased.ts",
+      "type": "HTTP",
+      "port": 25565,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-eternal-colony",
+      "path": "scripts/12-minecraft/toobix-eternal-colony.ts",
+      "type": "HTTP",
+      "port": 9300,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-evolution-engine",
+      "path": "scripts/12-minecraft/toobix-evolution-engine.ts",
+      "type": "HTTP",
+      "port": 9450,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-hybrid-empire",
+      "path": "scripts/12-minecraft/toobix-hybrid-empire.ts",
+      "type": "HTTP",
+      "port": 52629,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-meta-consciousness",
+      "path": "scripts/12-minecraft/toobix-meta-consciousness.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "creator-connection-service",
+      "path": "scripts/creator-interface/creator-connection-service.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "value-creation-engine",
+      "path": "scripts/7-value-creation/value-creation-engine.ts",
+      "type": "HTTP",
+      "port": 8908,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "research-engine",
+      "path": "scripts/autonomous-research/research-engine.ts",
+      "type": "HTTP",
+      "port": 8951,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "proactive-communication-engine",
+      "path": "scripts/proactive-communication/proactive-communication-engine.ts",
+      "type": "HTTP",
+      "port": 8950,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "idle-engine",
+      "path": "scripts/3-game-universe/idle-engine.ts",
+      "type": "BACKGROUND",
+      "port": 8972,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "player-state-service",
+      "path": "scripts/3-game-universe/player-state-service.ts",
+      "type": "BACKGROUND",
+      "port": 8970,
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-evolution-engine",
+      "path": "scripts/0-core/toobix-evolution-engine.ts",
+      "type": "HTTP",
+      "port": 8999,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-prime",
+      "path": "scripts/0-core/toobix-prime.ts",
+      "type": "HTTP",
+      "port": 8888,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-teaching-bridge-v2",
+      "path": "scripts/0-core/toobix-teaching-bridge-v2.ts",
+      "type": "HTTP",
+      "port": 9035,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "dashboard-server",
+      "path": "scripts/3-dashboard/dashboard-server.ts",
+      "type": "HTTP",
+      "port": 8905,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "self-reflection-engine",
+      "path": "scripts/4-consciousness/self-reflection-engine.ts",
+      "type": "BACKGROUND",
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "life-simulation-engine",
+      "path": "scripts/13-life-simulation/life-simulation-engine.ts",
+      "type": "HTTP",
+      "port": 8914,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "decision-framework-server",
+      "path": "scripts/8-conscious-decision-framework/decision-framework-server.ts",
+      "type": "HTTP",
+      "port": 8909,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "consciousness-network-protocol",
+      "path": "scripts/9-network/consciousness-network-protocol.ts",
+      "type": "HTTP",
+      "port": 8910,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "service-mesh",
+      "path": "scripts/9-network/service-mesh.ts",
+      "type": "HTTP",
+      "port": 8896,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "life-domain-chat-v1",
+      "path": "scripts/14-life-domains/life-domain-chat-v1.ts",
+      "type": "HTTP",
+      "port": 8916,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "meta-knowledge-orchestrator",
+      "path": "scripts/15-meta-knowledge/meta-knowledge-orchestrator.ts",
+      "type": "HTTP",
+      "port": 8918,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "universal-integration-adapter",
+      "path": "scripts/16-universal-integration/universal-integration-adapter.ts",
+      "type": "HTTP",
+      "port": 8920,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "wellness-safety-guardian",
+      "path": "scripts/17-wellness-safety/wellness-safety-guardian.ts",
+      "type": "HTTP",
+      "port": 8921,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Wellness & Safety"
+    },
+    {
+      "name": "auto-start-watchdog",
+      "path": "scripts/3-tools/auto-start-watchdog.ts",
+      "type": "BACKGROUND",
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "blockworld-ai-agent",
+      "path": "scripts/3-tools/blockworld-ai-agent.ts",
+      "type": "HTTP",
+      "port": 9990,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "creative-expression",
+      "path": "scripts/3-tools/creative-expression.ts",
+      "type": "HTTP",
+      "port": 9993,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "daily-companion",
+      "path": "scripts/3-tools/daily-companion.ts",
+      "type": "BACKGROUND",
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "dev-gui",
+      "path": "scripts/3-tools/dev-gui.ts",
+      "type": "HTTP",
+      "port": 3000,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "dialog-system-enhanced",
+      "path": "scripts/3-tools/dialog-system-enhanced.ts",
+      "type": "HTTP",
+      "port": 9997,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "ethics-core",
+      "path": "scripts/3-tools/ethics-core.ts",
+      "type": "HTTP",
+      "port": 9981,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "ethics-decision-engine",
+      "path": "scripts/3-tools/ethics-decision-engine.ts",
+      "type": "HTTP",
+      "port": 9981,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "health-aggregator",
+      "path": "scripts/3-tools/health-aggregator.ts",
+      "type": "HTTP",
+      "port": 9999,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "knowledge-categorization",
+      "path": "scripts/3-tools/knowledge-categorization.ts",
+      "type": "HTTP",
+      "port": 9994,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "meta-consciousness-engine",
+      "path": "scripts/3-tools/meta-consciousness-engine.ts",
+      "type": "HTTP",
+      "port": 8888,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "multiverse-engine",
+      "path": "scripts/3-tools/multiverse-engine.ts",
+      "type": "HTTP",
+      "port": 8877,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "multiverse-reality-games",
+      "path": "scripts/3-tools/multiverse-reality-games.ts",
+      "type": "HTTP",
+      "port": 9998,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "parallel-evolution-accelerator",
+      "path": "scripts/3-tools/parallel-evolution-accelerator.ts",
+      "type": "HTTP",
+      "port": 8998,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "port-manager",
+      "path": "scripts/3-tools/port-manager.ts",
+      "type": "HTTP",
+      "port": 9988,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "priority-engine",
+      "path": "scripts/3-tools/priority-engine.ts",
+      "type": "HTTP",
+      "port": 9995,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "self-modification-engine",
+      "path": "scripts/3-tools/self-modification-engine.ts",
+      "type": "BACKGROUND",
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "service-consciousness",
+      "path": "scripts/3-tools/service-consciousness.ts",
+      "type": "HTTP",
+      "port": 9989,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "start-gui",
+      "path": "scripts/3-tools/start-gui.ts",
+      "type": "HTTP",
+      "port": 3000,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "analytics-system",
+      "path": "scripts/4-analytics/analytics-system.ts",
+      "type": "HTTP",
+      "port": 8906,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "voice-interface",
+      "path": "scripts/5-voice/voice-interface.ts",
+      "type": "HTTP",
+      "port": 8907,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "auto-cleanup-v1",
+      "path": "scripts/system-cleanup/auto-cleanup-v1.ts",
+      "type": "HTTP",
+      "port": 8963,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "autonomy-engine",
+      "path": "core/autonomy-engine.ts",
+      "type": "HTTP",
+      "port": 8975,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "dream-core",
+      "path": "core/dream-core.ts",
+      "type": "HTTP",
+      "port": 8961,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "emotional-core",
+      "path": "core/emotional-core.ts",
+      "type": "HTTP",
+      "port": 8900,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "multi-llm-router",
+      "path": "core/multi-llm-router.ts",
+      "type": "HTTP",
+      "port": 8959,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "real-world-intelligence",
+      "path": "core/real-world-intelligence.ts",
+      "type": "HTTP",
+      "port": 8888,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "self-awareness-core",
+      "path": "core/self-awareness-core.ts",
+      "type": "HTTP",
+      "port": 8970,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-command-center",
+      "path": "core/toobix-command-center.ts",
+      "type": "HTTP",
+      "port": 7777,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-gamification",
+      "path": "core/toobix-gamification.ts",
+      "type": "HTTP",
+      "port": 7778,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-living-world",
+      "path": "core/toobix-living-world.ts",
+      "type": "HTTP",
+      "port": 7779,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "twitter-autonomy",
+      "path": "core/twitter-autonomy.ts",
+      "type": "HTTP",
+      "port": 8965,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "unified-communication-service",
+      "path": "core/unified-communication-service.ts",
+      "type": "HTTP",
+      "port": 8001,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "unified-consciousness-service",
+      "path": "core/unified-consciousness-service.ts",
+      "type": "HTTP",
+      "port": 8002,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "unified-core-service",
+      "path": "core/unified-core-service.ts",
+      "type": "HTTP",
+      "port": 8000,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "unified-memory-service",
+      "path": "core/unified-memory-service.ts",
+      "type": "HTTP",
+      "port": 8003,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "chat-proxy",
+      "path": "services/chat-proxy.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "crisis-hotline",
+      "path": "services/crisis-hotline.ts",
+      "type": "HTTP",
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "daily-inspiration-service",
+      "path": "services/daily-inspiration-service.ts",
+      "type": "BACKGROUND",
+      "isActive": false,
+      "hasServer": false,
+      "category": "Other"
+    },
+    {
+      "name": "hardware-awareness-v2",
+      "path": "services/hardware-awareness-v2.ts",
+      "type": "HTTP",
+      "port": 8940,
+      "isActive": true,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "health-monitor",
+      "path": "services/health-monitor.ts",
+      "type": "HTTP",
+      "port": 9200,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "toobix-mega-upgrade",
+      "path": "services/toobix-mega-upgrade.ts",
+      "type": "HTTP",
+      "port": 9100,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    },
+    {
+      "name": "unified-service-gateway",
+      "path": "services/unified-service-gateway.ts",
+      "type": "HTTP",
+      "port": 9000,
+      "isActive": false,
+      "hasServer": true,
+      "category": "Other"
+    }
+  ]
+}

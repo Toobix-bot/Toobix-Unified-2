@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * 🐦 TWITTER/X AUTONOMY SERVICE v1.0
  * 
@@ -481,6 +483,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'twitter-autonomy',
+  port: 8965,
+  role: 'social',
+  endpoints: ['/health', '/status'],
+  capabilities: ['social'],
+  version: '1.0.0'
+}).catch(console.warn);
+
     }
 
     // =============== HEALTH ===============

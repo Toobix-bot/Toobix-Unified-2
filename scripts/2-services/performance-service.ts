@@ -18,6 +18,7 @@ import type { Serve } from 'bun';
 import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -875,3 +876,14 @@ console.log(`
 `);
 
 export default service.serve();
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'performance-service',
+  port: 8934,
+  role: 'monitoring',
+  endpoints: ['/health', '/status'],
+  capabilities: ['monitoring'],
+  version: '1.0.0'
+}).catch(console.warn);

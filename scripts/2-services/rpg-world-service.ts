@@ -15,6 +15,7 @@
  */
 
 import type { Serve } from 'bun';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -901,3 +902,14 @@ console.log(`
 `);
 
 export default server;
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'rpg-world-service',
+  port: 8933,
+  role: 'gaming',
+  endpoints: ['/health', '/status'],
+  capabilities: ['gaming'],
+  version: '1.0.0'
+}).catch(console.warn);

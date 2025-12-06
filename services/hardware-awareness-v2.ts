@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * 🔧 HARDWARE AWARENESS SERVICE v2 (Simplified)
  * Port 8940
@@ -322,6 +324,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'hardware-awareness-v2',
+  port: 8940,
+  role: 'monitoring',
+  endpoints: ['/health', '/status'],
+  capabilities: ['monitoring'],
+  version: '1.0.0'
+}).catch(console.warn);
+
     }
 
     try {

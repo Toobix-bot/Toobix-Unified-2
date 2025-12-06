@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * TOOBIX UNIFIED COMMUNICATION SERVICE
  * Konsolidiert Chat, Life-Domain, Proactive Communication
@@ -130,5 +132,16 @@ const server = Bun.serve({
   port: PORT,
   fetch: handleRequest
 });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'unified-communication-service',
+  port: 8001,
+  role: 'communication',
+  endpoints: ['/health', '/status'],
+  capabilities: ['communication'],
+  version: '1.0.0'
+}).catch(console.warn);
+
 
 console.log(`🗨️  Toobix Unified Communication Service running on http://localhost:${PORT}`);

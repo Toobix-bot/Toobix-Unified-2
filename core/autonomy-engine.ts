@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * 🤖 AUTONOMY ENGINE v1.0
  * 
@@ -544,6 +546,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'autonomy-engine',
+  port: 8975,
+  role: 'decision',
+  endpoints: ['/health', '/status'],
+  capabilities: ['decision'],
+  version: '1.0.0'
+}).catch(console.warn);
+
     }
 
     // =============== HEALTH ===============

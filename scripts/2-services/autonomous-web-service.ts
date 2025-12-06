@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
+
 /**
  * 🌐 TOOBIX AUTONOMOUS WEB CAPABILITIES
  * 
@@ -546,3 +548,14 @@ app.listen(PORT, () => {
 ╚════════════════════════════════════════════════════════════════╝
   `);
 });
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'autonomous-web-service',
+  port: 8980,
+  role: 'web',
+  endpoints: ['/health', '/status'],
+  capabilities: ['web'],
+  version: '1.0.0'
+}).catch(console.warn);

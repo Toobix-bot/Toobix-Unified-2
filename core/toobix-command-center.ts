@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * 🎯 TOOBIX COMMAND CENTER
  *
@@ -207,6 +209,17 @@ const server = Bun.serve({
     // CORS preflight
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'toobix-command-center',
+  port: 7777,
+  role: 'orchestrator',
+  endpoints: ['/health', '/status'],
+  capabilities: ['orchestrator'],
+  version: '1.0.0'
+}).catch(console.warn);
+
 
 // Keep the process alive
 process.stdin.resume();

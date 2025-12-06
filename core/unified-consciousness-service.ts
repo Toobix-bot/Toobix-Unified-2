@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * TOOBIX UNIFIED CONSCIOUSNESS SERVICE
  * Konsolidiert Meta-Consciousness, Multi-Perspective, Consciousness Stream
@@ -60,6 +62,17 @@ async function handleRequest(req: Request): Promise<Response> {
 }
 
 const server = Bun.serve({ port: PORT, fetch: handleRequest });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'unified-consciousness-service',
+  port: 8002,
+  role: 'core',
+  endpoints: ['/health', '/status'],
+  capabilities: ['core'],
+  version: '1.0.0'
+}).catch(console.warn);
+
 
 // Keep the process alive
 process.stdin.resume();

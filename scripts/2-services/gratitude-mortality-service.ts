@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
+
 /**
  * Gratitude & Mortality Contemplation Service v2.0
  * 

@@ -14,6 +14,7 @@
  */
 
 import type { Serve } from 'bun';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -859,3 +860,14 @@ console.log(`
 `);
 
 export default service.serve();
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'story-engine-service',
+  port: 8932,
+  role: 'creative',
+  endpoints: ['/health', '/status'],
+  capabilities: ['creative'],
+  version: '1.0.0'
+}).catch(console.warn);

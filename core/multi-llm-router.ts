@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * 🌐 MULTI-LLM ROUTER v1.0
  * 
@@ -499,6 +501,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'multi-llm-router',
+  port: 8959,
+  role: 'ai',
+  endpoints: ['/health', '/status'],
+  capabilities: ['ai'],
+  version: '1.0.0'
+}).catch(console.warn);
+
     }
 
     // =============== HEALTH ===============

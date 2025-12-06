@@ -12,6 +12,7 @@
  */
 
 import type { Serve } from 'bun';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -437,3 +438,14 @@ console.log(`
 `);
 
 export default service.serve();
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'translation-service',
+  port: 8931,
+  role: 'utility',
+  endpoints: ['/health', '/status'],
+  capabilities: ['utility'],
+  version: '1.0.0'
+}).catch(console.warn);

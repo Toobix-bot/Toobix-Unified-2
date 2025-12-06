@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../lib/service-mesh-registration';
+
 /**
  * TOOBIX UNIFIED CORE SERVICE
  * Konsolidiert alle Core-, Autonomy- und Infrastructure-Services
@@ -250,16 +252,15 @@ const server = Bun.serve({
     console.error('Server error:', error);
     return new Response('Internal Server Error', { status: 500 });
 
-// Keep the process alive
-process.stdin.resume();
-
-console.log('🟢 Service is running. Press Ctrl+C to stop.');
-
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  process.exit(0);
-});
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'unified-core-service',
+  port: 8000,
+  role: 'core',
+  endpoints: ['/health', '/status'],
+  capabilities: ['core'],
+  version: '1.0.0'
+}).catch(console.warn);
 
   }
 });
@@ -288,3 +289,14 @@ console.log(`  GET  http://localhost:${PORT}/api/hardware/stats`);
 console.log('');
 console.log('========================================');
 console.log('');
+
+// Keep the process alive
+process.stdin.resume();
+
+console.log('🟢 Service is running. Press Ctrl+C to stop.');
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\n🛑 Shutting down gracefully...');
+  process.exit(0);
+});

@@ -13,6 +13,7 @@
  */
 
 import type { Serve } from 'bun';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -512,3 +513,14 @@ console.log(`
 `);
 
 export default service.serve();
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'data-sources-service',
+  port: 8930,
+  role: 'data',
+  endpoints: ['/health', '/status'],
+  capabilities: ['data'],
+  version: '1.0.0'
+}).catch(console.warn);

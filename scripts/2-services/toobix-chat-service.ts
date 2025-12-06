@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
+
 /**
  * 💬 TOOBIX CHAT SERVICE
  *
@@ -348,3 +350,14 @@ server.listen(PORT, () => {
     console.log('║  Status: 🟢 READY TO CHAT                                 ║');
     console.log('╚════════════════════════════════════════════════════════════╝\n');
 });
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'toobix-chat-service',
+  port: 8995,
+  role: 'interaction',
+  endpoints: ['/health', '/status'],
+  capabilities: ['interaction'],
+  version: '1.0.0'
+}).catch(console.warn);

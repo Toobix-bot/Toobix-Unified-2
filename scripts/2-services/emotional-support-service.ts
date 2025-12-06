@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
+
 /**
  * 💚 TOOBIX EMOTIONAL SUPPORT SERVICE
  * 
@@ -117,6 +119,17 @@ const server = Bun.serve({
 
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'emotional-support-service',
+  port: 8985,
+  role: 'support',
+  endpoints: ['/health', '/status'],
+  capabilities: ['support'],
+  version: '1.0.0'
+}).catch(console.warn);
+
     }
 
     // Health check

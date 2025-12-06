@@ -1,3 +1,5 @@
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
+
 /**
  * 🛡️ WELLNESS & SAFETY GUARDIAN
  *
@@ -788,6 +790,17 @@ class WellnessSafetyGuardian {
 
         if (req.method === 'OPTIONS') {
           return new Response(null, { headers });
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'wellness-safety-guardian',
+  port: 8921,
+  role: 'safety',
+  endpoints: ['/health', '/status'],
+  capabilities: ['safety'],
+  version: '1.0.0'
+}).catch(console.warn);
+
         }
 
         try {

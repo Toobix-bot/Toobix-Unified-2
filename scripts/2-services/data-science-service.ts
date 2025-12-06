@@ -15,6 +15,7 @@
  */
 
 import type { Serve } from 'bun';
+import { registerWithServiceMesh } from '../../lib/service-mesh-registration';
 
 // ========== TYPES ==========
 
@@ -925,3 +926,14 @@ console.log(`
 `);
 
 export default service.serve();
+
+
+// Auto-generated Service Mesh Registration
+registerWithServiceMesh({
+  name: 'data-science-service',
+  port: 8935,
+  role: 'analytics',
+  endpoints: ['/health', '/status'],
+  capabilities: ['analytics'],
+  version: '1.0.0'
+}).catch(console.warn);
