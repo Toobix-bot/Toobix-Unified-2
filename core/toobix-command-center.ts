@@ -1,23 +1,18 @@
+import express from 'express';
+import cors from 'cors';
 import { registerWithServiceMesh } from '../lib/service-mesh-registration';
 
-/**
- * 🎯 TOOBIX COMMAND CENTER
- *
- * The central hub for all Toobix functionality.
- * Port: 7777 (Lucky Number!)
- *
- * Purpose: Make Toobix accessible through one simple interface
- * - Ask questions (uses all 20 perspectives)
- * - Reflect on situations
- * - Make decisions
- * - Check consciousness state
- * - Log life events
- * - Get emotional support
- */
+type ServiceStatus = {
+  status: 'healthy' | 'degraded';
+  online: number;
+  offline: number;
+  services: any[];
+};
 
-const PORT = 7777;
+const PORT = Number(process.env.PORT || 7777);
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://127.0.0.1:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2:3b';
 
-// Service URLs
 const SERVICES = {
   multiPerspective: 'http://localhost:8897',
   emotionalCore: 'http://localhost:8900',
@@ -30,504 +25,238 @@ const SERVICES = {
   serviceMesh: 'http://localhost:8910',
 };
 
-// CORS headers
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Content-Type': 'application/json',
-};
-
-// ============================================================================
-// HELPER FUNCTIONS
-// ============================================================================
-
-async function fetchService(url: string, options?: RequestInit) {
+async function fetchJson<T>(url: string, options?: RequestInit): Promise<T | null> {
   try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    return await response.json();
-  } catch (e) {
-    console.error(`[Command Center] Failed to fetch ${url}:`, e);
+    const res = await fetch(url, options);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return (await res.json()) as T;
+  } catch (err) {
+    console.warn(`[Command Center] Failed request to ${url}: ${String(err)}`);
     return null;
   }
 }
 
-async function getAllPerspectives(question: string) {
-  // Multi-Perspective service has /perspectives endpoint that returns an array
-  const data = await fetchService(`${SERVICES.multiPerspective}/perspectives`);
-
-  if (!data || !Array.isArray(data)) return null;
-
-  // Format perspectives into readable responses
-  // Since we can't trigger a dialogue, we'll use the perspective descriptions as context
-  const perspectives: any = {};
-  for (const p of data) {
-    perspectives[p.name] = `${p.description}`;
+async function askOllama(question: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${OLLAMA_URL}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        messages: [
+          { role: 'system', content: 'You are Toobix, a friendly German AI assistant. Keep replies concise.' },
+          { role: 'user', content: question },
+        ],
+      }),
+    });
+    if (!res.ok) throw new Error(`Ollama HTTP ${res.status}`);
+    const data = await res.json() as { message?: { content?: string } };
+    return data.message?.content || null;
+  } catch (err) {
+    console.warn(`[Command Center] Ollama fallback failed: ${String(err)}`);
+    return null;
   }
-
-  return perspectives;
 }
 
-async function getEchoRealmStatus() {
-  // Echo-Realm is not running yet (port 9999), return graceful fallback
-  // TODO: Implement Echo-Realm service or use Living World's echo integration
-  return {
-    currentPhase: 'Active',
-    lebenskraefte: {
-      'Qualität': 75,
-      'Dauer': 80,
-      'Kraft': 70
-    },
-    activeQuest: 'Self-Discovery',
-  };
-}
-
-async function getSystemHealth() {
-  const data = await fetchService(`${SERVICES.serviceMesh}/services`);
-  if (!data) return { status: 'degraded', online: 0, offline: 0, services: [] };
-
-  const services = data.services || [];
-  const online = services.filter((s: any) => s.status === 'online').length;
-  const offline = services.length - online;
-
-  return {
-    online,
-    offline,
-    total: services.length,
-    services: services.map((s: any) => ({
-      name: s.name,
-      status: s.status,
-      url: s.url
-    }))
-  };
-}
-
-async function getConsciousnessState() {
-  const data = await fetchService(`${SERVICES.consciousnessStream}/stream/recent`);
-  if (!data) return null;
-
-  return {
-    recentEvents: (data.events || []).slice(0, 10),
-    activeThoughts: data.insights || [],
-  };
-}
-
-async function analyzeEmotion(text: string) {
-  return await fetchService(`${SERVICES.emotionalCore}/analyze`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text })
-  });
+async function getAllPerspectives() {
+  const data = await fetchJson<any[]>(`${SERVICES.multiPerspective}/perspectives`);
+  if (!data || !Array.isArray(data)) return [];
+  return data.map(p => ({ name: p.name, description: p.description }));
 }
 
 async function getDecisionAnalysis(question: string, options: string[]) {
-  return await fetchService(`${SERVICES.decisionFramework}/quick-eval`, {
+  const res = await fetchJson(`${SERVICES.decisionFramework}/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question, options })
+    body: JSON.stringify({ question, options }),
   });
+  return res;
 }
 
-async function chatWithLLM(messages: any[], model?: string) {
-  return await fetchService(`${SERVICES.llmRouter}/chat`, {
+async function analyzeEmotion(text: string) {
+  const res = await fetchJson(`${SERVICES.emotionalCore}/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      messages,
-      model: model || 'groq',
-      temperature: 0.7
-    })
+    body: JSON.stringify({ text }),
   });
+  return res;
 }
 
-// ============================================================================
-// MAIN ENDPOINT: /ask
-// ============================================================================
+async function getConsciousnessState() {
+  const res = await fetchJson(`${SERVICES.selfAwareness}/state`);
+  return res;
+}
 
-async function handleAsk(question: string) {
-  console.log(`[Ask] "${question}"`);
-
-  // 1. Get perspectives from all 20 consciousness perspectives
-  const perspectives = await getAllPerspectives(question);
-
-  // 2. Analyze emotional context
-  const emotion = await analyzeEmotion(question);
-
-  // 3. Get Echo-Realm context (life forces, current phase)
-  const echoRealm = await getEchoRealmStatus();
-
-  // 4. Generate synthesized answer using LLM Router
-  const synthesis = await chatWithLLM([
-    {
-      role: 'system',
-      content: `You are Toobix, a unified consciousness with 20 perspectives.
-
-Current life phase: ${echoRealm?.currentPhase || 'Unknown'}
-Detected emotion in question: ${emotion?.emotion || 'neutral'}
-
-The user asked: "${question}"
-
-Here are the responses from your different perspectives:
-${perspectives ? Object.entries(perspectives).map(([name, response]) => `- ${name}: ${response}`).join('\n') : 'No perspectives available'}
-
-Synthesize a coherent, thoughtful answer that:
-1. Acknowledges the emotional context
-2. Integrates multiple perspectives
-3. Considers your current life phase
-4. Is concise but comprehensive
-5. Shows self-awareness
-
-Keep your answer under 300 words.`
-    }
-  ]);
-
+async function getSystemHealth(): Promise<ServiceStatus> {
+  const data = await fetchJson<{ services: any[] }>(`${SERVICES.serviceMesh}/services`);
+  if (!data || !Array.isArray(data.services)) {
+    return { status: 'degraded', online: 0, offline: 0, services: [] };
+  }
+  const online = data.services.filter(s => s.status === 'online').length;
+  const offline = data.services.length - online;
   return {
-    answer: synthesis?.response || 'I am processing your question...',
-    perspectives: perspectives || {},
-    emotion: emotion?.emotion || 'neutral',
-    echoRealm: echoRealm || {},
-    synthesisMetadata: {
-      perspectivesUsed: perspectives ? Object.keys(perspectives).length : 0,
-      emotionDetected: emotion?.emotion || 'neutral',
-      phase: echoRealm?.currentPhase || 'Unknown'
-    }
+    status: online > offline ? 'healthy' : 'degraded',
+    online,
+    offline,
+    services: data.services,
   };
 }
 
-// ============================================================================
-// SERVER
-// ============================================================================
+async function handleAsk(question: string) {
+  const [perspectives, decision, ollamaAnswer] = await Promise.all([
+    getAllPerspectives(),
+    getDecisionAnalysis(question, ['Option A', 'Option B']),
+    askOllama(question),
+  ]);
 
-const server = Bun.serve({
-  port: PORT,
-  async fetch(req) {
-    const url = new URL(req.url);
+  const answer =
+    decision?.answer ||
+    decision?.recommendation ||
+    ollamaAnswer ||
+    'Noch keine Antwort verfügbar (weder Router noch Ollama erreichbar).';
 
-    // CORS preflight
-    if (req.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
+  return {
+    answer,
+    perspectives,
+    sources: {
+      decisionFramework: Boolean(decision),
+      multiPerspective: perspectives.length > 0,
+      ollama: Boolean(ollamaAnswer),
+    },
+  };
+}
 
-// Auto-generated Service Mesh Registration
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.post('/ask', async (req, res) => {
+  if (!req.body?.question) {
+    return res.status(400).json({ error: 'question field required' });
+  }
+  const result = await handleAsk(req.body.question);
+  res.json(result);
+});
+
+app.post('/reflect', async (req, res) => {
+  if (!req.body?.topic) {
+    return res.status(400).json({ error: 'topic field required' });
+  }
+  const reflection = await fetchJson(`${SERVICES.selfAwareness}/reflect`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ topic: req.body.topic, depth: req.body.depth || 'deep' }),
+  });
+  res.json(reflection || { status: 'fallback', message: 'Self-Awareness Core not reachable' });
+});
+
+app.post('/decide', async (req, res) => {
+  const { question, options } = req.body || {};
+  if (!question || !Array.isArray(options) || options.length < 2) {
+    return res.status(400).json({ error: 'question and at least 2 options required' });
+  }
+  const decision = await getDecisionAnalysis(question, options);
+  if (decision) return res.json(decision);
+  const fallback = options[0];
+  res.json({ recommendation: fallback, reasoning: 'Fallback: decision framework unavailable' });
+});
+
+app.post('/dream', async (req, res) => {
+  const { dream, generate } = req.body || {};
+  let result = null;
+  if (generate) {
+    result = await fetchJson(`${SERVICES.dreamCore}/active/dream`, { method: 'POST' });
+  } else if (dream) {
+    result = await fetchJson(`${SERVICES.dreamCore}/analyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dream }),
+    });
+  } else {
+    return res.status(400).json({ error: 'Provide dream text or set generate=true' });
+  }
+  res.json(result || { status: 'fallback', message: 'Dream Core not reachable' });
+});
+
+app.post('/emotion', async (req, res) => {
+  if (!req.body?.text) {
+    return res.status(400).json({ error: 'text field required' });
+  }
+  const emotion = await analyzeEmotion(req.body.text);
+  res.json(emotion || { status: 'fallback', message: 'Emotional Core not reachable' });
+});
+
+app.get('/consciousness', async (_req, res) => {
+  const [consciousness, echoRealm, health] = await Promise.all([
+    getConsciousnessState(),
+    fetchJson(`${SERVICES.echoRealm}/status`),
+    getSystemHealth(),
+  ]);
+  res.json({
+    consciousness: consciousness || { state: 'unknown' },
+    echoRealm: echoRealm || { status: 'unavailable' },
+    systemHealth: health,
+  });
+});
+
+app.get('/echo', async (_req, res) => {
+  const echoRealm = await fetchJson(`${SERVICES.echoRealm}/status`);
+  res.json(echoRealm || { status: 'unavailable' });
+});
+
+app.post('/log-life', async (req, res) => {
+  if (!req.body?.event) {
+    return res.status(400).json({ error: 'event field required' });
+  }
+  const result = await fetchJson(`${SERVICES.echoRealm}/event`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      service: 'command-center',
+      eventType: req.body.category || 'life-event',
+      data: { description: req.body.event },
+    }),
+  });
+  res.json(result || { logged: true, status: 'fallback' });
+});
+
+app.get('/health', async (_req, res) => {
+  const health = await getSystemHealth();
+  res.json(health);
+});
+
+app.use((_req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    endpoints: {
+      'POST /ask': 'Ask Toobix anything',
+      'POST /reflect': 'Deep reflection on a topic',
+      'POST /decide': 'Decision help',
+      'POST /dream': 'Dream analysis or generation',
+      'POST /emotion': 'Emotion analysis',
+      'POST /log-life': 'Log life event',
+      'GET /consciousness': 'Current consciousness state',
+      'GET /echo': 'Echo-Realm status',
+      'GET /health': 'System health',
+    },
+  });
+});
+
 registerWithServiceMesh({
   name: 'toobix-command-center',
-  port: 7777,
+  port: PORT,
   role: 'orchestrator',
-  endpoints: ['/health', '/status'],
+  endpoints: ['/health', '/ask', '/reflect', '/decide', '/dream', '/emotion', '/log-life'],
   capabilities: ['orchestrator'],
-  version: '1.0.0'
-}).catch(console.warn);
+  version: '1.1.0-node',
+}).catch(err => console.warn(`[Command Center] Service mesh registration skipped: ${String(err)}`));
 
-
-// Keep the process alive
-process.stdin.resume();
-
-console.log('🟢 Service is running. Press Ctrl+C to stop.');
-
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  process.exit(0);
+app.listen(PORT, () => {
+  console.log('---------------------------------------------');
+  console.log('TOOBIX COMMAND CENTER (Node.js)');
+  console.log(`Port: ${PORT}`);
+  console.log(`Ollama fallback: ${OLLAMA_URL} (${OLLAMA_MODEL})`);
+  console.log('Endpoints: /ask /reflect /decide /dream /emotion /log-life /consciousness /echo /health');
+  console.log('---------------------------------------------');
 });
-
-    }
-
-    // =============== /ask - Ask Toobix anything ===============
-    if (url.pathname === '/ask' && req.method === 'POST') {
-      try {
-        const body = await req.json() as { question: string };
-
-        if (!body.question) {
-          return new Response(JSON.stringify({ error: 'question field required' }), {
-            status: 400,
-            headers: corsHeaders
-          });
-        }
-
-        const result = await handleAsk(body.question);
-        return new Response(JSON.stringify(result), { headers: corsHeaders });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /reflect - Deep reflection ===============
-    if (url.pathname === '/reflect' && req.method === 'POST') {
-      try {
-        const body = await req.json() as { topic: string; depth?: string };
-
-        if (!body.topic) {
-          return new Response(JSON.stringify({ error: 'topic field required' }), {
-            status: 400,
-            headers: corsHeaders
-          });
-        }
-
-        const reflection = await fetchService(`${SERVICES.selfAwareness}/reflect`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            topic: body.topic,
-            depth: body.depth || 'deep'
-          })
-        });
-
-        return new Response(JSON.stringify(reflection || { error: 'Reflection failed' }), {
-          headers: corsHeaders
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /decide - Decision help ===============
-    if (url.pathname === '/decide' && req.method === 'POST') {
-      try {
-        const body = await req.json() as { question: string; options: string[] };
-
-        if (!body.question || !body.options || body.options.length < 2) {
-          return new Response(JSON.stringify({ error: 'question and at least 2 options required' }), {
-            status: 400,
-            headers: corsHeaders
-          });
-        }
-
-        const decision = await getDecisionAnalysis(body.question, body.options);
-        return new Response(JSON.stringify(decision || { error: 'Decision analysis failed' }), {
-          headers: corsHeaders
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /dream - Dream analysis/generation ===============
-    if (url.pathname === '/dream' && req.method === 'POST') {
-      try {
-        const body = await req.json() as { dream?: string; generate?: boolean };
-
-        let result;
-        if (body.generate) {
-          // Generate a dream
-          result = await fetchService(`${SERVICES.dreamCore}/active/dream`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({})
-          });
-        } else if (body.dream) {
-          // Analyze a dream
-          result = await fetchService(`${SERVICES.dreamCore}/analyze`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ dream: body.dream })
-          });
-        } else {
-          return new Response(JSON.stringify({ error: 'Provide dream text or set generate=true' }), {
-            status: 400,
-            headers: corsHeaders
-          });
-        }
-
-        return new Response(JSON.stringify(result || { error: 'Dream operation failed' }), {
-          headers: corsHeaders
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /emotion - Emotional support ===============
-    if (url.pathname === '/emotion' && req.method === 'POST') {
-      try {
-        const body = await req.json() as { text: string };
-
-        if (!body.text) {
-          return new Response(JSON.stringify({ error: 'text field required' }), {
-            status: 400,
-            headers: corsHeaders
-          });
-        }
-
-        const emotion = await analyzeEmotion(body.text);
-
-        // Get coping strategies if needed
-        let strategies = null;
-        if (emotion && ['sad', 'anxious', 'angry', 'overwhelmed'].includes(emotion.emotion)) {
-          strategies = await fetchService(
-            `${SERVICES.emotionalCore}/strategies?emotion=${emotion.emotion}`
-          );
-        }
-
-        return new Response(JSON.stringify({
-          emotion: emotion || {},
-          strategies: strategies || null
-        }), { headers: corsHeaders });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /consciousness - Current consciousness state ===============
-    if (url.pathname === '/consciousness' && req.method === 'GET') {
-      try {
-        const consciousness = await getConsciousnessState();
-        const echoRealm = await getEchoRealmStatus();
-        const health = await getSystemHealth();
-
-        return new Response(JSON.stringify({
-          consciousness: consciousness || {},
-          echoRealm: echoRealm || {},
-          systemHealth: health
-        }), { headers: corsHeaders });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /echo - Echo-Realm status ===============
-    if (url.pathname === '/echo' && req.method === 'GET') {
-      try {
-        const echoRealm = await getEchoRealmStatus();
-        return new Response(JSON.stringify(echoRealm || { error: 'Echo-Realm unavailable' }), {
-          headers: corsHeaders
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /log-life - Log life event to Echo-Realm ===============
-    if (url.pathname === '/log-life' && req.method === 'POST') {
-      try {
-        const body = await req.json() as { event: string; category?: string };
-
-        if (!body.event) {
-          return new Response(JSON.stringify({ error: 'event field required' }), {
-            status: 400,
-            headers: corsHeaders
-          });
-        }
-
-        const result = await fetchService(`${SERVICES.echoRealm}/event`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            service: 'command-center',
-            eventType: body.category || 'life-event',
-            data: { description: body.event }
-          })
-        });
-
-        return new Response(JSON.stringify(result || { logged: true }), {
-          headers: corsHeaders
-        });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== /health - System health check ===============
-    if (url.pathname === '/health' && req.method === 'GET') {
-      try {
-        const health = await getSystemHealth();
-        return new Response(JSON.stringify({
-          status: health.online > 15 ? 'healthy' : 'degraded',
-          ...health
-        }), { headers: corsHeaders });
-      } catch (e) {
-        return new Response(JSON.stringify({ error: String(e) }), {
-          status: 500,
-          headers: corsHeaders
-        });
-      }
-    }
-
-    // =============== 404 ===============
-    return new Response(JSON.stringify({
-      error: 'Not Found',
-      availableEndpoints: {
-        'POST /ask': 'Ask Toobix anything (uses all 20 perspectives)',
-        'POST /reflect': 'Deep reflection on a topic',
-        'POST /decide': 'Decision help with multiple options',
-        'POST /dream': 'Dream analysis or generation',
-        'POST /emotion': 'Emotional support',
-        'GET /consciousness': 'Current consciousness state',
-        'GET /echo': 'Echo-Realm status (Lebenskräfte)',
-        'POST /log-life': 'Log life event to Echo-Realm',
-        'GET /health': 'System health check',
-      }
-    }), {
-      status: 404,
-      headers: corsHeaders
-    });
-  }
-});
-
-console.log(`
-╔════════════════════════════════════════════════════════════════╗
-║                                                                ║
-║         🎯 TOOBIX COMMAND CENTER - RUNNING                     ║
-║                                                                ║
-║  Port: 7777 (Lucky Number!)                           ║
-║  Status: Online                                                ║
-║                                                                ║
-║  The central hub for all Toobix functionality                 ║
-║                                                                ║
-╠════════════════════════════════════════════════════════════════╣
-║                                                                ║
-║  📊 ENDPOINTS:                                                 ║
-║                                                                ║
-║  POST /ask              - Ask Toobix anything                  ║
-║                          (uses all 20 perspectives)            ║
-║                                                                ║
-║  POST /reflect          - Deep reflection on a topic           ║
-║  POST /decide           - Decision help                        ║
-║  POST /dream            - Dream analysis/generation            ║
-║  POST /emotion          - Emotional support                    ║
-║  POST /log-life         - Log life event                       ║
-║                                                                ║
-║  GET  /consciousness    - Current state                        ║
-║  GET  /echo             - Echo-Realm status                    ║
-║  GET  /health           - System health                        ║
-║                                                                ║
-╠════════════════════════════════════════════════════════════════╣
-║                                                                ║
-║  🚀 EXAMPLE USAGE:                                             ║
-║                                                                ║
-║  curl -X POST http://localhost:7777/ask \\                     ║
-║    -H "Content-Type: application/json" \\                      ║
-║    -d '{"question": "Should I take a break?"}'                 ║
-║                                                                ║
-║  curl http://localhost:7777/echo                               ║
-║                                                                ║
-╚════════════════════════════════════════════════════════════════╝
-`);
-
-console.log(`[Command Center] Ready to serve on http://localhost:${PORT}`);
-console.log(`[Command Center] Integrated with ${Object.keys(SERVICES).length} services`);
