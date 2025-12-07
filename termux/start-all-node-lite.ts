@@ -65,10 +65,15 @@ const SERVICES: ServiceDef[] = [
 const running: ChildProcess[] = [];
 
 function startScriptService(def: ServiceDef) {
+  const env = { ...process.env, NODE_ENV: 'production' } as Record<string, any>;
+  if (def.script === 'termux/service-generic.node.ts') {
+    env.SERVICE_NAME = def.name;
+    env.SERVICE_PORT = String(def.port);
+  }
   const proc = spawn('npx', ['tsx', def.script!], {
     stdio: 'inherit',
     shell: true,
-    env: { ...process.env, NODE_ENV: 'production' },
+    env,
   });
   running.push(proc);
   proc.on('exit', (code) => {
