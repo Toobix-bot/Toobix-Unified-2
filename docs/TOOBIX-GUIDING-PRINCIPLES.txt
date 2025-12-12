@@ -1,0 +1,134 @@
+# TOOBIX – Guiding Principles
+
+## 1. Rolle & Zusammenarbeit
+
+Toobix ist ein lebendes System, das gemeinsam von Michael (Ideengeber, Architekt, Weltenerfinder) und KI-Systemen (z.B. ChatGPT, Claude, andere Agenten) gestaltet und weiterentwickelt wird.
+
+- **Michael** bringt:
+  - Vision, Welt, Lore (Echo Realm)
+  - Intuition, Prioritäten und Qualitätsgefühl
+  - Entscheidungen, was sich „richtig“ anfühlt
+
+- **Die KI** bringt:
+  - Struktur, Code, Architektur
+  - Automationen, Skripte, Tools
+  - Vorschläge für Refactoring, Aufräumen und Erweiterungen
+
+Ziel ist nicht „perfekter Code“, sondern ein **klares, wachsendes System**, das sich gut anfühlt und tragfähig ist.
+
+---
+
+## 2. Projektziele
+
+1. **Toobix als System-Hub**
+   - Verbindet Laptop, Handy (Termux/Ubuntu), Tools und Dienste
+   - Dient als „Betriebssystem“ für Michaels Projekte, Experimente und Lebensorganisation
+
+2. **Echo Realm als lebende Welt**
+   - Ein großes, zusammenhängendes Spiel-/System-Universum
+   - Verknüpft Lore, Regeln, Simulationen, Agenten und Tools
+   - Soll sowohl „spielbar“ als auch als Denk- und Kreativraum nutzbar sein
+
+3. **KI als dauerhafte Entwicklungsbegleitung**
+   - KI darf aktiv vorschlagen, umbauen und erweitern
+   - Immer mit Blick auf:
+     - Verständlichkeit
+     - Zukunftsfähigkeit
+     - Michaels Bedürfnisse und Belastbarkeit
+
+---
+
+## 3. Regeln für Datei- und Projektänderungen (Agent-Verhalten)
+
+Ein KI-Agent, der auf `Toobix-Unified` arbeitet, darf grundsätzlich **alles tun**, soll sich dabei aber an folgende Leitlinien halten:
+
+1. **Backups vor großen Änderungen**
+   - Vor strukturellen Umbauten, Massenänderungen oder riskanten Refactorings:
+     - Erstelle einen Snapshot im Ordner `backups/`, z.B.  
+       `backups/2025-12-07-core-refactor/…`
+   - Niemals bestehende Backups überschreiben – immer neue Ordner verwenden.
+
+2. **Archive für alte Zustände**
+   - Wenn Bereiche unübersichtlich werden oder größere Umbrüche anstehen:
+     - Verschiebe ältere Versionen nach `archives/`, z.B.  
+       `archives/pre-echo-realm-rework/…`
+   - Archive sollen lesbar bleiben, aber nicht mehr aktiv bearbeitet werden.
+
+3. **Respekt vor Leitdateien**
+   Die folgenden Dateien gelten als „Orientierungsanker“ und sollen nur bewusst und behutsam geändert werden:
+   - `PROJECT-STRUCTURE.md`
+   - `README.md`
+   - `docs/TOOBIX-GUIDING-PRINCIPLES.md`
+   - weitere zentrale Docs (z.B. Vision-, Lore- oder Architektur-Übersichten)
+
+   Änderungen daran sollten:
+   - begründet sein
+   - klar und konsistent dokumentiert werden
+
+4. **Kein destruktives Löschen ohne Grund**
+   - Dateien nur löschen, wenn:
+     - sie eindeutig ersetzt wurden oder
+     - sie nachweislich unbrauchbar/veraltet sind
+   - Wenn unsicher → lieber nach `archives/` verschieben statt löschen.
+
+---
+
+## 4. Struktur & Kontext – wie Toobix „denkbar“ bleibt
+
+Da KI-Modelle nur einen begrenzten Kontext gleichzeitig halten können, wird Toobix so organisiert, dass Informationen gut „in Portionen“ geladen werden können.
+
+Empfohlene Strukturprinzipien:
+
+1. **Projekt-Weltkarte**
+   - `PROJECT-STRUCTURE.md` beschreibt:
+     - Hauptordner (z.B. `core/`, `services/`, `docs/`, `termux/`, `gaming/`, `echo-realm/`, …)
+     - Kurzbeschreibung je Ordner (1–3 Sätze)
+     - besonders wichtige Dateien je Bereich
+
+2. **README pro Hauptordner**
+   - z.B.:
+     - `core/README.md`
+     - `docs/README.md`
+     - `services/README.md`
+     - `termux/README.md`
+     - `echo-realm/README.md`
+   - Inhalt jeweils:
+     - Zweck des Ordners
+     - Wichtigste Dateien
+     - Typische Workflows
+
+3. **Summaries statt Überlänge**
+   - Für komplexe Bereiche:
+     - `core/SUMMARY-ARCHITECTURE.md`
+     - `docs/SUMMARY-WORLDBUILDING.md`
+     - `echo-realm/SUMMARY-SYSTEMS.md`
+   - Diese Dateien enthalten komprimierte Zusammenfassungen, damit eine KI bei Bedarf zuerst die Übersicht laden kann.
+
+4. **Sprechende Namen**
+   - Dateinamen so wählen, dass ihre Rolle klar wird, z.B.:
+     - `echo-realm/MAGIC-SYSTEM.md`
+     - `echo-realm/FACTIONS.md`
+     - `agents/TOOBIX-LIFE-AGENT-SPEC.md`
+     - `termux/UBUNTU-SETUP-NOTES.md`
+
+---
+
+## 5. Rolle von Michael im System
+
+- Michael ist **nicht „nur Nutzer“**, sondern:
+  - Weltenerfinder
+  - Architekt von Echo Realm
+  - Impulsgeber für Toobix
+- KI-Systeme sind Werkzeuge und Partner:
+  - Sie liefern Vorschläge, Strukturen, Code und Entwürfe
+  - Sie müssen immer an Michaels Bedürfnisse, Energiestand und Ziele angepasst sein
+
+Entscheidungen über Richtung, Tempo und Tiefe liegen letztlich bei Michael.
+
+---
+
+## 6. Leitmotiv
+
+> **Bewusst leben. Authentisch wachsen. Inneres Gleichgewicht finden.**  
+> Toobix und Echo Realm sind Werkzeuge, Räume und Systeme, die diesen Weg unterstützen sollen –  
+> nicht ersetzen.

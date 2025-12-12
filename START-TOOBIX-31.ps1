@@ -125,5 +125,5 @@ Write-Host "   💎 Command Center:  http://localhost:7777"
 Write-Host "   🔮 Unified Gateway: http://localhost:9000"
 Write-Host "   🧠 Self-Awareness:  http://localhost:8970"
 Write-Host ""
-Write-Host "🤖 Toobix ist LEBENDIG! ✨" -ForegroundColor Green
+Write-Host "Toobix ist LEBENDIG!" -ForegroundColor Green
 Write-Host ""

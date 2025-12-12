@@ -1,3 +1,5 @@
+import express, { Request, Response } from 'express';
+import cors from 'cors';
 /**
  * 💭 DREAM CORE v1.0
  * 
@@ -271,203 +273,117 @@ function startDreamSession(purpose: string, problem?: string): ActiveDreamSessio
 // HTTP SERVER
 // ============================================================================
 
-const server = Bun.serve({
-  port: PORT,
-  async fetch(req) {
-    const url = new URL(req.url);
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Content-Type': 'application/json'
-    };
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-    if (req.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
-
-// Keep the process alive
-process.stdin.resume();
-
-console.log('🟢 Service is running. Press Ctrl+C to stop.');
-
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  process.exit(0);
+app.get('/health', (_req: Request, res: Response) => {
+  const dreamCount = (db.prepare(`SELECT COUNT(*) as count FROM dreams`).get() as { count?: number })?.count || 0;
+  res.json({
+    status: 'online',
+    service: 'Dream Core v1.0',
+    port: PORT,
+    modules: ['journal', 'analysis', 'lucid', 'active', 'integration'],
+    totalDreams: dreamCount,
+    activeSessions: activeSessions.size,
+    consolidated_from: 4
+  });
 });
 
-    }
-
-    // =============== HEALTH ===============
-    if (url.pathname === '/health') {
-      const dreamCount = db.query<{ count: number }, []>(`SELECT COUNT(*) as count FROM dreams`).get()?.count || 0;
-      return new Response(JSON.stringify({
-        status: 'online',
-        service: 'Dream Core v1.0',
-        port: PORT,
-        modules: ['journal', 'analysis', 'lucid', 'active', 'integration'],
-        totalDreams: dreamCount,
-        activeSessions: activeSessions.size,
-        consolidated_from: 4
-      }), { headers: corsHeaders });
-    }
-
-    // =============== RECORD DREAM ===============
-    if (url.pathname === '/dream' && req.method === 'POST') {
-      const body = await req.json() as Partial<Dream>;
-      const id = nanoid();
-      
-      const symbols = body.symbols || await analyzeDreamSymbols(body.narrative || '');
-      
-      db.run(
-        `INSERT INTO dreams (id, theme, narrative, symbols, emotions, sleep_cycle, lucidity, clarity, type, insights)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          id, 
-          body.theme || 'Unnamed Dream',
-          body.narrative || '',
-          JSON.stringify(symbols),
-          JSON.stringify(body.emotions || []),
-          body.sleepCycle || 'REM',
-          body.lucidity || 50,
-          body.clarity || 50,
-          body.type || 'passive',
-          JSON.stringify(body.insights || [])
-        ]
-      );
-      
-      // Update symbol frequencies
-      symbols.forEach(s => {
-        db.run(`UPDATE dream_symbols SET frequency = frequency + 1 WHERE symbol = ?`, [s.symbol]);
-      });
-      
-      return new Response(JSON.stringify({ id, recorded: true }), { headers: corsHeaders });
-    }
-
-    // =============== GET DREAMS ===============
-    if (url.pathname === '/dreams' && req.method === 'GET') {
-      const limit = parseInt(url.searchParams.get('limit') || '20');
-      const dreams = db.query(`SELECT * FROM dreams ORDER BY timestamp DESC LIMIT ?`).all(limit);
-      return new Response(JSON.stringify(dreams), { headers: corsHeaders });
-    }
-
-    // =============== ANALYZE DREAM ===============
-    if (url.pathname === '/analyze' && req.method === 'POST') {
-      const body = await req.json() as { narrative: string; theme?: string };
-      
-      const symbols = await analyzeDreamSymbols(body.narrative);
-      const interpretation = await generateDreamInterpretation({ 
-        narrative: body.narrative, 
-        theme: body.theme || 'Unknown',
-        symbols 
-      });
-      
-      return new Response(JSON.stringify({
-        symbols,
-        interpretation,
-        timestamp: new Date().toISOString()
-      }), { headers: corsHeaders });
-    }
-
-    // =============== SYMBOL DICTIONARY ===============
-    if (url.pathname === '/symbols' && req.method === 'GET') {
-      const symbols = db.query(`SELECT * FROM dream_symbols ORDER BY frequency DESC`).all();
-      return new Response(JSON.stringify(symbols), { headers: corsHeaders });
-    }
-
-    if (url.pathname.startsWith('/symbols/') && req.method === 'GET') {
-      const symbol = url.pathname.split('/symbols/')[1];
-      const result = db.query(`SELECT * FROM dream_symbols WHERE symbol = ?`).get(symbol);
-      
-      if (!result) {
-        return new Response(JSON.stringify({ error: 'Symbol not found' }), { status: 404, headers: corsHeaders });
-      }
-      
-      return new Response(JSON.stringify(result), { headers: corsHeaders });
-    }
-
-    // =============== ACTIVE DREAMING ===============
-    if (url.pathname === '/active/start' && req.method === 'POST') {
-      const body = await req.json() as { purpose: string; problem?: string };
-      const session = startDreamSession(body.purpose, body.problem);
-      
-      return new Response(JSON.stringify({
-        sessionId: session.id,
-        status: 'incubating',
-        message: 'Dream incubation started. Call /active/dream when ready.'
-      }), { headers: corsHeaders });
-    }
-
-    if (url.pathname === '/active/dream' && req.method === 'POST') {
-      const body = await req.json() as { sessionId: string };
-      const session = activeSessions.get(body.sessionId);
-      
-      if (!session) {
-        return new Response(JSON.stringify({ error: 'Session not found' }), { status: 404, headers: corsHeaders });
-      }
-      
-      session.status = 'dreaming';
-      const dream = await generateActiveDream(session.purpose, session.problem);
-      session.result = dream;
-      session.status = 'completed';
-      
-      // Store dream
-      db.run(
-        `INSERT INTO dreams (id, theme, narrative, symbols, emotions, sleep_cycle, lucidity, clarity, type, insights, problem_solved)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [dream.id, dream.theme, dream.narrative, JSON.stringify(dream.symbols), JSON.stringify(dream.emotions),
-         dream.sleepCycle, dream.lucidity, dream.clarity, dream.type, JSON.stringify(dream.insights), dream.problemSolved || null]
-      );
-      
-      db.run(`UPDATE active_dream_sessions SET status = 'completed', result_dream_id = ? WHERE id = ?`, [dream.id, session.id]);
-      
-      return new Response(JSON.stringify({
-        dream,
-        visualization: generateASCIIDream(dream)
-      }), { headers: corsHeaders });
-    }
-
-    // =============== PATTERNS ===============
-    if (url.pathname === '/patterns' && req.method === 'GET') {
-      const patterns = db.query(`SELECT * FROM dream_patterns ORDER BY frequency DESC`).all();
-      return new Response(JSON.stringify(patterns), { headers: corsHeaders });
-    }
-
-    // =============== STATISTICS ===============
-    if (url.pathname === '/stats' && req.method === 'GET') {
-      const totalDreams = db.query<{ count: number }, []>(`SELECT COUNT(*) as count FROM dreams`).get()?.count || 0;
-      const typeDistribution = db.query(`SELECT type, COUNT(*) as count FROM dreams GROUP BY type`).all();
-      const topSymbols = db.query(`SELECT * FROM dream_symbols ORDER BY frequency DESC LIMIT 10`).all();
-      const avgLucidity = db.query<{ avg: number }, []>(`SELECT AVG(lucidity) as avg FROM dreams`).get()?.avg || 0;
-      
-      return new Response(JSON.stringify({
-        totalDreams,
-        typeDistribution,
-        topSymbols,
-        averageLucidity: Math.round(avgLucidity)
-      }), { headers: corsHeaders });
-    }
-
-    return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsHeaders });
-  }
+app.post('/dream', async (req: Request, res: Response) => {
+  const body = req.body as Partial<Dream>;
+  const id = nanoid();
+  const symbols = body.symbols || await analyzeDreamSymbols(body.narrative || '');
+  db.prepare(`INSERT INTO dreams (id, theme, narrative, symbols, emotions, sleep_cycle, lucidity, clarity, type, insights)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .run(
+      id,
+      body.theme || 'Unnamed Dream',
+      body.narrative || '',
+      JSON.stringify(symbols),
+      JSON.stringify(body.emotions || []),
+      body.sleepCycle || 'REM',
+      body.lucidity || 50,
+      body.clarity || 50,
+      body.type || 'passive',
+      JSON.stringify(body.insights || [])
+    );
+  symbols.forEach(s => {
+    db.prepare(`UPDATE dream_symbols SET frequency = frequency + 1 WHERE symbol = ?`).run(s.symbol);
+  });
+  res.json({ id, recorded: true });
 });
 
-console.log(`
-╔════════════════════════════════════════════════════════════╗
-║  💭 DREAM CORE v1.0 - UNIFIED                              ║
-╠════════════════════════════════════════════════════════════╣
-║  Port: ${PORT}                                               ║
-║  Modules: journal, analysis, lucid, active, integration    ║
-║  Consolidated from: 4 services                             ║
-╠════════════════════════════════════════════════════════════╣
-║  Endpoints:                                                ║
-║  POST /dream - Record a dream                              ║
-║  GET  /dreams - Get dream history                          ║
-║  POST /analyze - Analyze dream symbols                     ║
-║  GET  /symbols - Get symbol dictionary                     ║
-║  POST /active/start - Start active dream session           ║
-║  POST /active/dream - Generate active dream                ║
-║  GET  /patterns - Get recurring patterns                   ║
-║  GET  /stats - Get dream statistics                        ║
-╚════════════════════════════════════════════════════════════╝
-`);
+app.get('/dreams', (req: Request, res: Response) => {
+  const limit = parseInt((req.query.limit as string) || '20');
+  const dreams = db.prepare(`SELECT * FROM dreams ORDER BY timestamp DESC LIMIT ?`).all(limit);
+  res.json(dreams);
+});
+
+app.post('/analyze', async (req: Request, res: Response) => {
+  const { narrative, theme } = req.body;
+  const symbols = await analyzeDreamSymbols(narrative);
+  const interpretation = await generateDreamInterpretation({ narrative, theme: theme || 'Unknown', symbols });
+  res.json({ symbols, interpretation, timestamp: new Date().toISOString() });
+});
+
+app.get('/symbols', (_req: Request, res: Response) => {
+  const symbols = db.prepare(`SELECT * FROM dream_symbols ORDER BY frequency DESC`).all();
+  res.json(symbols);
+});
+
+app.get('/symbols/:symbol', (req: Request, res: Response) => {
+  const symbol = req.params.symbol;
+  const result = db.prepare(`SELECT * FROM dream_symbols WHERE symbol = ?`).get(symbol);
+  if (!result) return res.status(404).json({ error: 'Symbol not found' });
+  res.json(result);
+});
+
+app.post('/active/start', (req: Request, res: Response) => {
+  const { purpose, problem } = req.body;
+  const session = startDreamSession(purpose, problem);
+  res.json({ sessionId: session.id, status: 'incubating', message: 'Dream incubation started. Call /active/dream when ready.' });
+});
+
+app.post('/active/dream', async (req: Request, res: Response) => {
+  const { sessionId } = req.body;
+  const session = activeSessions.get(sessionId);
+  if (!session) return res.status(404).json({ error: 'Session not found' });
+  session.status = 'dreaming';
+  const dream = await generateActiveDream(session.purpose, session.problem);
+  session.result = dream;
+  session.status = 'completed';
+  db.prepare(`INSERT INTO dreams (id, theme, narrative, symbols, emotions, sleep_cycle, lucidity, clarity, type, insights, problem_solved)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .run(
+      dream.id, dream.theme, dream.narrative, JSON.stringify(dream.symbols), JSON.stringify(dream.emotions),
+      dream.sleepCycle, dream.lucidity, dream.clarity, dream.type, JSON.stringify(dream.insights), dream.problemSolved || null
+    );
+  db.prepare(`UPDATE active_dream_sessions SET status = 'completed', result_dream_id = ? WHERE id = ?`).run(dream.id, session.id);
+  res.json({ dream, visualization: generateASCIIDream(dream) });
+});
+
+app.get('/patterns', (_req: Request, res: Response) => {
+  const patterns = db.prepare(`SELECT * FROM dream_patterns ORDER BY frequency DESC`).all();
+  res.json(patterns);
+});
+
+app.get('/stats', (_req: Request, res: Response) => {
+  const totalDreams = (db.prepare(`SELECT COUNT(*) as count FROM dreams`).get() as { count?: number })?.count || 0;
+  const typeDistribution = db.prepare(`SELECT type, COUNT(*) as count FROM dreams GROUP BY type`).all();
+  const topSymbols = db.prepare(`SELECT * FROM dream_symbols ORDER BY frequency DESC LIMIT 10`).all();
+  const avgLucidity = (db.prepare(`SELECT AVG(lucidity) as avg FROM dreams`).get() as { avg?: number })?.avg || 0;
+  res.json({ totalDreams, typeDistribution, topSymbols, averageLucidity: Math.round(avgLucidity) });
+});
+
+app.use((_req: Request, res: Response) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
+app.listen(PORT, () => {
+  console.log('---------------------------------------------');
+  console.log('DREAM CORE (Node.js)');
+  console.log(`Port: ${PORT}`);
+  console.log('Endpoints: /health /dream /dreams /analyze /symbols /symbols/:symbol /active/start /active/dream /patterns /stats');
+  console.log('---------------------------------------------');
+});

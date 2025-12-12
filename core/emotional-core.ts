@@ -22,10 +22,12 @@
  * 📊 Analytics - Emotionale Muster-Analyse
  */
 
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3';
+import express from 'express';
+import cors from 'cors';
 import { nanoid } from 'nanoid';
 
-const PORT = 8900;
+const PORT = Number(process.env.PORT || 8900);
 const LLM_GATEWAY = 'http://localhost:8954';
 const MEMORY_PALACE = 'http://localhost:8953';
 const EVENT_BUS = 'http://localhost:8955';
@@ -125,8 +127,8 @@ export interface CopingStrategy {
 // DATABASE SETUP
 // ============================================================================
 
-const db = new Database('./data/emotional-core.db', { create: true });
-db.exec('PRAGMA journal_mode = WAL');
+const db = new Database('./data/emotional-core.db');
+db.pragma('journal_mode = WAL');
 
 // Initialize tables
 db.exec(`
@@ -313,216 +315,111 @@ function getSession(sessionId: string): SupportSession | undefined {
 // HTTP SERVER
 // ============================================================================
 
-const server = Bun.serve({
-  port: PORT,
-  async fetch(req) {
-    const url = new URL(req.url);
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Content-Type': 'application/json'
-    };
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-    if (req.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
-
-// Keep the process alive
-process.stdin.resume();
-
-console.log('🟢 Service is running. Press Ctrl+C to stop.');
-
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  process.exit(0);
+app.get('/health', (_req, res) => {
+  res.json({
+    status: 'online',
+    service: 'Emotional Core v1.0',
+    port: PORT,
+    modules: ['resonance', 'support', 'wellbeing', 'bonds', 'analytics'],
+    activeSessions: activeSessions.size,
+    consolidated_from: 9
+  });
 });
 
-    }
-
-    // =============== HEALTH ===============
-    if (url.pathname === '/health') {
-      return new Response(JSON.stringify({
-        status: 'online',
-        service: 'Emotional Core v1.0',
-        port: PORT,
-        modules: ['resonance', 'support', 'wellbeing', 'bonds', 'analytics'],
-        activeSessions: activeSessions.size,
-        consolidated_from: 9
-      }), { headers: corsHeaders });
-    }
-
-    // =============== EMOTION DETECTION ===============
-    if (url.pathname === '/analyze' && req.method === 'POST') {
-      const body = await req.json() as { text: string; context?: string };
-      const emotion = await detectEmotion(body.text);
-      
-      // Store in database
-      const id = nanoid();
-      db.run(
-        `INSERT INTO emotion_entries (id, emotion, context) VALUES (?, ?, ?)`,
-        [id, emotion, body.context || null]
-      );
-      
-      // Get coping strategies
-      const strategies = db.query<CopingStrategy, [string]>(
-        `SELECT * FROM coping_strategies WHERE emotion = ?`
-      ).all(emotion);
-      
-      return new Response(JSON.stringify({
-        emotion,
-        strategies: strategies.map(s => s.strategy),
-        timestamp: new Date().toISOString()
-      }), { headers: corsHeaders });
-    }
-
-    // =============== SUPPORT SESSION ===============
-    if (url.pathname === '/support/start' && req.method === 'POST') {
-      const body = await req.json() as { name?: string; userId?: string };
-      const session = startSession(body.userId || 'anonymous', body.name);
-      
-      const greeting = body.name
-        ? `Hallo ${body.name}, ich bin Toobix. 💚 Schön, dass du hier bist. Was beschäftigt dich gerade?`
-        : `Hallo, ich bin Toobix. 💚 Ich bin da, um zuzuhören. Was beschäftigt dich?`;
-      
-      session.messages.push({ role: 'toobix', content: greeting, timestamp: new Date() });
-      
-      return new Response(JSON.stringify({
-        sessionId: session.id,
-        greeting
-      }), { headers: corsHeaders });
-    }
-
-    if (url.pathname === '/support/message' && req.method === 'POST') {
-      const body = await req.json() as { sessionId: string; message: string };
-      const session = getSession(body.sessionId);
-      
-      if (!session) {
-        return new Response(JSON.stringify({ error: 'Session not found' }), { status: 404, headers: corsHeaders });
-      }
-      
-      // Detect emotion
-      const emotion = await detectEmotion(body.message);
-      session.emotionalState = emotion;
-      session.messages.push({ role: 'user', content: body.message, timestamp: new Date() });
-      
-      // Build context
-      const contextMessages = [
-        { role: 'system', content: TOOBIX_SUPPORT_PERSONA },
-        ...session.messages.slice(-10).map(m => ({ role: m.role === 'toobix' ? 'assistant' : 'user', content: m.content }))
-      ];
-      
-      const response = await callLLM(contextMessages);
-      session.messages.push({ role: 'toobix', content: response, timestamp: new Date() });
-      
-      return new Response(JSON.stringify({
-        response,
-        detectedEmotion: emotion,
-        sessionId: session.id
-      }), { headers: corsHeaders });
-    }
-
-    // =============== POEM REQUEST ===============
-    if (url.pathname === '/poem' && req.method === 'POST') {
-      const body = await req.json() as { theme: string; emotion?: string };
-      const emotion = body.emotion || 'hope';
-      const poem = await generatePoem(body.theme, emotion);
-      
-      return new Response(JSON.stringify({ poem, emotion }), { headers: corsHeaders });
-    }
-
-    // =============== COPING STRATEGIES ===============
-    if (url.pathname === '/strategies' && req.method === 'GET') {
-      const emotion = url.searchParams.get('emotion');
-      const query = emotion
-        ? db.query<CopingStrategy, [string]>(`SELECT * FROM coping_strategies WHERE emotion = ?`).all(emotion)
-        : db.query<CopingStrategy, []>(`SELECT * FROM coping_strategies`).all();
-      
-      return new Response(JSON.stringify(query), { headers: corsHeaders });
-    }
-
-    // =============== WELLBEING ENTRY ===============
-    if (url.pathname === '/wellbeing/log' && req.method === 'POST') {
-      const body = await req.json() as { emotion: string; intensity?: string; context?: string; triggers?: string[] };
-
-      // Validate required field
-      if (!body.emotion) {
-        return new Response(JSON.stringify({ error: 'emotion field is required' }), {
-          status: 400,
-          headers: corsHeaders
-        });
-      }
-
-      const id = nanoid();
-
-      db.run(
-        `INSERT INTO emotion_entries (id, emotion, intensity, context, triggers) VALUES (?, ?, ?, ?, ?)`,
-        [id, body.emotion, body.intensity || 'moderate', body.context || null, JSON.stringify(body.triggers || [])]
-      );
-
-      return new Response(JSON.stringify({ id, logged: true }), { headers: corsHeaders });
-    }
-
-    if (url.pathname === '/wellbeing/history' && req.method === 'GET') {
-      const limit = parseInt(url.searchParams.get('limit') || '20');
-      const entries = db.query(`SELECT * FROM emotion_entries ORDER BY timestamp DESC LIMIT ?`).all(limit);
-      
-      return new Response(JSON.stringify(entries), { headers: corsHeaders });
-    }
-
-    // =============== EMOTIONAL BONDS ===============
-    if (url.pathname === '/bonds' && req.method === 'POST') {
-      const body = await req.json() as { perspective1: string; perspective2: string };
-      const id = nanoid();
-      
-      db.run(
-        `INSERT INTO emotional_bonds (id, perspective1, perspective2) VALUES (?, ?, ?)`,
-        [id, body.perspective1, body.perspective2]
-      );
-      
-      return new Response(JSON.stringify({ id, created: true }), { headers: corsHeaders });
-    }
-
-    if (url.pathname === '/bonds' && req.method === 'GET') {
-      const bonds = db.query(`SELECT * FROM emotional_bonds`).all();
-      return new Response(JSON.stringify(bonds), { headers: corsHeaders });
-    }
-
-    // =============== ANALYTICS ===============
-    if (url.pathname === '/analytics/summary' && req.method === 'GET') {
-      const totalEntries = db.query<{ count: number }, []>(`SELECT COUNT(*) as count FROM emotion_entries`).get()?.count || 0;
-      const emotionDistribution = db.query(`SELECT emotion, COUNT(*) as count FROM emotion_entries GROUP BY emotion ORDER BY count DESC`).all();
-      const recentPatterns = db.query(`SELECT * FROM emotion_entries ORDER BY timestamp DESC LIMIT 20`).all();
-      
-      return new Response(JSON.stringify({
-        totalEntries,
-        emotionDistribution,
-        recentCount: recentPatterns.length,
-        mostCommonEmotion: emotionDistribution[0] || null
-      }), { headers: corsHeaders });
-    }
-
-    return new Response(JSON.stringify({ error: 'Not found' }), { status: 404, headers: corsHeaders });
-  }
+app.post('/analyze', async (req, res) => {
+  const { text, context } = req.body;
+  if (!text) return res.status(400).json({ error: 'text field required' });
+  const emotion = await detectEmotion(text);
+  res.json({ emotion });
 });
 
-console.log(`
-╔════════════════════════════════════════════════════════════╗
-║  💚 EMOTIONAL CORE v1.0 - UNIFIED                          ║
-╠════════════════════════════════════════════════════════════╣
-║  Port: ${PORT}                                               ║
-║  Modules: resonance, support, wellbeing, bonds, analytics  ║
-║  Consolidated from: 9 services                             ║
-╠════════════════════════════════════════════════════════════╣
-║  Endpoints:                                                ║
-║  POST /analyze - Detect emotion from text                  ║
-║  POST /support/start - Start support session               ║
-║  POST /support/message - Send message in session           ║
-║  POST /poem - Generate comforting poem                     ║
-║  GET  /strategies?emotion=X - Get coping strategies        ║
-║  POST /wellbeing/log - Log emotion entry                   ║
-║  GET  /wellbeing/history - Get emotion history             ║
-║  POST /bonds - Create emotional bond                       ║
-║  GET  /analytics/summary - Get emotional analytics         ║
-╚════════════════════════════════════════════════════════════╝
-`);
+app.post('/support/start', (req, res) => {
+  const { name, userId } = req.body;
+  const session = startSession(userId || 'anonymous', name);
+  const greeting = name
+    ? `Hallo ${name}, ich bin Toobix. 💚 Schön, dass du hier bist. Was beschäftigt dich gerade?`
+    : `Hallo, ich bin Toobix. 💚 Ich bin da, um zuzuhören. Was beschäftigt dich?`;
+  session.messages.push({ role: 'toobix', content: greeting, timestamp: new Date() });
+  res.json({ sessionId: session.id, greeting });
+});
+
+app.post('/support/message', async (req, res) => {
+  const { sessionId, message } = req.body;
+  const session = getSession(sessionId);
+  if (!session) return res.status(404).json({ error: 'Session not found' });
+  const emotion = await detectEmotion(message);
+  session.emotionalState = emotion;
+  session.messages.push({ role: 'user', content: message, timestamp: new Date() });
+  const contextMessages = [
+    { role: 'system', content: TOOBIX_SUPPORT_PERSONA },
+    ...session.messages.slice(-10).map(m => ({ role: m.role === 'toobix' ? 'assistant' : 'user', content: m.content }))
+  ];
+  const response = await callLLM(contextMessages);
+  session.messages.push({ role: 'toobix', content: response, timestamp: new Date() });
+  res.json({ response, detectedEmotion: emotion, sessionId: session.id });
+});
+
+app.post('/poem', async (req, res) => {
+  const { theme, emotion } = req.body;
+  const poem = await generatePoem(theme, emotion || 'hope');
+  res.json({ poem, emotion: emotion || 'hope' });
+});
+
+app.get('/strategies', (req, res) => {
+  const emotion = req.query.emotion as string | undefined;
+  const query = emotion
+    ? db.prepare(`SELECT * FROM coping_strategies WHERE emotion = ?`).all(emotion)
+    : db.prepare(`SELECT * FROM coping_strategies`).all();
+  res.json(query);
+});
+
+app.post('/wellbeing/log', (req, res) => {
+  const { emotion, intensity, context, triggers } = req.body;
+  if (!emotion) return res.status(400).json({ error: 'emotion field is required' });
+  const id = nanoid();
+  db.prepare(`INSERT INTO emotion_entries (id, emotion, intensity, context, triggers) VALUES (?, ?, ?, ?, ?)`)
+    .run(id, emotion, intensity || 'moderate', context || null, JSON.stringify(triggers || []));
+  res.json({ id, logged: true });
+});
+
+app.get('/wellbeing/history', (req, res) => {
+  const limit = parseInt((req.query.limit as string) || '20');
+  const entries = db.prepare(`SELECT * FROM emotion_entries ORDER BY timestamp DESC LIMIT ?`).all(limit);
+  res.json(entries);
+});
+
+app.post('/bonds', (req, res) => {
+  const { perspective1, perspective2 } = req.body;
+  const id = nanoid();
+  db.prepare(`INSERT INTO emotional_bonds (id, perspective1, perspective2) VALUES (?, ?, ?)`)
+    .run(id, perspective1, perspective2);
+  res.json({ id, created: true });
+});
+
+app.get('/bonds', (_req, res) => {
+  const bonds = db.prepare(`SELECT * FROM emotional_bonds`).all();
+  res.json(bonds);
+});
+
+app.get('/analytics/summary', (_req, res) => {
+  const summary = db.prepare(`
+    SELECT category, COUNT(*) as count, AVG(intensity_value) as avg_intensity
+    FROM emotional_events
+    GROUP BY category
+  `).all();
+  res.json({ summary });
+});
+
+app.use((_req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`💚 Emotional Core v1.0 running on http://localhost:${PORT}`);
+  console.log(`📊 Health: http://localhost:${PORT}/health`);
+});

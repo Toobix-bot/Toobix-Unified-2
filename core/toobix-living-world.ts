@@ -588,6 +588,31 @@ const server = Bun.serve({
 
     const playerName = req.headers.get('X-Player-Name') || 'Player';
 
+    // =============== HEALTH CHECK ===============
+
+    if (url.pathname === '/health' && req.method === 'GET') {
+      const world: any = getWorldState();
+      const perspectives = getAllPerspectivesDevelopment();
+      const totalEvents = db.query('SELECT COUNT(*) as count FROM narrative_events').get();
+
+      return new Response(JSON.stringify({
+        status: 'online',
+        service: 'Living World v1.0',
+        port: PORT,
+        world: {
+          era: world?.era || 'Awakening',
+          day: world?.day || 1,
+          season: world?.season || 1
+        },
+        society: {
+          perspectives: perspectives.length,
+          mood: getSocietyMood(),
+          avgLevel: (perspectives.reduce((sum: number, p: any) => sum + p.development_level, 0) / perspectives.length).toFixed(1)
+        },
+        events: (totalEvents as any).count || 0
+      }), { headers: corsHeaders });
+    }
+
     // =============== LIVING WORLD ENDPOINTS ===============
 
     if (url.pathname === '/world/state' && req.method === 'GET') {

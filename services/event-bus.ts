@@ -1,8 +1,8 @@
 /**
  * 🚌 TOOBIX EVENT BUS
- * 
+ *
  * Asynchrone Inter-Service Communication
- * Port: 8920
+ * Port: 8955 (STANDARDIZED)
  */
 
 interface EventSubscription {
@@ -96,7 +96,7 @@ async function publish(eventType: string, data: any, source: string): Promise<vo
 }
 
 const server = Bun.serve({
-  port: 8920,
+  port: 8955,
   
   async fetch(req) {
     const url = new URL(req.url);
