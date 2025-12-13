@@ -161,12 +161,9 @@ function createMainWindow() {
     mainWindow = null;
   });
 
-  // Don't quit on close, minimize to tray
-  mainWindow.on('close', (e) => {
-    if (!isQuitting) {
-      e.preventDefault();
-      mainWindow?.hide();
-    }
+  // Close should really quit (kein Tray aktiv)
+  mainWindow.on('close', () => {
+    isQuitting = true;
   });
 }
 
