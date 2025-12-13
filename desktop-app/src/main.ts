@@ -55,50 +55,52 @@ interface ServiceConfig {
   path: string;
   port: number;
   autostart: boolean;
-  icon: string;
-  category: 'core' | 'creative' | 'analytics' | 'network';
+  category: 'essential' | 'core' | 'enhanced' | 'creative';
+  description?: string;
 }
 
 const SERVICES: ServiceConfig[] = [
-  // Core Services
-  { id: 'game-engine', name: 'Game Engine', path: 'scripts/2-services/self-evolving-game-engine.ts', port: 8896, autostart: true, icon: '🎮', category: 'core' },
-  { id: 'multi-perspective', name: 'Multi-Perspective', path: 'scripts/2-services/multi-perspective-consciousness.ts', port: 8897, autostart: true, icon: '🧠', category: 'core' },
-  { id: 'dream-journal', name: 'Dream Journal', path: 'scripts/2-services/dream-journal.ts', port: 8899, autostart: true, icon: '💭', category: 'core' },
-  { id: 'emotional-resonance', name: 'Emotional Resonance', path: 'scripts/2-services/emotional-resonance-network.ts', port: 8900, autostart: true, icon: '💖', category: 'core' },
-  
-  // Creative Services
-  { id: 'gratitude', name: 'Gratitude & Mortality', path: 'scripts/2-services/gratitude-mortality-service.ts', port: 8901, autostart: true, icon: '🙏', category: 'creative' },
-  { id: 'creator-ai', name: 'Creator-AI', path: 'scripts/2-services/creator-ai-collaboration.ts', port: 8902, autostart: true, icon: '🎨', category: 'creative' },
-  { id: 'memory-palace', name: 'Memory Palace', path: 'scripts/2-services/memory-palace.ts', port: 8903, autostart: true, icon: '📚', category: 'core' },
-  { id: 'meta-consciousness', name: 'Meta-Consciousness', path: 'scripts/2-services/meta-consciousness.ts', port: 8904, autostart: true, icon: '🔮', category: 'core' },
-  
-  // Analytics & Infrastructure
-  { id: 'analytics', name: 'Analytics System', path: 'scripts/4-analytics/analytics-system.ts', port: 8906, autostart: false, icon: '📈', category: 'analytics' },
-  { id: 'voice', name: 'Voice Interface', path: 'scripts/5-voice/voice-interface.ts', port: 8907, autostart: false, icon: '🎤', category: 'analytics' },
-  { id: 'decision-framework', name: 'Decision Framework', path: 'scripts/8-conscious-decision-framework/decision-framework-server.ts', port: 8909, autostart: false, icon: '🎯', category: 'core' },
-  
-  // Network
-  { id: 'service-mesh', name: 'Service Mesh', path: 'scripts/9-network/service-mesh.ts', port: 8910, autostart: true, icon: '🌐', category: 'network' },
-  { id: 'ai-gateway', name: 'AI Gateway (Groq)', path: 'scripts/10-ai-integration/ai-gateway.ts', port: 8911, autostart: false, icon: '🤖', category: 'network' },
-  { id: 'adaptive-ui', name: 'Adaptive Meta-UI', path: 'scripts/11-adaptive-ui/adaptive-meta-ui.ts', port: 8919, autostart: false, icon: '🎨', category: 'network' },
+  // Essential (6)
+  { id: 'command-center', name: 'Toobix Command Center', path: 'core/toobix-command-center.ts', port: 7777, category: 'essential', autostart: true, description: 'Zentrale Steuerung & API' },
+  { id: 'self-awareness', name: 'Self-Awareness Core', path: 'core/self-awareness-core.ts', port: 8970, category: 'essential', autostart: true, description: 'Bewusstsein & Selbstreflexion' },
+  { id: 'emotional-core', name: 'Emotional Core', path: 'core/emotional-core.ts', port: 8900, category: 'essential', autostart: true, description: 'Emotionale Intelligenz' },
+  { id: 'dream-core', name: 'Dream Core', path: 'core/dream-core.ts', port: 8961, category: 'essential', autostart: true, description: 'Träume & Kreativität' },
+  { id: 'unified-core', name: 'Unified Core Service', path: 'core/unified-core-service.ts', port: 8000, category: 'essential', autostart: true, description: 'Konsolidierter Hauptservice' },
+  { id: 'unified-consciousness', name: 'Unified Consciousness', path: 'core/unified-consciousness-service.ts', port: 8002, category: 'essential', autostart: true, description: 'Bewusstseins-Integration' },
 
-  // Creative
-  { id: 'minecraft-bot', name: 'Minecraft Bot', path: 'scripts/12-minecraft/minecraft-bot-service.ts', port: 8913, autostart: false, icon: '🎮', category: 'creative' },
-  { id: 'life-simulation', name: 'Life Simulation Engine', path: 'scripts/13-life-simulation/life-simulation-engine.ts', port: 8914, autostart: false, icon: '🌍', category: 'creative' },
+  // Core (7)
+  { id: 'autonomy-engine', name: 'Autonomy Engine', path: 'core/autonomy-engine.ts', port: 8975, category: 'core', autostart: true, description: 'Selbstständiges Handeln' },
+  { id: 'multi-llm-router', name: 'Multi-LLM Router', path: 'core/multi-llm-router.ts', port: 8959, category: 'core', autostart: true, description: 'KI-Schnittstelle' },
+  { id: 'unified-communication', name: 'Unified Communication', path: 'core/unified-communication-service.ts', port: 8001, category: 'core', autostart: true, description: 'Kommunikation & Chat' },
+  { id: 'twitter-autonomy', name: 'Twitter Autonomy', path: 'core/twitter-autonomy.ts', port: 8965, category: 'core', autostart: false, description: 'Social Media Präsenz' },
+  { id: 'gamification', name: 'Toobix Gamification', path: 'core/toobix-gamification.ts', port: 7778, category: 'core', autostart: true, description: 'Spiel & Motivation' },
+  { id: 'real-world-intel', name: 'Real World Intelligence', path: 'core/real-world-intelligence.ts', port: 8888, category: 'core', autostart: true, description: 'Echtwelt-Verbindung' },
+  { id: 'living-world', name: 'Toobix Living World', path: 'core/toobix-living-world.ts', port: 7779, category: 'core', autostart: true, description: 'Lebendige Welt' },
 
-  // Advanced AI
-  { id: 'hybrid-ai', name: 'Hybrid AI Core', path: 'scripts/2-services/hybrid-ai-core.ts', port: 8915, autostart: true, icon: '🧠', category: 'core' },
+  // Enhanced / Infrastruktur (9 inkl. MCP)
+  { id: 'service-gateway', name: 'Unified Service Gateway', path: 'services/unified-service-gateway.ts', port: 9000, category: 'enhanced', autostart: true, description: 'API Gateway' },
+  { id: 'hardware-awareness', name: 'Hardware Awareness', path: 'services/hardware-awareness-v2.ts', port: 8940, category: 'enhanced', autostart: true, description: 'Hardware-Überwachung' },
+  { id: 'health-monitor', name: 'Health Monitor', path: 'services/health-monitor.ts', port: 9200, category: 'enhanced', autostart: true, description: 'Service-Überwachung' },
+  { id: 'mega-upgrade', name: 'Toobix Mega Upgrade', path: 'services/toobix-mega-upgrade.ts', port: 9100, category: 'enhanced', autostart: false, description: 'Mega-Erweiterungen' },
+  { id: 'event-bus', name: 'Event Bus', path: 'services/event-bus.ts', port: 8955, category: 'enhanced', autostart: true, description: 'Event-System' },
+  { id: 'llm-gateway', name: 'LLM Gateway v4', path: 'scripts/2-services/llm-gateway-v4.ts', port: 8954, category: 'enhanced', autostart: true, description: 'Groq/LLM Schnittstelle' },
+  { id: 'memory-palace', name: 'Memory Palace v4', path: 'scripts/2-services/memory-palace-v4.ts', port: 8953, category: 'enhanced', autostart: true, description: 'Langzeitgedächtnis' },
+  { id: 'performance-dashboard', name: 'Performance Dashboard', path: 'services/performance-dashboard.ts', port: 8899, category: 'enhanced', autostart: false, description: 'Echtzeit-Monitoring' },
+  { id: 'mcp-bridge', name: 'MCP Bridge', path: 'scripts/mcp-server.ts', port: 8787, category: 'enhanced', autostart: false, description: 'Model Context Protocol bridge' },
 
-  // Life Guidance
-  { id: 'life-domains', name: 'Life-Domain Chat', path: 'scripts/14-life-domains/life-domain-chat.ts', port: 8916, autostart: false, icon: '🌐', category: 'network' },
-  { id: 'meta-knowledge', name: 'Meta-Knowledge Orchestrator', path: 'scripts/15-meta-knowledge/meta-knowledge-orchestrator.ts', port: 8918, autostart: false, icon: '🧠', category: 'network' },
-
-  // Universal Integration
-  { id: 'universal-integration', name: 'Universal Integration Adapter', path: 'scripts/16-universal-integration/universal-integration-adapter.ts', port: 8920, autostart: false, icon: '🔌', category: 'network' },
-
-  // Safety & Wellness
-  { id: 'wellness-safety', name: 'Wellness & Safety Guardian', path: 'scripts/17-wellness-safety/wellness-safety-guardian.ts', port: 8921, autostart: true, icon: '🛡️', category: 'core' }
+  // Creative (10)
+  { id: 'chat-service', name: 'Toobix Chat Service', path: 'scripts/2-services/toobix-chat-service.ts', port: 8995, category: 'creative', autostart: false, description: 'Chat-Interface' },
+  { id: 'emotional-support', name: 'Emotional Support', path: 'scripts/2-services/emotional-support-service.ts', port: 8985, category: 'creative', autostart: false, description: 'Emotionale Unterstützung' },
+  { id: 'autonomous-web', name: 'Autonomous Web', path: 'scripts/2-services/autonomous-web-service.ts', port: 8980, category: 'creative', autostart: false, description: 'Web-Autonomie' },
+  { id: 'story-engine', name: 'Story Engine', path: 'scripts/2-services/story-engine-service.ts', port: 8932, category: 'creative', autostart: false, description: 'Geschichten-Generator' },
+  { id: 'translation-service', name: 'Translation Service', path: 'scripts/2-services/translation-service.ts', port: 8931, category: 'creative', autostart: false, description: 'Übersetzung' },
+  { id: 'user-profile', name: 'User Profile', path: 'scripts/2-services/user-profile-service.ts', port: 8904, category: 'creative', autostart: false, description: 'Benutzer-Profile' },
+  { id: 'rpg-world', name: 'RPG World', path: 'scripts/2-services/rpg-world-service.ts', port: 8933, category: 'creative', autostart: false, description: 'RPG-Welt' },
+  { id: 'game-logic', name: 'Game Logic', path: 'scripts/2-services/game-logic-service.ts', port: 8936, category: 'creative', autostart: false, description: 'Spiel-Logik' },
+  { id: 'data-science', name: 'Data Science', path: 'scripts/2-services/data-science-service.ts', port: 8935, category: 'creative', autostart: false, description: 'Datenanalyse' },
+  { id: 'gratitude', name: 'Gratitude & Mortality', path: 'scripts/2-services/gratitude-mortality-service.ts', port: 8901, category: 'creative', autostart: false, description: 'Dankbarkeit & Sinn' }
 ];
+
 
 // Groq API Setup
 let groqClient: Groq | null = null;

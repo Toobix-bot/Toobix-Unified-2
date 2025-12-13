@@ -1,16 +1,4 @@
-// Lightweight renderer without React – keeps the Electron window from being blank.
-// Uses the preload bridge (window.electronAPI) to talk to the main process.
-
-const CORE_ENDPOINTS = [
-  { id: 'command-center', name: 'Command Center', url: 'http://localhost:7777/health' },
-  { id: 'memory-palace', name: 'Memory Palace', url: 'http://localhost:8953/health' },
-  { id: 'llm-gateway', name: 'LLM Gateway', url: 'http://localhost:8954/health' },
-  { id: 'event-bus', name: 'Event Bus', url: 'http://localhost:8955/health' },
-  { id: 'emotional-core', name: 'Emotional Core', url: 'http://localhost:8900/health' },
-  { id: 'autonomy-engine', name: 'Autonomy Engine', url: 'http://localhost:8975/health' },
-  { id: 'chat-service', name: 'Chat Service', url: 'http://localhost:8995/health' },
-  { id: 'mcp-bridge', name: 'MCP Bridge', url: 'http://localhost:8787/health' }
-];
+// Lightweight renderer without React - uses the preload bridge (window.electronAPI).
 
 // Update when a new tunnel is created
 const MCP_TUNNEL_URL = 'https://multiplicative-unapprehendably-marisha.ngrok-free.dev';
@@ -20,53 +8,13 @@ const coreContainer = document.getElementById('core-status');
 const serviceContainer = document.getElementById('service-status');
 const mcpLink = document.getElementById('mcp-tunnel');
 const lastUpdatedLabel = document.getElementById('last-updated');
+const liveTitle = document.getElementById('live-title');
+
+let servicesCache = [];
 
 function formatTime() {
   const now = new Date();
   return now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-}
-
-async function pingEndpoint(endpoint) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 2000);
-  try {
-    const res = await fetch(endpoint.url, { signal: controller.signal });
-    clearTimeout(timer);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return { online: true };
-  } catch (err) {
-    clearTimeout(timer);
-    return { online: false, error: err?.message || 'offline' };
-  }
-}
-
-async function refreshCore() {
-  if (!coreContainer) return;
-  const statuses = await Promise.all(
-    CORE_ENDPOINTS.map(async (endpoint) => {
-      const result = await pingEndpoint(endpoint);
-      return { ...endpoint, ...result };
-    })
-  );
-
-  coreContainer.innerHTML = statuses
-    .map((status) => {
-      const state = status.online ? 'online' : 'offline';
-      const hint = status.online ? 'OK' : status.error || 'offline';
-      return `
-        <div class="status-card">
-          <div class="status-row">
-            <div>
-              <div class="status-title">${status.name}</div>
-              <div class="status-sub">${status.url}</div>
-            </div>
-            <div class="status-dot ${state}" title="${hint}"></div>
-          </div>
-          <div class="status-sub">${hint}</div>
-        </div>
-      `;
-    })
-    .join('');
 }
 
 function renderServiceCard(service, status) {
@@ -136,32 +84,6 @@ function renderServiceCard(service, status) {
   return card;
 }
 
-async function refreshServices() {
-  if (!serviceContainer) return;
-
-  if (!window.electronAPI) {
-    serviceContainer.innerHTML = '<div class="status-card">Electron Bridge nicht geladen (preload).</div>';
-    return;
-  }
-
-  try {
-    const [services, statuses] = await Promise.all([
-      window.electronAPI.getServices(),
-      window.electronAPI.getAllServiceStatus()
-    ]);
-
-    const fragment = document.createDocumentFragment();
-    services.forEach((service) => {
-      const status = statuses?.[service.id] || 'unknown';
-      fragment.appendChild(renderServiceCard(service, status));
-    });
-    serviceContainer.innerHTML = '';
-    serviceContainer.appendChild(fragment);
-  } catch (err) {
-    serviceContainer.innerHTML = `<div class="status-card">Service-Liste konnte nicht geladen werden: ${err?.message || err}</div>`;
-  }
-}
-
 function wireBadges() {
   if (mcpLink) {
     if (MCP_TUNNEL_URL) {
@@ -179,15 +101,56 @@ function refreshClock() {
   }
 }
 
+function renderPanels(services, statuses) {
+  if (liveTitle) {
+    liveTitle.textContent = `Live System Monitor (${services.length} Services)`;
+  }
+
+  const infra = services.filter(s => s.category !== 'creative');
+  const creative = services.filter(s => s.category === 'creative');
+
+  if (coreContainer) {
+    const fragment = document.createDocumentFragment();
+    infra.forEach((service) => fragment.appendChild(renderServiceCard(service, statuses?.[service.id] || 'unknown')));
+    coreContainer.innerHTML = '';
+    coreContainer.appendChild(fragment);
+  }
+
+  if (serviceContainer) {
+    const fragment = document.createDocumentFragment();
+    creative.forEach((service) => fragment.appendChild(renderServiceCard(service, statuses?.[service.id] || 'unknown')));
+    serviceContainer.innerHTML = '';
+    serviceContainer.appendChild(fragment);
+  }
+}
+
+async function refreshAll() {
+  if (!window.electronAPI) {
+    const msg = '<div class="status-card">Electron Bridge nicht geladen (preload).</div>';
+    if (coreContainer) coreContainer.innerHTML = msg;
+    if (serviceContainer) serviceContainer.innerHTML = msg;
+    return;
+  }
+
+  try {
+    if (!servicesCache.length) {
+      servicesCache = await window.electronAPI.getServices();
+    }
+    const statuses = await window.electronAPI.getAllServiceStatus();
+    renderPanels(servicesCache, statuses);
+  } catch (err) {
+    const msg = `<div class="status-card">Service-Liste konnte nicht geladen werden: ${err?.message || err}</div>`;
+    if (coreContainer) coreContainer.innerHTML = msg;
+    if (serviceContainer) serviceContainer.innerHTML = msg;
+  }
+}
+
 function bootstrap() {
   wireBadges();
-  refreshCore();
-  refreshServices();
+  refreshAll();
   refreshClock();
-  setInterval(refreshCore, POLL_INTERVAL);
-  setInterval(refreshServices, POLL_INTERVAL);
+  setInterval(refreshAll, POLL_INTERVAL);
   setInterval(refreshClock, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', bootstrap);
-
