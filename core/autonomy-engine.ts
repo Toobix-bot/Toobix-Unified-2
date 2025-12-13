@@ -15,7 +15,7 @@
  * 📈 Progress tracking
  */
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import express from 'express';
 import type { Request, Response } from 'express';
 import cors from 'cors';
@@ -68,7 +68,7 @@ interface AutonomyState {
 // ============================================================================
 
 const db = new Database('./data/autonomy-engine.db');
-db.pragma('journal_mode = WAL');
+db.exec('PRAGMA journal_mode = WAL');
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS goals (

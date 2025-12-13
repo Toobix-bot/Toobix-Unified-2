@@ -22,7 +22,7 @@
  * 📊 Analytics - Emotionale Muster-Analyse
  */
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import express from 'express';
 import cors from 'cors';
 import { nanoid } from 'nanoid';
@@ -128,7 +128,7 @@ export interface CopingStrategy {
 // ============================================================================
 
 const db = new Database('./data/emotional-core.db');
-db.pragma('journal_mode = WAL');
+db.exec('PRAGMA journal_mode = WAL');
 
 // Initialize tables
 db.exec(`

@@ -75,6 +75,7 @@
         "memory": "bun run scripts/2-services/memory-palace-v4.ts",
         "llm": "bun run scripts/2-services/llm-gateway-v4.ts",
         "events": "bun run scripts/2-services/event-bus-v4.ts",
+        "mcp": "bun run scripts/mcp-server.ts",
         "system:monitor": "bun run scripts/2-services/system-monitor-v1.ts",
         "system:analysis": "bun run scripts/2-services/file-analysis-v1.ts",
         "system:cleanup": "bun run scripts/system-cleanup/auto-cleanup-v1.ts",
@@ -95,6 +96,7 @@
     },
     "dependencies": {
         "@anthropic-ai/sdk": "^0.71.0",
+        "@modelcontextprotocol/sdk": "^1.24.3",
         "@types/better-sqlite3": "^7.6.13",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",

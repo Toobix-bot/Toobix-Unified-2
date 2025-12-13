@@ -54,10 +54,11 @@ const ENHANCED_SERVICES: ServiceDef[] = [
   { name: 'Hardware Awareness', path: 'services/hardware-awareness-v2.ts', port: 8940, category: 'enhanced', description: 'Hardware-Überwachung', delay: 2500 },
   { name: 'Health Monitor', path: 'services/health-monitor.ts', port: 9200, category: 'enhanced', description: 'Service-Überwachung', delay: 2500 },
   { name: 'Toobix Mega Upgrade', path: 'services/toobix-mega-upgrade.ts', port: 9100, category: 'enhanced', description: 'Mega-Erweiterungen', delay: 2500 },
-  { name: 'Event Bus', path: 'services/event-bus.ts', port: 8920, category: 'enhanced', description: 'Event-System', delay: 2500 },
+  { name: 'Event Bus', path: 'services/event-bus.ts', port: 8955, category: 'enhanced', description: 'Event-System', delay: 2500 },
   { name: 'LLM Gateway v4', path: 'scripts/2-services/llm-gateway-v4.ts', port: 8954, category: 'enhanced', description: 'Groq/LLM Schnittstelle', delay: 2500 },
   { name: 'Memory Palace v4', path: 'scripts/2-services/memory-palace-v4.ts', port: 8953, category: 'enhanced', description: 'Langzeitgedächtnis', delay: 2500 },
   { name: 'Performance Dashboard', path: 'services/performance-dashboard.ts', port: 8899, category: 'enhanced', description: 'Echtzeit-Monitoring', delay: 2500 },
+  { name: 'MCP Bridge', path: 'scripts/mcp-server.ts', port: 8787, category: 'enhanced', description: 'Model Context Protocol bridge', delay: 2500 },
 ];
 
 // KATEGORIE: CREATIVE (Kreative Services - 10 Services)
