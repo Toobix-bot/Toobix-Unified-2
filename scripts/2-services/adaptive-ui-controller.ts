@@ -623,6 +623,10 @@ class AdaptiveUIController {
           return new Response(null, { headers })
         }
 
+        if (path === '/health') {
+          return new Response(JSON.stringify({ status: 'ok', service: 'adaptive-ui-controller', port }), { headers })
+        }
+
         try {
           // GET /adaptation/:viewId - Get adaptation for view
           if (path.startsWith('/adaptation/') && req.method === 'GET') {

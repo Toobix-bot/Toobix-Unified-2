@@ -726,6 +726,10 @@ const server = Bun.serve({
       return new Response(null, { headers: corsHeaders });
     }
 
+    if (url.pathname === '/health') {
+      return Response.json({ status: 'ok', service: 'meta-knowledge-orchestrator', port: PORT }, { headers: corsHeaders });
+    }
+
     // ========== ROUTES ==========
 
     // POST /synthesize - Cross-domain synthesis

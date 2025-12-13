@@ -497,6 +497,10 @@ const server = Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
 
+    if (url.pathname === '/health') {
+      return Response.json({ status: 'ok', service: 'gamification', port: PORT }, { headers: corsHeaders });
+    }
+
     // CORS preflight
     if (req.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });

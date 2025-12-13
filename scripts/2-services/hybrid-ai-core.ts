@@ -11,7 +11,7 @@
  * 7. Pattern Recognition (Mustererkennung)
  * 8. Predictive Analytics (Vorhersagen)
  * 
- * Port: 8911
+ * Port: 8915
  */
 
 import Bun from 'bun'
@@ -1116,7 +1116,7 @@ class HybridAICore {
   // HTTP SERVER
   // ========================================================================
 
-  async start(port = 8911) {
+  async start(port = 8915) {
     const server = Bun.serve({
       port,
       async fetch(req) {
@@ -1286,6 +1286,6 @@ class HybridAICore {
 // ============================================================================
 
 const hybridAI = new HybridAICore()
-const server = await hybridAI.start(8911)
+const server = await hybridAI.start(8915)
 
 console.log('\n✨ Hybrid AI Core is learning, evolving, and predicting...\n')

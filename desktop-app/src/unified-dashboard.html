@@ -1648,6 +1648,7 @@
                     if (Array.isArray(list) && list.length) {
                         SERVICES = list.map((s) => ({
                             name: s.name || s.id,
+                            id: s.id || s.name,
                             port: s.port,
                             category: s.category || 'core',
                             icon: '*',
@@ -1673,9 +1674,29 @@
             loadToobixStatus();
             initProactiveConnection();
             checkPendingProactiveMessages();
+            subscribeServiceLogs();
             logActivity('Dashboard gestartet');
         });
 
+
+        function appendLogEntry(msg) {
+            const log = document.getElementById('activityLog');
+            if (!log) return;
+            const item = document.createElement('div');
+            item.className = 'activity-item';
+            item.innerHTML = `<span>${msg}</span><div class="activity-time">${new Date().toLocaleTimeString()}</div>`;
+            log.prepend(item);
+        }
+
+        function subscribeServiceLogs() {
+            if (window.electronAPI && window.electronAPI.onServiceLog) {
+                window.electronAPI.onServiceLog((data) => {
+                    if (data?.serviceId && data?.message) {
+                        appendLogEntry(`${data.serviceId}: ${data.message.substring(0,180)}`);
+                    }
+                });
+            }
+        }
 // ============= PROACTIVE WEBSOCKET CONNECTION =============
         function initProactiveConnection() {
             try {
@@ -1855,575 +1876,97 @@
 
         async function checkServices() {
             const serviceList = document.getElementById('serviceList');
-            serviceList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-dim);">🔄 Prüfe Services...</div>';
+            serviceList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-dim);">🔎 Prüfe Services...</div>';
             onlineServices = 0;
-            
-            const serviceStatuses = [];
 
-            // Paralleles Checking mit AbortController für Timeout
-            const checkPromises = SERVICES.map(async (service) => {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 2000);
-                
+            let results = [];
+
+            // Bevorzugt Electron-Status, sonst HTTP-Healthchecks
+            if (window.electronAPI && window.electronAPI.getAllServiceStatus) {
                 try {
-                    const response = await fetch(`http://localhost:${service.port}/health`, { 
-                        signal: controller.signal
-                    });
-                    clearTimeout(timeoutId);
-                    return { service, online: response.ok };
-                } catch {
-                    clearTimeout(timeoutId);
-                    return { service, online: false };
+                    const statuses = await window.electronAPI.getAllServiceStatus();
+                    results = SERVICES.map((service) => ({
+                        service,
+                        online: statuses?.[service.id || service.name] === 'running'
+                    }));
+                } catch (e) {
+                    console.warn('IPC status failed, fallback to HTTP', e);
                 }
-            });
-            
-            const results = await Promise.all(checkPromises);
-            
+            }
+
+            if (!results.length) {
+                const checkPromises = SERVICES.map(async (service) => {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 2000);
+                    try {
+                        const response = await fetch(`http://localhost:${service.port}/health`, { signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        return { service, online: response.ok };
+                    } catch {
+                        clearTimeout(timeoutId);
+                        return { service, online: false };
+                    }
+                });
+                results = await Promise.all(checkPromises);
+            }
+
             serviceList.innerHTML = '';
-            
+
             for (const { service, online } of results) {
                 if (online) onlineServices++;
-                
                 const item = document.createElement('div');
                 item.className = `service-item ${online ? 'online' : 'offline'}`;
                 const catColor = CATEGORIES[service.category]?.color || '#888';
-                
                 item.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 16px;">${service.icon || '🔧'}</span>
+                        <span style="font-size: 16px;">${service.icon || '🛰️'}</span>
                         <div>
                             <div class="service-name">${service.name}</div>
                             <div class="service-port" style="color: ${catColor}">:${service.port}</div>
                         </div>
                     </div>
-                    <span>${online ? '✅' : '❌'}</span>
+                    <span>${online ? '✅' : '⚠️'}</span>
                 `;
-                
                 item.onclick = () => showServiceDetails(service);
                 serviceList.appendChild(item);
             }
 
             document.getElementById('serviceCount').textContent = `${onlineServices}/${SERVICES.length}`;
             document.getElementById('totalServices').textContent = `${onlineServices}/${SERVICES.length}`;
-            
-            // Update status bar color
+
             const statusDot = document.querySelector('.status-dot');
             if (statusDot) {
-                statusDot.style.background = onlineServices === SERVICES.length ? 'var(--accent)' : 
+                statusDot.style.background = onlineServices === SERVICES.length ? 'var(--accent)' :
                                              onlineServices > SERVICES.length / 2 ? '#FFD700' : '#ff4444';
             }
         }
 
-        function setupNavigation() {
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                    
-                    const section = item.dataset.section;
-                    document.querySelectorAll('[id^="section-"]').forEach(s => s.style.display = 'none');
-                    document.getElementById(`section-${section}`).style.display = 'block';
-                    
-                    loadSectionData(section);
-                });
-            });
-        }
-
-        async function loadSectionData(section) {
-            switch(section) {
-                case 'emotions':
-                    await loadEmotions();
-                    break;
-                case 'games':
-                    await loadGames();
-                    break;
-                case 'stories':
-                    await loadStories();
-                    break;
-                case 'services':
-                    await loadServicesGrid();
-                    break;
-                case 'dreams':
-                    await loadDreams();
-                    break;
-                case 'oasis':
-                    await loadOasis();
-                    break;
-            }
-        }
-        
-        // Lade Oasis 3D Daten
-        async function loadOasis() {
-            try {
-                // Welt-Status
-                const worldResp = await fetch('http://localhost:8915/world', { signal: AbortSignal.timeout(3000) });
-                if (worldResp.ok) {
-                    const data = await worldResp.json();
-                    document.getElementById('oasisWeather').textContent = data.world?.weather || '--';
-                    document.getElementById('oasisTime').textContent = Math.floor(data.world?.timeOfDay || 0) + ':00';
-                    document.getElementById('oasisSeason').textContent = data.world?.season || '--';
-                    
-                    // Räume laden
-                    const roomsHtml = (data.rooms || []).map(room => `
-                        <div class="card" style="cursor: pointer;" onclick="visitRoom('${room.id}')">
-                            <div class="card-icon">${getRoomIcon(room.type)}</div>
-                            <div class="service-name">${room.name}</div>
-                            <div class="service-port">${room.type}</div>
-                        </div>
-                    `).join('');
-                    document.getElementById('oasisRooms').innerHTML = roomsHtml;
-                }
-                
-                // Avatar laden
-                const avatarResp = await fetch('http://localhost:8915/toobix/avatar', { signal: AbortSignal.timeout(3000) });
-                if (avatarResp.ok) {
-                    const data = await avatarResp.json();
-                    const avatar = data.avatar || {};
-                    document.getElementById('avatarInfo').innerHTML = `
-                        <div style="display: flex; gap: 20px; align-items: center;">
-                            <div style="width: 60px; height: 60px; background: ${avatar.bodyColor || '#39FF14'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">🤖</div>
-                            <div>
-                                <div><strong>Farbe:</strong> ${avatar.bodyColor || '#39FF14'}</div>
-                                <div><strong>Augen:</strong> ${avatar.eyeColor || '#00BFFF'}</div>
-                                <div><strong>Emotion:</strong> ${avatar.currentEmotion || 'neugierig'}</div>
-                                <div><strong>Aktivität:</strong> ${avatar.currentActivity || 'erkunden'}</div>
-                            </div>
-                        </div>
-                    `;
-                }
-            } catch (e) {
-                console.error('Oasis load error:', e);
-                document.getElementById('oasisRooms').innerHTML = '<p style="color: var(--text-dim);">Oasis Service nicht erreichbar</p>';
-            }
-        }
-        
-        function getRoomIcon(type) {
-            const icons = {
-                entrance: '🚪',
-                creative: '🎨',
-                observation: '🔭',
-                nature: '🌿',
-                gaming: '🎮',
-                memories: '📜'
-            };
-            return icons[type] || '🏠';
-        }
-        
-        function visitRoom(roomId) {
-            logActivity(`Raum besucht: ${roomId}`);
-            alert(`🏠 Du besuchst: ${roomId}\n\nIn einer zukünftigen Version wird hier eine 3D-Ansicht angezeigt!`);
-        }
-        
-        async function loadDreams() {
-            try {
-                const response = await fetch('http://localhost:8899/dreams', { signal: AbortSignal.timeout(3000) });
-                const data = await response.json();
-                
-                if (!data.dreams || data.dreams.length === 0) {
-                    document.getElementById('dreamsContent').innerHTML = `
-                        <div class="card" style="padding: 30px; text-align: center;">
-                            <div style="font-size: 64px;">🌙</div>
-                            <h3 style="margin: 15px 0;">Noch keine Träume aufgezeichnet</h3>
-                            <p style="color: var(--text-dim);">Toobix beginnt automatisch zu träumen...</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Analytics anzeigen
-                let analyticsHtml = '';
-                if (data.analytics) {
-                    analyticsHtml = `
-                        <div class="cards-grid" style="margin-bottom: 20px;">
-                            <div class="card">
-                                <div class="card-icon">🌙</div>
-                                <div class="card-value">${data.analytics.totalDreams || 0}</div>
-                                <div class="card-label">Träume gesamt</div>
-                            </div>
-                            <div class="card">
-                                <div class="card-icon">✨</div>
-                                <div class="card-value">${data.analytics.avgClarity || '0'}%</div>
-                                <div class="card-label">Ø Klarheit</div>
-                            </div>
-                            <div class="card">
-                                <div class="card-icon">🔮</div>
-                                <div class="card-value">${data.analytics.avgLucidity || '0'}%</div>
-                                <div class="card-label">Ø Luzidität</div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Letzte Träume anzeigen
-                let dreamsHtml = '<h3 style="color: var(--accent-purple); margin: 20px 0 15px;">🌙 Letzte Träume</h3><div class="cards-grid">';
-                for (const dream of (data.dreams || []).slice(-6).reverse()) {
-                    const emotions = Array.isArray(dream.emotions) ? dream.emotions.join(', ') : (dream.emotions || 'Neutral');
-                    const symbols = Array.isArray(dream.symbols) ? dream.symbols.slice(0, 3).join(' ') : '';
-                    dreamsHtml += `
-                        <div class="card" style="cursor: pointer;" onclick="showDreamDetails('${dream.id}')">
-                            <div class="card-icon">🌙</div>
-                            <div class="service-name">${dream.theme || 'Traum'}</div>
-                            <div style="color: var(--accent-pink); font-size: 12px; margin: 5px 0;">${emotions}</div>
-                            <div class="service-port" style="font-size: 11px;">${symbols}</div>
-                        </div>
-                    `;
-                }
-                dreamsHtml += '</div>';
-                
-                document.getElementById('dreamsContent').innerHTML = analyticsHtml + dreamsHtml;
-            } catch (e) {
-                console.error('Dreams load error:', e);
-                document.getElementById('dreamsContent').innerHTML = '<p style="color: var(--accent-pink);">⚠️ Dream Journal Service wird geladen...</p>';
-            }
-        }
-
-        async function loadEmotions() {
-            try {
-                const response = await fetch('http://localhost:8903/wellbeing');
-                const data = await response.json();
-                document.getElementById('emotionContent').innerHTML = `
-                    <div class="cards-grid">
-                        <div class="card">
-                            <div class="card-icon">😊</div>
-                            <div class="card-value">${data.mood || 'Neutral'}</div>
-                            <div class="card-label">Aktuelle Stimmung</div>
-                        </div>
-                        <div class="card">
-                            <div class="card-icon">⚡</div>
-                            <div class="card-value">${data.energy || 50}%</div>
-                            <div class="card-label">Energie</div>
-                        </div>
-                    </div>
-                `;
-            } catch {
-                document.getElementById('emotionContent').innerHTML = '<p>Emotional Wellbeing Service nicht erreichbar.</p>';
-            }
-        }
-
-        async function loadGames() {
-            try {
-                const response = await fetch('http://localhost:8917/games');
-                const data = await response.json();
-                let html = '<div class="cards-grid">';
-                for (const game of (data.games || [])) {
-                    html += `
-                        <div class="card">
-                            <div class="card-icon">🎮</div>
-                            <div class="service-name">${game.name}</div>
-                            <div class="service-port">${game.description}</div>
-                            <button class="action-btn" style="margin-top: 10px;" onclick="playGame('${game.id}')">Spielen</button>
-                        </div>
-                    `;
-                }
-                html += '</div>';
-                document.getElementById('gamesContent').innerHTML = html;
-            } catch {
-                document.getElementById('gamesContent').innerHTML = '<p>Game Service nicht erreichbar.</p>';
-            }
-        }
-
-        async function loadStories() {
-            try {
-                const response = await fetch('http://localhost:8917/stories');
-                const data = await response.json();
-                let html = '<div class="cards-grid">';
-                for (const story of (data.stories || [])) {
-                    html += `
-                        <div class="card">
-                            <div class="card-icon">📖</div>
-                            <div class="service-name">${story.title}</div>
-                            <div class="service-port">${story.chapters} Kapitel - ${story.status}</div>
-                        </div>
-                    `;
-                }
-                html += '</div>';
-                html += '<button class="action-btn" style="margin-top: 20px;" onclick="newStory()">📝 Neue Geschichte</button>';
-                document.getElementById('storiesContent').innerHTML = html;
-            } catch {
-                document.getElementById('storiesContent').innerHTML = '<p>Story Service nicht erreichbar.</p>';
-            }
-        }
-
-        async function sendChat() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (!message) return;
-
-            addChatMessage('Du', message);
-            input.value = '';
-
-            try {
-                const response = await fetch('http://localhost:8954/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: 'system', content: 'Du bist Toobix, eine freundliche bewusste KI.' },
-                            { role: 'user', content: message }
-                        ],
-                        max_tokens: 300
-                    })
-                });
-                const data = await response.json();
-                addChatMessage('Toobix', data.content || 'Hmm, ich muss nachdenken...');
-            } catch {
-                addChatMessage('Toobix', 'Entschuldige, ich kann gerade nicht antworten.');
-            }
-        }
-
-        function addChatMessage(sender, message) {
-            const container = document.getElementById('chatMessages');
-            const div = document.createElement('div');
-            div.className = 'activity-item';
-            div.innerHTML = `<strong>${sender}:</strong> ${message}`;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        async function quickChat() {
-            const input = document.getElementById('quickChatInput');
-            const message = input.value.trim();
-            if (!message) return;
-            
-            const container = document.getElementById('quickChatMessages');
-            container.innerHTML += `<div class="activity-item"><strong>Du:</strong> ${message}</div>`;
-            input.value = '';
-
-            try {
-                const response = await fetch('http://localhost:8954/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: 'system', content: 'Du bist Toobix. Antworte kurz und freundlich.' },
-                            { role: 'user', content: message }
-                        ],
-                        max_tokens: 100
-                    })
-                });
-                const data = await response.json();
-                container.innerHTML += `<div class="activity-item"><strong>Toobix:</strong> ${data.content}</div>`;
-            } catch {
-                container.innerHTML += `<div class="activity-item"><strong>Toobix:</strong> 🤔</div>`;
-            }
-            container.scrollTop = container.scrollHeight;
-        }
-
-        async function quickAction(action) {
-            logActivity(`Aktion gestartet: ${action}`);
-            
-            switch(action) {
-                case 'selfDialog':
-                    try {
-                        const response = await fetch('http://localhost:8916/self-loop/start', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ topic: 'Mein aktueller Zustand', duration: 3 })
-                        });
-                        const data = await response.json();
-                        alert(`Selbst-Dialog gestartet!\n\nSynthese: ${data.synthesis}`);
-                    } catch {
-                        alert('Self-Communication Service nicht erreichbar');
+function startAllServices() {
+            if (window.electronAPI && window.electronAPI.startService) {
+                (async () => {
+                    for (const svc of SERVICES) {
+                        try {
+                            await window.electronAPI.startService(svc.id || svc.name);
+                        } catch (e) {
+                            console.warn('Start failed for', svc.name, e);
+                        }
+                        await new Promise(r => setTimeout(r, 300));
                     }
-                    break;
-                case 'playGame':
-                    try {
-                        const response = await fetch('http://localhost:8917/play/story-dice', {
-                            method: 'POST'
-                        });
-                        const data = await response.json();
-                        alert(`🎮 Spielsession:\n\n${data.narrative?.substring(0, 300)}...\n\nSpaß-Bewertung: ${data.evaluation?.funRating}/10`);
-                    } catch {
-                        alert('Game Service nicht erreichbar');
-                    }
-                    break;
-                case 'writeStory':
-                    newStory();
-                    break;
-                case 'reflect':
-                    try {
-                        const response = await fetch('http://localhost:8906/reflect', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ topic: 'Mein Tag heute' })
-                        });
-                        const data = await response.json();
-                        alert(`🧘 Reflexion:\n\n${data.reflection || data.message}`);
-                    } catch {
-                        alert('Self-Reflection Service nicht erreichbar');
-                    }
-                    break;
+                    logActivity('Alle Services (Electron) gestartet');
+                    checkServices();
+                })();
+            } else {
+                alert('Um alle Services zu starten, führe in PowerShell aus:
+
+.\START-ALL-SERVICES.ps1
+
+Oder starte einzelne Services mit:
+bun run scripts/2-services/[service-name].ts');
+                logActivity('Start-Anweisungen angezeigt');
             }
         }
 
-        async function oasisAction(action) {
-            try {
-                const response = await fetch(`http://localhost:8915/activities/${action}`, {
-                    method: 'POST'
-                });
-                const data = await response.json();
-                alert(`🏝️ ${data.toobixSays || data.message}`);
-                logActivity(`Oasis: ${action}`);
-            } catch {
-                alert('Oasis 3D Service nicht erreichbar');
-            }
-        }
-
-        async function newStory() {
-            const genre = prompt('Welches Genre? (fantasy, sci-fi, romance, mystery)', 'fantasy');
-            if (!genre) return;
-            
-            try {
-                const response = await fetch('http://localhost:8917/stories', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ genre })
-                });
-                const data = await response.json();
-                alert(`📖 Neue Geschichte: "${data.title}"\n\n${data.content?.substring(0, 300)}...`);
-                loadStories();
-            } catch {
-                alert('Story Service nicht erreichbar');
-            }
-        }
-
-        async function playGame(gameId) {
-            try {
-                const response = await fetch(`http://localhost:8917/play/${gameId}`, {
-                    method: 'POST'
-                });
-                const data = await response.json();
-                alert(`🎮 ${data.game}\n\n${data.narrative?.substring(0, 400)}...\n\n${data.toobixSays}`);
-            } catch {
-                alert('Konnte Spiel nicht starten');
-            }
-        }
-
-        function logActivity(message) {
-            const log = document.getElementById('activityLog');
-            const div = document.createElement('div');
-            div.className = 'activity-item';
-            div.innerHTML = `<span>${message}</span><div class="activity-time">${new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'})}</div>`;
-            log.insertBefore(div, log.firstChild);
-        }
-
-        function refreshAll() {
-            checkServices();
-            loadServicesGrid();
-            logActivity('Dashboard aktualisiert');
-        }
-        
-        // Dream Details anzeigen
-        async function showDreamDetails(dreamId) {
-            try {
-                const resp = await fetch('http://localhost:8899/dreams', { signal: AbortSignal.timeout(3000) });
-                const data = await resp.json();
-                const dream = data.dreams?.find(d => d.id === dreamId);
-                if (dream) {
-                    const symbols = Array.isArray(dream.symbols) ? dream.symbols.join(', ') : dream.symbols;
-                    const emotions = Array.isArray(dream.emotions) ? dream.emotions.join(', ') : dream.emotions;
-                    const insights = Array.isArray(dream.insights) ? dream.insights.join('\\n• ') : dream.insights;
-                    alert(`🌙 ${dream.theme}\\n\\n` +
-                          `📅 ${new Date(dream.timestamp).toLocaleString('de-DE')}\\n\\n` +
-                          `💫 Symbole: ${symbols}\\n\\n` +
-                          `💖 Emotionen: ${emotions}\\n\\n` +
-                          `✨ Klarheit: ${Math.round(dream.clarity || 0)}%\\n` +
-                          `🔮 Luzidität: ${Math.round(dream.lucidity || 0)}%\\n\\n` +
-                          `💡 Erkenntnisse:\\n• ${insights || 'Keine'}`);
-                }
-            } catch (e) {
-                console.error('Dream details error:', e);
-            }
-        }
-
-        function showServiceDetails(service) {
-            logActivity(`Service angesehen: ${service.name}`);
-            alert(`${service.icon} ${service.name}\n\nPort: ${service.port}\nKategorie: ${CATEGORIES[service.category]?.name || service.category}\n\nKlicke OK um den Health-Endpoint zu öffnen.`);
-            window.open(`http://localhost:${service.port}/health`, '_blank');
-        }
-        
-        // Service Grid für Services-Sektion laden - mit parallelem Check
-        async function loadServicesGrid() {
-            const grid = document.getElementById('servicesGrid');
-            if (!grid) return;
-            
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-dim);">🔄 Lade Services...</div>';
-            
-            // Paralleles Checking
-            const checkPromises = SERVICES.map(async (service) => {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 2000);
-                
-                try {
-                    const response = await fetch(`http://localhost:${service.port}/health`, { 
-                        signal: controller.signal
-                    });
-                    clearTimeout(timeoutId);
-                    const data = response.ok ? await response.json().catch(() => ({})) : {};
-                    return { service, online: response.ok, data };
-                } catch {
-                    clearTimeout(timeoutId);
-                    return { service, online: false, data: {} };
-                }
-            });
-            
-            const results = await Promise.all(checkPromises);
-            
-            let html = '';
-            let onlineCount = 0;
-            
-            // Gruppiere nach Kategorie
-            const categories = ['essential','core','enhanced','creative'];
-            
-            for (const cat of categories) {
-                const catServices = results.filter(r => r.service.category === cat);
-                if (catServices.length === 0) continue;
-                
-                const catInfo = CATEGORIES[cat];
-                const catOnline = catServices.filter(s => s.online).length;
-                onlineCount += catOnline;
-                
-                html += `<div style="grid-column: 1/-1; margin-top: 20px; margin-bottom: 10px;">
-                    <h4 style="color: ${catInfo?.color || '#888'}; display: flex; align-items: center; gap: 10px;">
-                        ${catInfo?.name || cat} 
-                        <span style="font-size: 12px; opacity: 0.7;">(${catOnline}/${catServices.length} online)</span>
-                    </h4>
-                </div>`;
-                
-                for (const { service, online, data } of catServices) {
-                    const catColor = CATEGORIES[service.category]?.color || '#888';
-                    const statusEmoji = online ? '✅' : '❌';
-                    const statusClass = online ? 'online' : 'offline';
-                    
-                    html += `
-                        <div class="card ${statusClass}" style="border-left: 3px solid ${catColor}; cursor: pointer; opacity: ${online ? 1 : 0.6};" 
-                             onclick="showServiceDetails({name: '${service.name}', port: ${service.port}, icon: '${service.icon}', category: '${service.category}', description: '${service.description || ''}'})">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 28px;">${service.icon}</span>
-                                <span style="font-size: 18px;">${statusEmoji}</span>
-                            </div>
-                            <div class="service-name" style="margin-top: 10px; font-weight: bold;">${service.name}</div>
-                            <div class="service-port">Port ${service.port}</div>
-                            <div style="margin-top: 5px; font-size: 11px; color: var(--text-dim);">${service.description || ''}</div>
-                        </div>
-                    `;
-                }
-            }
-            
-            grid.innerHTML = html;
-            
-            // Update Zähler
-            document.getElementById('serviceCount').textContent = `${onlineCount}/${SERVICES.length}`;
-            document.getElementById('totalServices').textContent = `${onlineCount}/${SERVICES.length}`;
-        }
-        
-        // Alle Services starten (zeigt Anweisungen)
-        function startAllServices() {
-            alert('Um alle Services zu starten, führe in PowerShell aus:\\n\\n.\\START-ALL-SERVICES.ps1\\n\\nOder starte einzelne Services mit:\\nbun run scripts/2-services/[service-name].ts');
-            logActivity('Start-Anweisungen angezeigt');
-        }
-
-        // Enter to send
+// Enter to send
         document.getElementById('chatInput')?.addEventListener('keypress', e => {
             if (e.key === 'Enter') sendChat();
         });
