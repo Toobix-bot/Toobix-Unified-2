@@ -99,6 +99,21 @@ const SERVICES: ServiceConfig[] = [
   { id: 'game-logic', name: 'Game Logic', path: 'scripts/2-services/game-logic-service.ts', port: 8936, category: 'creative', autostart: false, description: 'Spiel-Logik' },
   { id: 'data-science', name: 'Data Science', path: 'scripts/2-services/data-science-service.ts', port: 8935, category: 'creative', autostart: false, description: 'Datenanalyse' },
   { id: 'gratitude', name: 'Gratitude & Mortality', path: 'scripts/2-services/gratitude-mortality-service.ts', port: 8901, category: 'creative', autostart: false, description: 'Dankbarkeit & Sinn' }
+
+  // Additional stack services (laufende Prozesse, nicht im Clean-Set)
+  ,{ id: 'analytics-system', name: 'Analytics System', path: 'scripts/4-analytics/analytics-system.ts', port: 8906, category: 'enhanced', autostart: false, description: 'Analytics & Reporting' }
+  ,{ id: 'voice-interface', name: 'Voice Interface', path: 'scripts/5-voice/voice-interface.ts', port: 8907, category: 'enhanced', autostart: false, description: 'Spracheingabe/Audio' }
+  ,{ id: 'decision-framework', name: 'Decision Framework', path: 'scripts/8-conscious-decision-framework/decision-framework-server.ts', port: 8909, category: 'enhanced', autostart: false, description: 'Entscheidungslogik' }
+  ,{ id: 'ai-gateway', name: 'AI Gateway', path: 'scripts/10-ai-integration/ai-gateway.ts', port: 8911, category: 'enhanced', autostart: false, description: 'Externe KI-Integration' }
+  ,{ id: 'adaptive-ui', name: 'Adaptive Meta-UI', path: 'scripts/11-adaptive-ui/adaptive-meta-ui.ts', port: 8919, category: 'enhanced', autostart: false, description: 'Adaptive Oberflächen' }
+  ,{ id: 'minecraft-bot', name: 'Minecraft Bot', path: 'scripts/12-minecraft/minecraft-bot-service.ts', port: 8913, category: 'creative', autostart: false, description: 'Minecraft-Akteur' }
+  ,{ id: 'life-simulation', name: 'Life Simulation Engine', path: 'scripts/13-life-simulation/life-simulation-engine.ts', port: 8914, category: 'creative', autostart: false, description: 'Simulation' }
+  ,{ id: 'hybrid-ai', name: 'Hybrid AI Core', path: 'scripts/2-services/hybrid-ai-core.ts', port: 8915, category: 'core', autostart: false, description: 'Hybrid AI Kern' }
+  ,{ id: 'meta-knowledge', name: 'Meta-Knowledge Orchestrator', path: 'scripts/15-meta-knowledge/meta-knowledge-orchestrator.ts', port: 8918, category: 'enhanced', autostart: false, description: 'Wissensorchestrierung' }
+  ,{ id: 'universal-integration', name: 'Universal Integration Adapter', path: 'scripts/16-universal-integration/universal-integration-adapter.ts', port: 8920, category: 'enhanced', autostart: false, description: 'Integrationslayer' }
+  ,{ id: 'self-evolving-game-engine', name: 'Self-Evolving Game Engine', path: 'scripts/2-services/self-evolving-game-engine.ts', port: 8896, category: 'creative', autostart: false, description: 'Selbst-evolvierendes Spiel' }
+  ,{ id: 'multi-perspective', name: 'Multi-Perspective Consciousness', path: 'scripts/2-services/multi-perspective-consciousness.ts', port: 8897, category: 'core', autostart: false, description: 'Mehrperspektivisches Bewusstsein' }
+  ,{ id: 'creator-ai', name: 'Creator-AI Collaboration', path: 'scripts/2-services/creator-ai-collaboration.ts', port: 8902, category: 'creative', autostart: false, description: 'Co-Creation' }
 ];
 
 
@@ -598,4 +613,3 @@ process.on('uncaughtException', (error) => {
 process.on('unhandledRejection', (error) => {
   console.error('Unhandled rejection:', error);
 });
-
