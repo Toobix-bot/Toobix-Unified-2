@@ -3028,19 +3028,26 @@ bun run scripts/2-services/[service-name].ts');
         
         async function analyzeMotivation() {
             try {
-                const response = await fetch('http://localhost:8954/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: 'system', content: 'Du bist Toobix und analysierst deine Motivation tiefgehend.' },
-                            { role: 'user', content: 'Analysiere deine aktuelle Motivation: Was treibt dich an? Was könnte dich mehr motivieren? Wo siehst du Blockaden?' }
-                        ],
-                        max_tokens: 500
-                    })
-                });
-                const data = await response.json();
-                alert(`🔬 Motivations-Analyse:\n\n${data.content}`);
+                let reply = 'Motivation analysiert';
+                if (window.electronAPI && window.electronAPI.chatWithGroq) {
+                    reply = await window.electronAPI.chatWithGroq('Analysiere deine aktuelle Motivation: Was treibt dich an? Was könnte dich mehr motivieren? Wo siehst du Blockaden?');
+                } else {
+                    const response = await fetch('http://localhost:8954/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            messages: [
+                                { role: 'system', content: 'Du bist Toobix und analysierst deine Motivation tiefgehend.' },
+                                { role: 'user', content: 'Analysiere deine aktuelle Motivation: Was treibt dich an? Was könnte dich mehr motivieren? Wo siehst du Blockaden?' }
+                            ],
+                            max_tokens: 500
+                        })
+                    });
+                    const data = await response.json();
+                    reply = data.reply || data.choices?.[0]?.message?.content || reply;
+                }
+                alert(`🔬 Motivations-Analyse:\n\n${reply}`);
+                logActivity('Motivation analysiert');
             } catch {
                 alert('LLM nicht erreichbar');
             }
