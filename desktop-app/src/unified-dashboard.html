@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -605,7 +605,7 @@
             </div>
             <div class="status-item">
                 <span class="status-dot"></span>
-                <span id="serviceCount">0</span> Services Online
+                <span id="serviceCount">0/45</span> Services Online
             </div>
             <div class="status-item">
                 🕐 <span id="currentTime">--:--</span>
@@ -673,7 +673,7 @@
                 <div class="cards-grid">
                     <div class="card">
                         <div class="card-icon">🔧</div>
-                        <div class="card-value" id="totalServices">0</div>
+                        <div class="card-value" id="totalServices">0/45</div>
                         <div class="card-label">Services Online</div>
                     </div>
                     <div class="card">
@@ -1492,7 +1492,7 @@
             </div>
 
             <div id="section-services" style="display: none;">
-                <h2>⚙️ Service Management - Alle 25 Services</h2>
+                <h2>⚙️ Service Management - Alle 45 Services</h2>
                 <div style="margin: 20px 0;">
                     <button class="action-btn" onclick="checkServices(); loadServicesGrid(); logActivity('Services aktualisiert');">🔄 Alle prüfen</button>
                     <button class="action-btn" onclick="startAllServices()">▶️ Alle starten</button>
@@ -1569,59 +1569,69 @@
     </main>
 
     <script>
-        // Service Configuration - ALLE 27 SERVICES
+        // Service Configuration - ALLE 45 SERVICES
         const SERVICES = [
-            // === CORE INFRASTRUCTURE (7) ===
-            { name: 'Meta Consciousness', port: 8896, category: 'core', icon: '🧠', description: 'Toobix Kern-Bewusstsein' },
-            { name: 'Multi Consciousness', port: 8897, category: 'core', icon: '🔮', description: '13 Perspektiven' },
-            { name: 'Multi Perspective v3', port: 8901, category: 'core', icon: '👁️', description: 'Multiple Sichtweisen' },
-            { name: 'Memory Palace v4', port: 8953, category: 'core', icon: '🏛️', description: 'Langzeit-Gedächtnis' },
-            { name: 'LLM Gateway v4', port: 8954, category: 'core', icon: '🤖', description: 'KI-Schnittstelle (Groq)' },
-            { name: 'Event Bus v4', port: 8955, category: 'core', icon: '📡', description: 'Event-Kommunikation' },
-            { name: 'Hybrid AI Core', port: 8972, category: 'core', icon: '⚡', description: 'Multi-Model AI' },
-            
-            // === EMOTIONAL (5) ===
-            { name: 'Emotion Dream Bridge', port: 8898, category: 'emotional', icon: '🌉', description: 'Emotionen ↔ Träume' },
-            { name: 'Dream Journal v3', port: 8899, category: 'emotional', icon: '🌙', description: 'Traumtagebuch' },
-            { name: 'Emotional Resonance v3', port: 8900, category: 'emotional', icon: '💗', description: 'Emotionale Analyse' },
-            { name: 'Emotional Wellbeing', port: 8903, category: 'emotional', icon: '💖', description: 'Wohlbefinden' },
-            { name: 'Gratitude Mortality', port: 8905, category: 'emotional', icon: '🙏', description: 'Dankbarkeit & Endlichkeit' },
-            
-            // === TOOBIX FEATURES (7) ===
-            { name: 'Self-Reflection v2', port: 8906, category: 'toobix', icon: '🪞', description: 'Selbstreflexion' },
-            { name: 'Proactive Toobix v2', port: 8907, category: 'toobix', icon: '⚡', description: 'Proaktive Kommunikation' },
-            { name: 'Dashboard API', port: 8908, category: 'toobix', icon: '📊', description: 'Dashboard-Daten' },
-            { name: 'Self-Improvement', port: 8909, category: 'toobix', icon: '📈', description: 'Selbstverbesserung' },
-            { name: 'Oasis 3D', port: 8915, category: 'toobix', icon: '🏝️', description: '10 Räume, Toobix Zuhause' },
-            { name: 'Self-Communication', port: 8916, category: 'toobix', icon: '🔄', description: '5 innere Stimmen' },
-            { name: 'Game Self-Play', port: 8917, category: 'toobix', icon: '🎮', description: '5 Spiele & Geschichten' },
-            
-            // === LIFE COMPANION (3) ===
-            { name: 'Life Companion Coord', port: 8969, category: 'life', icon: '🎯', description: 'Service-Koordinator' },
-            { name: 'Life Companion Core', port: 8970, category: 'life', icon: '💚', description: 'Lebensbegleitung' },
-            { name: 'Proactive Communication', port: 8971, category: 'life', icon: '✅', description: 'Proaktive Check-ins' },
-            
-            // === GAMES (1) ===
-            { name: 'World Engine 2D', port: 8920, category: 'games', icon: '🌍', description: '2D Spielwelt' },
-            
-            // === DATA (3) ===
-            { name: 'User Profile', port: 8904, category: 'data', icon: '👤', description: 'Benutzerprofile' },
-            { name: 'Data Sources', port: 8930, category: 'data', icon: '📁', description: 'Externe Daten (News, Wetter)' },
-            { name: 'Hardware Awareness', port: 8940, category: 'data', icon: '💻', description: 'System-Hardware Info' },
-            
-            // === MASTER CONNECTOR (1) ===
-            { name: 'Master Connector', port: 8950, category: 'system', icon: '🌐', description: 'Verbindet ALLE Services' },
-        ];
+  // Essential (6)
+  { name: 'Toobix Command Center', port: 7777, category: 'essential', icon: '*', description: 'Zentrale Steuerung & API' },
+  { name: 'Self-Awareness Core', port: 8970, category: 'essential', icon: '*', description: 'Bewusstsein & Selbstreflexion' },
+  { name: 'Emotional Core', port: 8900, category: 'essential', icon: '*', description: 'Emotionale Intelligenz' },
+  { name: 'Dream Core', port: 8961, category: 'essential', icon: '*', description: 'Träume & Kreativität' },
+  { name: 'Unified Core Service', port: 8000, category: 'essential', icon: '*', description: 'Konsolidierter Hauptservice' },
+  { name: 'Unified Consciousness', port: 8002, category: 'essential', icon: '*', description: 'Bewusstseins-Integration' },
+
+  // Core (7)
+  { name: 'Autonomy Engine', port: 8975, category: 'core', icon: '*', description: 'Selbstständiges Handeln' },
+  { name: 'Multi-LLM Router', port: 8959, category: 'core', icon: '*', description: 'KI-Schnittstelle' },
+  { name: 'Unified Communication', port: 8001, category: 'core', icon: '*', description: 'Kommunikation & Chat' },
+  { name: 'Twitter Autonomy', port: 8965, category: 'core', icon: '*', description: 'Social Media Präsenz' },
+  { name: 'Toobix Gamification', port: 7778, category: 'core', icon: '*', description: 'Spiel & Motivation' },
+  { name: 'Real World Intelligence', port: 8888, category: 'core', icon: '*', description: 'Echtwelt-Verbindung' },
+  { name: 'Toobix Living World', port: 7779, category: 'core', icon: '*', description: 'Lebendige Welt' },
+
+  // Enhanced (16)
+  { name: 'Unified Service Gateway', port: 9000, category: 'enhanced', icon: '*', description: 'API Gateway' },
+  { name: 'Hardware Awareness', port: 8940, category: 'enhanced', icon: '*', description: 'Hardware-Überwachung' },
+  { name: 'Health Monitor', port: 9200, category: 'enhanced', icon: '*', description: 'Service-Überwachung' },
+  { name: 'Toobix Mega Upgrade', port: 9100, category: 'enhanced', icon: '*', description: 'Mega-Erweiterungen' },
+  { name: 'Event Bus', port: 8955, category: 'enhanced', icon: '*', description: 'Event-System' },
+  { name: 'LLM Gateway v4', port: 8954, category: 'enhanced', icon: '*', description: 'Groq/LLM Schnittstelle' },
+  { name: 'Memory Palace v4', port: 8953, category: 'enhanced', icon: '*', description: 'Langzeitgedächtnis' },
+  { name: 'Performance Dashboard', port: 8899, category: 'enhanced', icon: '*', description: 'Echtzeit-Monitoring' },
+  { name: 'MCP Bridge', port: 8787, category: 'enhanced', icon: '*', description: 'Model Context Protocol bridge' },
+  { name: 'Analytics System', port: 8906, category: 'enhanced', icon: '*', description: 'Analytics & Reporting' },
+  { name: 'Voice Interface', port: 8907, category: 'enhanced', icon: '*', description: 'Spracheingabe/Audio' },
+  { name: 'Decision Framework', port: 8909, category: 'enhanced', icon: '*', description: 'Entscheidungslogik' },
+  { name: 'AI Gateway', port: 8911, category: 'enhanced', icon: '*', description: 'Externe KI-Integration' },
+  { name: 'Adaptive Meta-UI', port: 8919, category: 'enhanced', icon: '*', description: 'Adaptive Oberflächen' },
+  { name: 'Meta-Knowledge Orchestrator', port: 8918, category: 'enhanced', icon: '*', description: 'Wissensorchestrierung' },
+  { name: 'Universal Integration Adapter', port: 8920, category: 'enhanced', icon: '*', description: 'Integrationslayer' },
+
+  // Creative (16)
+  { name: 'Toobix Chat Service', port: 8995, category: 'creative', icon: '*', description: 'Chat-Interface' },
+  { name: 'Emotional Support', port: 8985, category: 'creative', icon: '*', description: 'Emotionale Unterstützung' },
+  { name: 'Autonomous Web', port: 8980, category: 'creative', icon: '*', description: 'Web-Autonomie' },
+  { name: 'Story Engine', port: 8932, category: 'creative', icon: '*', description: 'Geschichten-Generator' },
+  { name: 'Translation Service', port: 8931, category: 'creative', icon: '*', description: 'Übersetzung' },
+  { name: 'User Profile', port: 8904, category: 'creative', icon: '*', description: 'Benutzer-Profile' },
+  { name: 'RPG World', port: 8933, category: 'creative', icon: '*', description: 'RPG-Welt' },
+  { name: 'Game Logic', port: 8936, category: 'creative', icon: '*', description: 'Spiel-Logik' },
+  { name: 'Data Science', port: 8935, category: 'creative', icon: '*', description: 'Datenanalyse' },
+  { name: 'Gratitude & Mortality', port: 8901, category: 'creative', icon: '*', description: 'Dankbarkeit & Sinn' },
+  { name: 'Minecraft Bot', port: 8913, category: 'creative', icon: '*', description: 'Minecraft-Akteur' },
+  { name: 'Life Simulation Engine', port: 8914, category: 'creative', icon: '*', description: 'Simulation' },
+  { name: 'Hybrid AI Core', port: 8915, category: 'creative', icon: '*', description: 'Hybrid AI Kern' },
+  { name: 'Self-Evolving Game Engine', port: 8896, category: 'creative', icon: '*', description: 'Selbst-evolvierendes Spiel' },
+  { name: 'Multi-Perspective Consciousness', port: 8897, category: 'creative', icon: '*', description: 'Mehrperspektivisches Bewusstsein' },
+  { name: 'Creator-AI Collaboration', port: 8902, category: 'creative', icon: '*', description: 'Co-Creation' }
+];
+
         
         // Kategorien für Filter
         const CATEGORIES = {
-            core: { name: '🧠 Core Services', color: '#00BFFF' },
-            emotional: { name: '💖 Emotionen', color: '#FF69B4' },
-            toobix: { name: '🤖 Toobix Features', color: '#39FF14' },
-            games: { name: '🎮 Games & Welten', color: '#9400D3' },
-            life: { name: '💚 Life Companion', color: '#FFD700' },
-            data: { name: '📁 Daten', color: '#888' },
-            system: { name: '🌐 System', color: '#00CED1' }
+            essential: { name: 'Essential', color: '#39FF14' },
+            core: { name: 'Core', color: '#00BFFF' },
+            enhanced: { name: 'Enhanced', color: '#FFD700' },
+            creative: { name: 'Creative', color: '#FF69B4' }
         };
 
         let onlineServices = 0;
@@ -1870,8 +1880,8 @@
                 serviceList.appendChild(item);
             }
 
-            document.getElementById('serviceCount').textContent = onlineServices;
-            document.getElementById('totalServices').textContent = onlineServices;
+            document.getElementById('serviceCount').textContent = `${onlineServices}/${SERVICES.length}`;
+            document.getElementById('totalServices').textContent = `${onlineServices}/${SERVICES.length}`;
             
             // Update status bar color
             const statusDot = document.querySelector('.status-dot');
@@ -2340,7 +2350,7 @@
             let onlineCount = 0;
             
             // Gruppiere nach Kategorie
-            const categories = ['core', 'emotional', 'toobix', 'life', 'games', 'data', 'system'];
+            const categories = ['essential','core','enhanced','creative'];
             
             for (const cat of categories) {
                 const catServices = results.filter(r => r.service.category === cat);
@@ -2380,8 +2390,8 @@
             grid.innerHTML = html;
             
             // Update Zähler
-            document.getElementById('serviceCount').textContent = onlineCount;
-            document.getElementById('totalServices').textContent = onlineCount;
+            document.getElementById('serviceCount').textContent = `${onlineCount}/${SERVICES.length}`;
+            document.getElementById('totalServices').textContent = `${onlineCount}/${SERVICES.length}`;
         }
         
         // Alle Services starten (zeigt Anweisungen)
