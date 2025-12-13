@@ -1925,7 +1925,11 @@
                             <div class="service-port" style="color: ${catColor}">:${service.port}</div>
                         </div>
                     </div>
-                    <span>${online ? '✅' : '⚠️'}</span>
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                      <span>${online ? '✅' : '⚠️'}</span>
+                      <button class="action-btn" style="padding:4px 8px;" onclick="startOneService('${service.id || service.name}')">Start</button>
+                      <button class="action-btn" style="padding:4px 8px;" onclick="stopOneService('${service.id || service.name}')">Stop</button>
+                    </div>
                 `;
                 item.onclick = () => showServiceDetails(service);
                 serviceList.appendChild(item);
@@ -3119,3 +3123,30 @@ bun run scripts/2-services/[service-name].ts');
 </html>
 
 
+        async function startOneService(serviceId) {
+            if (window.electronAPI && window.electronAPI.startService) {
+                try {
+                    await window.electronAPI.startService(serviceId)
+                    logActivity(`Service gestartet: ${serviceId}`)
+                    checkServices()
+                } catch (e) {
+                    alert(`Start fehlgeschlagen: ${serviceId}`)
+                }
+            } else {
+                alert('Start nur via Electron möglich.')
+            }
+        }
+
+        async function stopOneService(serviceId) {
+            if (window.electronAPI && window.electronAPI.stopService) {
+                try {
+                    await window.electronAPI.stopService(serviceId)
+                    logActivity(`Service gestoppt: ${serviceId}`)
+                    checkServices()
+                } catch (e) {
+                    alert(`Stop fehlgeschlagen: ${serviceId}`)
+                }
+            } else {
+                alert('Stop nur via Electron möglich.')
+            }
+        }
