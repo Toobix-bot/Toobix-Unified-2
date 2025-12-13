@@ -1570,7 +1570,7 @@
 
     <script>
         // Service Configuration - ALLE 45 SERVICES
-        const SERVICES = [
+        let SERVICES = [
   // Essential (6)
   { name: 'Toobix Command Center', port: 7777, category: 'essential', icon: '*', description: 'Zentrale Steuerung & API' },
   { name: 'Self-Awareness Core', port: 8970, category: 'essential', icon: '*', description: 'Bewusstsein & Selbstreflexion' },
@@ -1634,14 +1634,37 @@
             creative: { name: 'Creative', color: '#FF69B4' }
         };
 
+        
         let onlineServices = 0;
         let serviceData = {}; // Cache für Service-Daten
         let proactiveSocket = null;
         let proactiveMessages = [];
         let lastProactiveMessage = null;
 
+        async function maybeLoadServicesFromElectron() {
+            if (window.electronAPI && window.electronAPI.getServices) {
+                try {
+                    const list = await window.electronAPI.getServices();
+                    if (Array.isArray(list) && list.length) {
+                        SERVICES = list.map((s) => ({
+                            name: s.name || s.id,
+                            port: s.port,
+                            category: s.category || 'core',
+                            icon: '*',
+                            description: s.description || ''
+                        }));
+                        document.getElementById('serviceCount').textContent = `0/${SERVICES.length}`;
+                        document.getElementById('totalServices').textContent = `0/${SERVICES.length}`;
+                    }
+                } catch (e) {
+                    console.warn('Electron services fetch failed, fallback to static list', e);
+                }
+            }
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
+            await maybeLoadServicesFromElectron();
             updateTime();
             setInterval(updateTime, 1000);
             await checkServices();
@@ -1652,8 +1675,8 @@
             checkPendingProactiveMessages();
             logActivity('Dashboard gestartet');
         });
-        
-        // ============= PROACTIVE WEBSOCKET CONNECTION =============
+
+// ============= PROACTIVE WEBSOCKET CONNECTION =============
         function initProactiveConnection() {
             try {
                 proactiveSocket = new WebSocket('ws://localhost:8971');
@@ -3551,3 +3574,5 @@
     </script>
 </body>
 </html>
+
+
