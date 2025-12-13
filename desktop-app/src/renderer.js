@@ -9,6 +9,7 @@ const serviceContainer = document.getElementById('service-status');
 const mcpLink = document.getElementById('mcp-tunnel');
 const lastUpdatedLabel = document.getElementById('last-updated');
 const liveTitle = document.getElementById('live-title');
+const runningBadge = document.getElementById('running-count');
 
 let servicesCache = [];
 
@@ -104,6 +105,11 @@ function refreshClock() {
 function renderPanels(services, statuses) {
   if (liveTitle) {
     liveTitle.textContent = `Live System Monitor (${services.length} Services)`;
+  }
+
+  if (runningBadge) {
+    const running = Object.values(statuses || {}).filter((s) => s === 'running').length;
+    runningBadge.textContent = `${running}/${services.length} online`;
   }
 
   const infra = services.filter(s => s.category !== 'creative');
