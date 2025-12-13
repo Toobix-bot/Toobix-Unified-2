@@ -43,7 +43,34 @@ import { toast, storage } from './utils';
 
 // ========== TYPES ==========
 
-type ViewType = 'dashboard' | 'services' | 'chat' | 'ai-training' | 'adaptive-ui' | 'life-domains' | 'ai-suggestions' | 'settings';
+type ViewType =
+  | 'dashboard'
+  | 'services'
+  | 'chat'
+  | 'ai-training'
+  | 'adaptive-ui'
+  | 'life-domains'
+  | 'ai-suggestions'
+  | 'service-details'
+  | 'settings';
+
+type ServiceCard = {
+  id: string;
+  name: string;
+  url: string;
+  description: string;
+};
+
+const SERVICE_CARDS: ServiceCard[] = [
+  { id: 'command-center', name: 'Command Center', url: 'http://localhost:7777/health', description: 'Orchestrator & public API' },
+  { id: 'memory-palace', name: 'Memory Palace', url: 'http://localhost:8953/health', description: 'Persistent memories' },
+  { id: 'llm-gateway', name: 'LLM Gateway', url: 'http://localhost:8954/health', description: 'Groq/Ollama routing' },
+  { id: 'event-bus', name: 'Event Bus', url: 'http://localhost:8955/health', description: 'Cross-service events' },
+  { id: 'emotional-core', name: 'Emotional Core', url: 'http://localhost:8900/health', description: 'Emotional intelligence' },
+  { id: 'autonomy-engine', name: 'Autonomy Engine', url: 'http://localhost:8975/health', description: 'Autonomous actions' },
+  { id: 'chat-service', name: 'Chat Service', url: 'http://localhost:8995/health', description: 'User chat interface' },
+  { id: 'mcp-bridge', name: 'MCP Bridge', url: 'http://localhost:8787/health', description: 'Model Context Protocol' },
+];
 
 // ========== MAIN APP ==========
 
@@ -53,6 +80,7 @@ function App() {
   );
   const [settings, setSettings] = useState<any>({});
   const [logs, setLogs] = useState<Array<{serviceId: string, type: string, message: string}>>([]);
+  const [serviceDetails, setServiceDetails] = useState<Record<string, { status: string; body?: any; error?: string }>>({});
 
   // Service Management
   const {
@@ -104,6 +132,12 @@ function App() {
       description: 'Go to AI Suggestions'
     },
     {
+      key: '6',
+      altKey: true,
+      action: () => setActiveView('service-details'),
+      description: 'Go to Service Details'
+    },
+    {
       key: 'a',
       altKey: true,
       action: startAll,
@@ -127,6 +161,36 @@ function App() {
   useEffect(() => {
     storage.set('lastView', activeView);
   }, [activeView]);
+
+  // Poll health of key services for the detail view
+  useEffect(() => {
+    let canceled = false;
+
+    const fetchDetails = async () => {
+      const updates: Record<string, { status: string; body?: any; error?: string }> = {};
+
+      for (const card of SERVICE_CARDS) {
+        try {
+          const res = await fetch(card.url);
+          const body = await res.json();
+          updates[card.id] = { status: res.ok ? 'online' : `http ${res.status}`, body };
+        } catch (err: any) {
+          updates[card.id] = { status: 'error', error: String(err) };
+        }
+      }
+
+      if (!canceled) {
+        setServiceDetails(updates);
+      }
+    };
+
+    fetchDetails();
+    const interval = setInterval(fetchDetails, 8000);
+    return () => {
+      canceled = true;
+      clearInterval(interval);
+    };
+  }, []);
 
   // Load settings on mount
   useEffect(() => {
@@ -931,6 +995,47 @@ function App() {
     );
   };
 
+  const renderServiceDetails = () => {
+    return (
+      <div className="services-view fade-in">
+        <div className="card-grid">
+          {SERVICE_CARDS.map((card) => {
+            const detail = serviceDetails[card.id];
+            const status = detail?.status || 'loading';
+            const isError = status.startsWith('error') || status.startsWith('http');
+
+            return (
+              <div key={card.id} className="glass-card service-card">
+                <div className="service-card-header">
+                  <div>
+                    <h3>{card.name}</h3>
+                    <p style={{ color: 'var(--text-dim)', marginTop: '0.25rem' }}>{card.description}</p>
+                    <small style={{ color: 'var(--text-dim)' }}>{card.url}</small>
+                  </div>
+                  <span className={`badge ${isError ? 'danger' : 'success'}`}>
+                    {status}
+                  </span>
+                </div>
+
+                <div className="service-card-body" style={{ marginTop: '1rem' }}>
+                  {detail?.body ? (
+                    <pre className="mini-pre">
+                      {JSON.stringify(detail.body, null, 2)}
+                    </pre>
+                  ) : detail?.error ? (
+                    <div className="error-text">{detail.error}</div>
+                  ) : (
+                    <LoadingSpinner size="small" />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   // ========== MAIN RENDER ==========
 
   return (
@@ -992,6 +1097,12 @@ function App() {
           >
             ⚙️ Settings
           </button>
+          <button
+            className={activeView === 'service-details' ? 'active' : ''}
+            onClick={() => setActiveView('service-details')}
+          >
+            Service Details
+          </button>
         </nav>
 
         <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid var(--border)' }}>
@@ -1004,6 +1115,7 @@ function App() {
       <div className="main-content">
         {activeView === 'dashboard' && renderDashboard()}
         {activeView === 'services' && renderServices()}
+        {activeView === 'service-details' && renderServiceDetails()}
         {activeView === 'chat' && renderChat()}
         {activeView === 'ai-training' && renderAITraining()}
         {activeView === 'adaptive-ui' && renderAdaptiveUI()}

@@ -2,10 +2,10 @@
   "name": "toobix-city-desktop",
   "version": "1.0.0",
   "description": "Toobix City - Native Desktop Application",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder",
+    "start": "set ELECTRON_RUN_AS_NODE=0 && npm run build && npx electron .",
+    "build": "tsc",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
     "build:linux": "electron-builder --linux"
@@ -46,7 +46,14 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^28.0.0",
-    "electron-builder": "^24.9.1"
+    "electron-builder": "^24.9.1",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.6.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "electron-store": "^9.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
 }

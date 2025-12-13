@@ -1,19 +1,51 @@
-/**
+﻿/**
  * TOOBIX UNIFIED - ELECTRON MAIN PROCESS
  * 
  * Desktop Launcher für das gesamte Consciousness System
  */
 
-import { app, BrowserWindow, ipcMain, /* Menu, Tray */ } from 'electron';
+// CommonJS-style import (tsc -> CJS). Fallback to require only when running under Electron.
+// If electron is not available (e.g., ELECTRON_RUN_AS_NODE=1), relaunch with proper env.
+let app: any, BrowserWindow: any, ipcMain: any;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const electron = require('electron');
+
+  // If we got the CLI path instead of runtime modules, re-spawn Electron without RUN_AS_NODE
+  if (typeof electron === 'string') {
+    const { spawn } = require('child_process');
+    const child = spawn(electron, [__filename], {
+      env: { ...process.env, ELECTRON_RUN_AS_NODE: '' },
+      stdio: 'inherit'
+    });
+    child.on('exit', (code: number) => process.exit(code ?? 0));
+    // Stop executing in the RUN_AS_NODE context
+    process.exit(0);
+  }
+
+  app = electron.app;
+  BrowserWindow = electron.BrowserWindow;
+  ipcMain = electron.ipcMain;
+} catch (err) {
+  console.error('Electron modules not available:', err);
+}
 import { spawn, ChildProcess } from 'child_process';
 import path from 'path';
-import Store from 'electron-store';
+// Lightweight in-memory store to avoid electron-store ESM/CJS issues during dev
+const storeData: Record<string, any> = {};
+const store = {
+  get(key: string, fallback?: any) {
+    return key in storeData ? storeData[key] : fallback;
+  },
+  set(key: string, value: any) {
+    storeData[key] = value;
+  }
+};
 import { Groq } from 'groq-sdk';
 
 // ========== CONFIGURATION ==========
 
-const store = new Store();
-let mainWindow: BrowserWindow | null = null;
+let mainWindow: any = null;
 let isQuitting = false;
 const runningServices = new Map<string, ChildProcess>();
 
@@ -101,9 +133,12 @@ function createMainWindow() {
     titleBarStyle: 'default'
   });
 
-  // Load React app (always use Vite dev server for now)
-  mainWindow.loadURL('http://localhost:5173');
-  mainWindow.webContents.openDevTools();
+  // Load static renderer (no dev server required)
+  const rendererPath = path.join(__dirname, '../src/index.html');
+  mainWindow.loadFile(rendererPath);
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log(`Renderer loaded from ${rendererPath}`);
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -315,6 +350,11 @@ async function syncWithInternet() {
 
 // ========== IPC HANDLERS ==========
 
+if (!ipcMain) {
+  console.error('ipcMain not available. Are you running inside Electron?');
+  process.exit(1);
+}
+
 ipcMain.handle('get-services', () => {
   return SERVICES;
 });
@@ -363,7 +403,7 @@ ipcMain.handle('get-settings', () => {
   return {
     groq_api_key: store.get('groq_api_key', ''),
     internet_sync_enabled: store.get('internet_sync_enabled', false),
-    auto_start_services: store.get('auto_start_services', true),
+    auto_start_services: store.get('auto_start_services', false),
     theme: store.get('theme', 'dark')
   };
 });
@@ -509,7 +549,7 @@ app.on('ready', async () => {
   initializeGroq();
 
   // Auto-start services if enabled
-  const autoStart = store.get('auto_start_services', true);
+  const autoStart = store.get('auto_start_services', false);
   if (autoStart) {
     console.log('🚀 Auto-starting services...');
     for (const service of SERVICES.filter(s => s.autostart)) {
@@ -556,3 +596,4 @@ process.on('uncaughtException', (error) => {
 process.on('unhandledRejection', (error) => {
   console.error('Unhandled rejection:', error);
 });
+
