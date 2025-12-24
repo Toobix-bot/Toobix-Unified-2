@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOOBIX Universe - v2 Functional</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --bg-tertiary: #2a2f4a;
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --accent-success: #00ff88;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0c0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* MODAL - First Use Onboarding */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 14, 39, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 500px;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal h2 {
+      font-size: 32px;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-tertiary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 16px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .modal input:focus {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 20px rgba(123, 97, 255, 0.3);
+    }
+
+    .avatar-selector {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .avatar-option {
+      width: 60px;
+      height: 60px;
+      font-size: 32px;
+      background: var(--bg-tertiary);
+      border: 2px solid transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .avatar-option:hover {
+      border-color: var(--accent-primary);
+      transform: scale(1.1);
+    }
+
+    .avatar-option.selected {
+      border-color: var(--accent-success);
+      background: var(--accent-primary);
+      transform: scale(1.2);
+    }
+
+    .modal button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      border-radius: 8px;
+      color: var(--bg-primary);
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .modal button:hover {
+      transform: scale(1.05);
+    }
+
+    .modal button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* APP LAYOUT */
+    .app-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 384px;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      border-right: 2px solid var(--accent-primary);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      padding: 16px;
+      border-bottom: 1px solid var(--bg-tertiary);
+    }
+
+    .sidebar-section h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+    }
+
+    .avatar-section {
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    .avatar-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 12px;
+      border: 3px solid var(--accent-primary);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .stat-bar {
+      margin: 8px 0;
+    }
+
+    .stat-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-secondary);
+    }
+
+    .stat-bar-fill-container {
+      width: 100%;
+      height: 20px;
+      background: var(--bg-primary);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--bg-tertiary);
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .stat-bar-fill.hp { background: linear-gradient(90deg, #ff4466, #ff6688); }
+    .stat-bar-fill.mp { background: linear-gradient(90deg, #7b61ff, #9b81ff); }
+    .stat-bar-fill.xp { background: linear-gradient(90deg, #00ff88, #00ffaa); }
+
+    .quest-item {
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-left: 3px solid var(--accent-secondary);
+      font-size: 13px;
+    }
+
+    .quest-item.completed {
+      opacity: 0.6;
+      border-left-color: var(--accent-success);
+    }
+
+    .resource-item {
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .collect-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--accent-success), #00cc66);
+      border: none;
+      border-radius: 6px;
+      color: var(--bg-primary);
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      height: 60px;
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .chat-container {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: var(--bg-primary);
+      margin-left: auto;
+    }
+
+    .message.toobix {
+      align-self: flex-start;
+      background: var(--bg-secondary);
+      border: 1px solid var(--accent-primary);
+    }
+
+    .message-meta {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 8px;
+    }
+
+    .loading {
+      padding: 16px;
+      text-align: center;
+      color: var(--accent-primary);
+    }
+
+    /* INPUT AREA */
+    .input-container {
+      padding: 24px;
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--accent-primary);
+    }
+
+    .variations-toggle {
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .variations-toggle button {
+      padding: 8px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--accent-primary);
+      border-radius: 6px;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .variations-toggle button:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    .variations-panel {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .variations-panel.active {
+      display: block;
+    }
+
+    .variation-option {
+      background: var(--bg-secondary);
+      border: 1px solid var(--accent-secondary);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .variation-option:hover {
+      border-color: var(--accent-success);
+      background: var(--bg-primary);
+    }
+
+    .variation-style {
+      font-size: 10px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .variation-text {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .variation-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    #chatInput {
+      flex: 1;
+      padding: 16px;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .send-btn {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      border-radius: 8px;
+      color: var(--bg-primary);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- FIRST USE ONBOARDING MODAL -->
+  <div class="modal-overlay" id="onboardingModal" style="display: none;">
+    <div class="modal">
+      <h2>Willkommen bei Toobix! 🎮</h2>
+      <p>Dein gamifizierter AI Companion ist bereit.<br>Lass uns dein Abenteuer starten!</p>
+
+      <input type="text" id="playerName" placeholder="Dein Name..." maxlength="20" />
+
+      <div class="avatar-selector">
+        <div class="avatar-option" data-avatar="👤">👤</div>
+        <div class="avatar-option" data-avatar="🧑">🧑</div>
+        <div class="avatar-option" data-avatar="👨">👨</div>
+        <div class="avatar-option" data-avatar="👩">👩</div>
+        <div class="avatar-option" data-avatar="🦸">🦸</div>
+        <div class="avatar-option" data-avatar="🧙">🧙</div>
+        <div class="avatar-option" data-avatar="🤖">🤖</div>
+        <div class="avatar-option" data-avatar="👽">👽</div>
+      </div>
+
+      <button id="startBtn" disabled>Abenteuer starten!</button>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="app-container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section avatar-section">
+        <div class="avatar-icon" id="avatarDisplay">👤</div>
+        <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;" id="playerNameDisplay">Wanderer</div>
+        <div style="font-size: 12px; color: var(--text-secondary); font-style: italic;" id="playerTitleDisplay">The Beginner</div>
+
+        <div class="stat-bar">
+          <div class="stat-bar-label"><span>HP</span><span id="hpValue">100/100</span></div>
+          <div class="stat-bar-fill-container">
+            <div class="stat-bar-fill hp" id="hpBar" style="width: 100%">100</div>
+          </div>
+        </div>
+
+        <div class="stat-bar">
+          <div class="stat-bar-label"><span>MP</span><span id="mpValue">100/100</span></div>
+          <div class="stat-bar-fill-container">
+            <div class="stat-bar-fill mp" id="mpBar" style="width: 100%">100</div>
+          </div>
+        </div>
+
+        <div class="stat-bar">
+          <div class="stat-bar-label"><span>XP</span><span id="xpValue">0% to Lvl 2</span></div>
+          <div class="stat-bar-fill-container">
+            <div class="stat-bar-fill xp" id="xpBar" style="width: 0%">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>🎯 ACTIVE QUESTS</h3>
+        <div id="questList"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>⚙️ IDLE PRODUCTION</h3>
+        <div class="resource-item">
+          <div>
+            <div style="font-size: 16px; font-weight: bold; color: var(--accent-success);" id="creditsValue">0</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Credits (+15/min)</div>
+          </div>
+        </div>
+        <div class="resource-item">
+          <div>
+            <div style="font-size: 16px; font-weight: bold; color: var(--accent-secondary);" id="researchValue">0%</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Research (+2%/hour)</div>
+          </div>
+        </div>
+        <button class="collect-btn" id="collectBtn">Collect All</button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="app-header">
+        <div class="app-title">TOOBIX Universe - v2 Functional</div>
+        <div style="color: var(--accent-success); font-size: 12px;">🚀 Groq AI Active</div>
+      </div>
+
+      <div class="chat-container" id="chatContainer"></div>
+
+      <div class="input-container">
+        <div class="variations-toggle">
+          <button id="variationsBtn">✨ Show Prompt Variations</button>
+        </div>
+
+        <div class="variations-panel" id="variationsPanel">
+          <div style="text-align: center; margin-bottom: 12px; color: var(--accent-primary);">
+            Loading variations...
+          </div>
+        </div>
+
+        <div class="input-wrapper">
+          <input type="text" id="chatInput" placeholder="Type a message... every message = XP!" />
+          <button class="send-btn" id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API = {
+      playerState: 'http://localhost:8970',
+      chat: 'http://localhost:8971',
+      idle: 'http://localhost:8972',
+      variations: 'http://localhost:8974'
+    };
+
+    let playerState = null;
+    let currentVariations = null;
+
+    // ========================================
+    // ONBOARDING
+    // ========================================
+
+    async function checkFirstUse() {
+      try {
+        const response = await fetch(`${API.playerState}/api/state`);
+        const state = await response.json();
+
+        if (state.firstUse) {
+          document.getElementById('onboardingModal').style.display = 'flex';
+        } else {
+          loadPlayerState();
+        }
+      } catch (error) {
+        console.error('Error checking first use:', error);
+        loadPlayerState(); // Fallback
+      }
+    }
+
+    // Avatar selection
+    document.querySelectorAll('.avatar-option').forEach(option => {
+      option.addEventListener('click', () => {
+        document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        validateOnboarding();
+      });
+    });
+
+    // Name input
+    document.getElementById('playerName').addEventListener('input', validateOnboarding);
+
+    function validateOnboarding() {
+      const name = document.getElementById('playerName').value.trim();
+      const avatar = document.querySelector('.avatar-option.selected');
+      document.getElementById('startBtn').disabled = !(name && avatar);
+    }
+
+    // Start button
+    document.getElementById('startBtn').addEventListener('click', async () => {
+      const name = document.getElementById('playerName').value.trim();
+      const avatar = document.querySelector('.avatar-option.selected').dataset.avatar;
+
+      try {
+        const response = await fetch(`${API.playerState}/api/state/setup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, avatar })
+        });
+
+        if (response.ok) {
+          document.getElementById('onboardingModal').style.display = 'none';
+          loadPlayerState();
+        }
+      } catch (error) {
+        console.error('Setup error:', error);
+      }
+    });
+
+    // ========================================
+    // LOAD PLAYER STATE
+    // ========================================
+
+    async function loadPlayerState() {
+      try {
+        const response = await fetch(`${API.playerState}/api/state`);
+        playerState = await response.json();
+        updateUI();
+        startIdlePolling();
+        addWelcomeMessage();
+      } catch (error) {
+        console.error('Error loading state:', error);
+      }
+    }
+
+    function updateUI() {
+      if (!playerState) return;
+
+      const { player, resources, quests } = playerState;
+
+      // Avatar & Name
+      document.getElementById('avatarDisplay').textContent = player.avatar;
+      document.getElementById('playerNameDisplay').textContent = player.name;
+      document.getElementById('playerTitleDisplay').textContent = player.title;
+
+      // Stats
+      const hpPercent = Math.floor((player.hp / player.maxHp) * 100);
+      const mpPercent = Math.floor((player.mp / player.maxMp) * 100);
+      const xpPercent = Math.floor((player.xp / player.xpToNext) * 100);
+
+      document.getElementById('hpBar').style.width = hpPercent + '%';
+      document.getElementById('hpBar').textContent = player.hp;
+      document.getElementById('hpValue').textContent = `${player.hp}/${player.maxHp}`;
+
+      document.getElementById('mpBar').style.width = mpPercent + '%';
+      document.getElementById('mpBar').textContent = player.mp;
+      document.getElementById('mpValue').textContent = `${player.mp}/${player.maxMp}`;
+
+      document.getElementById('xpBar').style.width = xpPercent + '%';
+      document.getElementById('xpBar').textContent = xpPercent + '%';
+      document.getElementById('xpValue').textContent = `${xpPercent}% to Lvl ${player.level + 1}`;
+
+      // Resources
+      document.getElementById('creditsValue').textContent = resources.credits.toLocaleString();
+      document.getElementById('researchValue').textContent = resources.research + '%';
+
+      // Quests
+      const questList = document.getElementById('questList');
+      questList.innerHTML = quests.map(q => `
+        <div class="quest-item ${q.completed ? 'completed' : ''}">
+          <div>${q.completed ? '☑' : '□'} ${q.name}</div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
+            Progress: ${q.progress}/${q.target} | Reward: ${q.reward.xp} XP
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ========================================
+    // IDLE POLLING
+    // ========================================
+
+    function startIdlePolling() {
+      setInterval(async () => {
+        try {
+          const response = await fetch(`${API.playerState}/api/state`);
+          playerState = await response.json();
+          updateUI();
+        } catch (error) {
+          console.error('Polling error:', error);
+        }
+      }, 10000); // Every 10 seconds
+    }
+
+    // Collect button
+    document.getElementById('collectBtn').addEventListener('click', async () => {
+      try {
+        await fetch(`${API.idle}/api/idle/collect`, { method: 'POST' });
+        const response = await fetch(`${API.playerState}/api/state`);
+        playerState = await response.json();
+        updateUI();
+      } catch (error) {
+        console.error('Collect error:', error);
+      }
+    });
+
+    // ========================================
+    // CHAT
+    // ========================================
+
+    function addMessage(content, role = 'user', meta = null) {
+      const chatContainer = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+
+      let html = `<div>${content}</div>`;
+      if (meta) {
+        html += `<div class="message-meta">${meta}</div>`;
+      }
+
+      messageDiv.innerHTML = html;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function addWelcomeMessage() {
+      if (!playerState) return;
+      addMessage(`Willkommen zurück, ${playerState.player.name}! 🎮<br><br>Ich bin Toobix - dein gamifizierter AI Companion. Jede Nachricht gibt dir XP und bringt dich weiter!<br><br>Was möchtest du heute erreichen?`, 'toobix');
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = '';
+      document.getElementById('sendBtn').disabled = true;
+      document.getElementById('variationsPanel').classList.remove('active');
+
+      addMessage(message, 'user');
+
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'loading';
+      loadingDiv.textContent = 'Toobix is typing...';
+      document.getElementById('chatContainer').appendChild(loadingDiv);
+
+      try {
+        const response = await fetch(`${API.chat}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+
+        loadingDiv.remove();
+
+        addMessage(
+          data.message,
+          'toobix',
+          `+${data.gameEffects.xp} XP | ${data.metadata.messageType} | ${data.metadata.responseTime}ms`
+        );
+
+        // Reload state
+        const stateResponse = await fetch(`${API.playerState}/api/state`);
+        playerState = await stateResponse.json();
+        updateUI();
+
+      } catch (error) {
+        console.error('Chat error:', error);
+        loadingDiv.remove();
+        addMessage('Oops, something went wrong! Try again?', 'toobix');
+      } finally {
+        document.getElementById('sendBtn').disabled = false;
+        input.focus();
+      }
+    }
+
+    // ========================================
+    // PROMPT VARIATIONS
+    // ========================================
+
+    document.getElementById('variationsBtn').addEventListener('click', async () => {
+      const input = document.getElementById('chatInput');
+      const prompt = input.value.trim();
+
+      if (!prompt) {
+        alert('Type a message first to see variations!');
+        return;
+      }
+
+      const panel = document.getElementById('variationsPanel');
+      panel.classList.toggle('active');
+
+      if (panel.classList.contains('active')) {
+        panel.innerHTML = '<div style="text-align: center; color: var(--accent-primary);">Loading variations...</div>';
+
+        try {
+          const response = await fetch(`${API.variations}/api/variations`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+          });
+
+          const data = await response.json();
+          currentVariations = data;
+
+          panel.innerHTML = data.variations.map((v, i) => `
+            <div class="variation-option" data-index="${i}">
+              <div class="variation-style">${v.style}</div>
+              <div class="variation-text">${v.text}</div>
+              <div class="variation-desc">${v.description}</div>
+            </div>
+          `).join('');
+
+          panel.innerHTML += `<div style="text-align: center; font-size: 11px; color: var(--text-secondary); margin-top: 12px;">Generated in ${data.generationTime}ms by Groq AI</div>`;
+
+          // Click handler
+          document.querySelectorAll('.variation-option').forEach(option => {
+            option.addEventListener('click', () => {
+              const index = parseInt(option.dataset.index);
+              input.value = currentVariations.variations[index].text;
+              panel.classList.remove('active');
+            });
+          });
+
+        } catch (error) {
+          console.error('Variations error:', error);
+          panel.innerHTML = '<div style="text-align: center; color: var(--text-secondary);">Error loading variations. Try again!</div>';
+        }
+      }
+    });
+
+    // ========================================
+    // INIT
+    // ========================================
+
+    checkFirstUse();
+  </script>
+
+</body>
+</html>

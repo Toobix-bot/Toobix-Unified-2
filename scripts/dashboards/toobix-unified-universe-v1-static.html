@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOOBIX - The Living Universe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Dark Theme Colors */
+      --bg-primary: #0a0e27;
+      --bg-secondary: #1a1f3a;
+      --bg-tertiary: #2a2f4a;
+      --accent-primary: #00d4ff;
+      --accent-secondary: #7b61ff;
+      --accent-success: #00ff88;
+      --accent-warning: #ffaa00;
+      --accent-danger: #ff4466;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0c0;
+      --text-muted: #606080;
+
+      /* Sidebar */
+      --sidebar-width: 384px;
+      --sidebar-collapsed: 60px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ========================================
+       MAIN LAYOUT
+       ======================================== */
+
+    .app-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ========================================
+       SIDEBAR
+       ======================================== */
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      border-right: 2px solid var(--accent-primary);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width 0.3s ease;
+      position: relative;
+    }
+
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed);
+    }
+
+    .sidebar-section {
+      padding: 16px;
+      border-bottom: 1px solid var(--bg-tertiary);
+    }
+
+    .sidebar-section h3 {
+      font-size: 14px;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Avatar Section */
+    .avatar-section {
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    .avatar-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 12px;
+      border: 3px solid var(--accent-primary);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .avatar-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .avatar-title {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    /* Progress Bars */
+    .stat-bar {
+      margin: 8px 0;
+    }
+
+    .stat-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-secondary);
+    }
+
+    .stat-bar-fill-container {
+      width: 100%;
+      height: 20px;
+      background: var(--bg-primary);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--bg-tertiary);
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .stat-bar-fill.hp { background: linear-gradient(90deg, #ff4466, #ff6688); }
+    .stat-bar-fill.mp { background: linear-gradient(90deg, #7b61ff, #9b81ff); }
+    .stat-bar-fill.xp { background: linear-gradient(90deg, #00ff88, #00ffaa); }
+
+    /* Current Zone */
+    .zone-display {
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid var(--accent-primary);
+    }
+
+    .zone-display h4 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .zone-status {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      margin: 4px 0;
+    }
+
+    .zone-switch {
+      margin-top: 8px;
+      width: 100%;
+      padding: 8px;
+      background: var(--bg-primary);
+      border: 1px solid var(--accent-primary);
+      border-radius: 4px;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .zone-switch:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    /* Quest List */
+    .quest-item {
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-left: 3px solid var(--accent-secondary);
+    }
+
+    .quest-item.completed {
+      opacity: 0.6;
+      border-left-color: var(--accent-success);
+    }
+
+    .quest-item h4 {
+      font-size: 13px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quest-progress {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin: 4px 0;
+    }
+
+    .quest-reward {
+      font-size: 11px;
+      color: var(--accent-success);
+    }
+
+    /* Life Stats */
+    .life-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bg-tertiary);
+    }
+
+    .life-stat:last-child {
+      border-bottom: none;
+    }
+
+    .life-stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .life-stat-value {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* Idle Resources */
+    .resource-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .resource-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--accent-success);
+    }
+
+    .resource-rate {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .collect-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--accent-success), #00cc66);
+      border: none;
+      border-radius: 6px;
+      color: var(--bg-primary);
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: transform 0.2s;
+    }
+
+    .collect-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* World Zones List */
+    .zone-list-item {
+      padding: 10px 12px;
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .zone-list-item:hover {
+      background: var(--bg-primary);
+      border-color: var(--accent-primary);
+    }
+
+    .zone-list-item.active {
+      border-color: var(--accent-primary);
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    /* Meta Controls */
+    .system-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-tertiary);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .expand-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--bg-primary);
+      border: 1px solid var(--accent-primary);
+      border-radius: 6px;
+      color: var(--text-primary);
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .expand-btn:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    /* ========================================
+       MAIN CONTENT
+       ======================================== */
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-primary);
+    }
+
+    /* Header */
+    .app-header {
+      height: 60px;
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      background: var(--accent-success);
+      color: var(--bg-primary);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-btn {
+      padding: 8px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--accent-primary);
+      border-radius: 6px;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .header-btn:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    /* Chat Area */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      overflow-y: auto;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: var(--bg-primary);
+      margin-left: auto;
+    }
+
+    .message.toobix {
+      align-self: flex-start;
+      background: var(--bg-secondary);
+      border: 1px solid var(--accent-primary);
+    }
+
+    .message-meta {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 8px;
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Game Canvas */
+    .game-canvas-container {
+      width: 100%;
+      height: 400px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 2px solid var(--accent-primary);
+      position: relative;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .canvas-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(10, 14, 39, 0.9);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--accent-primary);
+      font-size: 12px;
+    }
+
+    .canvas-overlay h4 {
+      color: var(--accent-primary);
+      margin-bottom: 8px;
+    }
+
+    /* Input Area */
+    .input-container {
+      padding: 24px;
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--accent-primary);
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #chatInput {
+      flex: 1;
+      padding: 16px;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+    }
+
+    #chatInput:focus {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 20px rgba(123, 97, 255, 0.3);
+    }
+
+    .send-btn {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      border-radius: 8px;
+      color: var(--bg-primary);
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .send-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .voice-btn {
+      padding: 16px;
+      background: var(--bg-tertiary);
+      border: 2px solid var(--accent-primary);
+      border-radius: 8px;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .voice-btn:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 40px;
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .status-bar-section {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-item strong {
+      color: var(--text-primary);
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 1366px) {
+      .sidebar {
+        width: 300px;
+      }
+
+      .sidebar.collapsed {
+        width: 60px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: absolute;
+        left: -300px;
+        z-index: 1000;
+        height: 100vh;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+
+      <!-- Avatar & Quick Stats -->
+      <div class="sidebar-section avatar-section">
+        <div class="avatar-icon">👤</div>
+        <div class="avatar-name" id="playerName">Michael</div>
+        <div class="avatar-title" id="playerTitle">The Code Wanderer</div>
+
+        <div class="stat-bar">
+          <div class="stat-bar-label">
+            <span>HP</span>
+            <span id="hpValue">85/100</span>
+          </div>
+          <div class="stat-bar-fill-container">
+            <div class="stat-bar-fill hp" id="hpBar" style="width: 85%">85</div>
+          </div>
+        </div>
+
+        <div class="stat-bar">
+          <div class="stat-bar-label">
+            <span>MP</span>
+            <span id="mpValue">60/100</span>
+          </div>
+          <div class="stat-bar-fill-container">
+            <div class="stat-bar-fill mp" id="mpBar" style="width: 60%">60</div>
+          </div>
+        </div>
+
+        <div class="stat-bar">
+          <div class="stat-bar-label">
+            <span>XP</span>
+            <span id="xpValue">73% to Lvl 13</span>
+          </div>
+          <div class="stat-bar-fill-container">
+            <div class="stat-bar-fill xp" id="xpBar" style="width: 73%">73%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Zone -->
+      <div class="sidebar-section">
+        <h3>📍 CURRENT ZONE</h3>
+        <div class="zone-display">
+          <h4 id="currentZoneName">🚀 SciFi Station A7</h4>
+          <div class="zone-status">
+            <span>Status:</span>
+            <span id="zoneStatus">Peaceful</span>
+          </div>
+          <div class="zone-status">
+            <span>NPCs:</span>
+            <span id="zoneNPCs">3 Active</span>
+          </div>
+          <button class="zone-switch">Switch Zone ▼</button>
+        </div>
+      </div>
+
+      <!-- Active Quests -->
+      <div class="sidebar-section">
+        <h3>🎯 ACTIVE QUESTS</h3>
+        <div id="questList">
+          <div class="quest-item">
+            <h4>□ Code 1hr (Daily)</h4>
+            <div class="quest-progress">Progress: 45/60m</div>
+            <div class="quest-reward">Reward: 50 XP</div>
+          </div>
+          <div class="quest-item completed">
+            <h4>☑ Morning Routine</h4>
+            <div class="quest-reward">+20 XP ✓</div>
+          </div>
+          <div class="quest-item">
+            <h4>□ Learn Rust (Week)</h4>
+            <div class="quest-progress">Progress: 2/7d</div>
+            <div class="quest-reward">Reward: 200 XP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Life Stats -->
+      <div class="sidebar-section">
+        <h3>🧘 LIFE STATS</h3>
+        <div class="life-stat">
+          <span class="life-stat-label">Mood:</span>
+          <span class="life-stat-value">😊 Happy</span>
+        </div>
+        <div class="life-stat">
+          <span class="life-stat-label">Energy:</span>
+          <span class="life-stat-value">⚡⚡⚡⚡░</span>
+        </div>
+        <div class="life-stat">
+          <span class="life-stat-label">Stress:</span>
+          <span class="life-stat-value">▁▂░░░</span>
+        </div>
+        <div class="life-stat">
+          <span class="life-stat-label">Focus:</span>
+          <span class="life-stat-value">████░</span>
+        </div>
+        <button class="zone-switch" style="margin-top: 12px;">Daily Check-in</button>
+      </div>
+
+      <!-- Idle Resources -->
+      <div class="sidebar-section">
+        <h3>⚙️ IDLE PRODUCTION</h3>
+        <div class="resource-item">
+          <div>
+            <div class="resource-value" id="creditsValue">1,247</div>
+            <div class="resource-rate">+15/min 🟢</div>
+          </div>
+        </div>
+        <div class="resource-item">
+          <div>
+            <div style="font-size: 13px; color: var(--text-secondary);">Research:</div>
+            <div class="resource-value" id="researchValue">89%</div>
+            <div class="resource-rate">+2%/hour</div>
+          </div>
+        </div>
+        <button class="collect-btn">Collect All</button>
+      </div>
+
+      <!-- World Zones -->
+      <div class="sidebar-section">
+        <h3>🌍 WORLD ZONES</h3>
+        <div class="zone-list-item active">🚀 SciFi Station</div>
+        <div class="zone-list-item">🏰 Medieval Village</div>
+        <div class="zone-list-item">🏙️ Modern City</div>
+        <div class="zone-list-item">⛏️ Mining Outpost</div>
+        <div class="zone-list-item">🌾 Farm Haven</div>
+        <div class="zone-list-item">🗼 Tower Defense</div>
+      </div>
+
+      <!-- Meta Controls -->
+      <div class="sidebar-section">
+        <h3>⚙️ SYSTEM</h3>
+        <div class="system-indicator">
+          <div class="status-dot"></div>
+          <span>Health: Optimal</span>
+        </div>
+        <div class="system-indicator">
+          <span>RAM: 2.1 GB (27%)</span>
+        </div>
+        <div class="system-indicator">
+          <span>Services: 8/35</span>
+        </div>
+        <button class="expand-btn">Expand ▼</button>
+      </div>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+      <!-- Header -->
+      <div class="app-header">
+        <div class="app-title">TOOBIX - The Living Universe</div>
+        <div class="header-controls">
+          <div class="status-badge">
+            <div class="status-dot" style="animation: none; background: #00ff88;"></div>
+            <span>Online</span>
+          </div>
+          <button class="header-btn" id="toggleSidebar">≡</button>
+        </div>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-container" id="chatContainer">
+
+        <!-- Welcome Message -->
+        <div class="message toobix">
+          <div>
+            Willkommen zurück, Michael! 🎮<br><br>
+            Ich bin <strong>Toobix</strong> - dein Living Universe Companion.<br><br>
+            <strong>Heute's Progress:</strong><br>
+            ✓ Morning Routine (+20 XP) 🌅<br>
+            ✓ Code Session 1hr (+50 XP) 💻<br>
+            ⏳ Evening Walk (In Progress...)<br><br>
+            <strong>Level 12 → 13:</strong> 73% (1,825/2,500 XP)<br><br>
+            Während du weg warst (2h 34m):<br>
+            • Gained 2,310 Credits (+15/min idle)<br>
+            • Research completed: "Async Patterns" 🧬<br>
+            • Story Event: "The crew discovered a signal..." [Read More]
+          </div>
+          <div class="message-meta">
+            <span>+15 XP (Welcome Back Bonus)</span>
+            <span>Story Fragment Unlocked</span>
+          </div>
+        </div>
+
+        <!-- Game Canvas -->
+        <div class="game-canvas-container">
+          <canvas id="gameCanvas"></canvas>
+          <div class="canvas-overlay">
+            <h4>🚀 SciFi Station A7</h4>
+            <div>Zone Level: 1</div>
+            <div>NPCs: Ada, Turing, Lovelace</div>
+            <div>Status: Idle Production Active</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="chatInput"
+            placeholder="Type a message... every message = XP & progress!"
+            autocomplete="off"
+          >
+          <button class="send-btn" id="sendBtn">Send</button>
+          <button class="voice-btn">🎙️</button>
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="status-bar-section">
+          <div class="status-item">
+            <span>HP:</span>
+            <strong>85/100</strong>
+          </div>
+          <div class="status-item">
+            <span>MP:</span>
+            <strong>60/100</strong>
+          </div>
+          <div class="status-item">
+            <span>Lvl 12:</span>
+            <strong>73%</strong>
+          </div>
+        </div>
+        <div class="status-bar-section">
+          <div class="status-item">
+            <span>💰</span>
+            <strong id="statusCredits">1,247</strong>
+          </div>
+          <div class="status-item">
+            <span>🧬</span>
+            <strong id="statusResearch">89%</strong>
+          </div>
+          <div class="status-item">
+            <span>Services:</span>
+            <strong>8/35</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // ========================================
+    // GAME STATE
+    // ========================================
+
+    const gameState = {
+      player: {
+        name: 'Michael',
+        level: 12,
+        xp: 1825,
+        xpToNext: 2500,
+        hp: 85,
+        maxHp: 100,
+        mp: 60,
+        maxMp: 100,
+        title: 'The Code Wanderer'
+      },
+      resources: {
+        credits: 1247,
+        research: 89,
+        energyCrystals: 5,
+        storyFragments: 12
+      },
+      currentZone: 'scifi-station',
+      lastMessageTime: new Date(),
+      messageCount: 0
+    };
+
+    // ========================================
+    // CHAT FUNCTIONS
+    // ========================================
+
+    const chatContainer = document.getElementById('chatContainer');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function addMessage(text, sender = 'user') {
+      const message = document.createElement('div');
+      message.className = `message ${sender}`;
+
+      if (sender === 'user') {
+        // Calculate XP gain
+        const xpGain = calculateXPGain(text);
+
+        message.innerHTML = `
+          <div>${escapeHtml(text)}</div>
+          <div class="message-meta">
+            <span>+${xpGain} XP</span>
+            <span>${new Date().toLocaleTimeString()}</span>
+          </div>
+        `;
+
+        // Update game state
+        gainXP(xpGain);
+      } else {
+        message.innerHTML = `<div>${text}</div>`;
+      }
+
+      chatContainer.appendChild(message);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function calculateXPGain(message) {
+      // Simple heuristic
+      let xp = 5; // Base XP
+
+      if (message.includes('?')) xp += 5; // Question
+      if (message.length > 50) xp += 5; // Longer message
+      if (message.includes('code') || message.includes('learn')) xp += 10; // Learning
+
+      return xp;
+    }
+
+    function gainXP(amount) {
+      gameState.player.xp += amount;
+      gameState.messageCount++;
+
+      // Check for level up
+      if (gameState.player.xp >= gameState.player.xpToNext) {
+        levelUp();
+      }
+
+      updateUI();
+    }
+
+    function levelUp() {
+      gameState.player.level++;
+      gameState.player.xp -= gameState.player.xpToNext;
+      gameState.player.xpToNext = Math.floor(gameState.player.xpToNext * 1.5);
+      gameState.player.maxHp += 5;
+      gameState.player.maxMp += 5;
+      gameState.player.hp = gameState.player.maxHp;
+      gameState.player.mp = gameState.player.maxMp;
+
+      // Show level up message
+      addMessage(`
+        🎉 <strong>LEVEL UP!</strong> 🎉<br><br>
+        You are now Level ${gameState.player.level}!<br>
+        Max HP +5 (now ${gameState.player.maxHp})<br>
+        Max MP +5 (now ${gameState.player.maxMp})<br><br>
+        Keep going! Next level at ${gameState.player.xpToNext} XP.
+      `, 'toobix');
+    }
+
+    function updateUI() {
+      // Update XP bar
+      const xpPercent = Math.floor((gameState.player.xp / gameState.player.xpToNext) * 100);
+      document.getElementById('xpBar').style.width = xpPercent + '%';
+      document.getElementById('xpBar').textContent = xpPercent + '%';
+      document.getElementById('xpValue').textContent = `${xpPercent}% to Lvl ${gameState.player.level + 1}`;
+
+      // Update HP/MP
+      const hpPercent = Math.floor((gameState.player.hp / gameState.player.maxHp) * 100);
+      const mpPercent = Math.floor((gameState.player.mp / gameState.player.maxMp) * 100);
+
+      document.getElementById('hpBar').style.width = hpPercent + '%';
+      document.getElementById('hpBar').textContent = gameState.player.hp;
+      document.getElementById('hpValue').textContent = `${gameState.player.hp}/${gameState.player.maxHp}`;
+
+      document.getElementById('mpBar').style.width = mpPercent + '%';
+      document.getElementById('mpBar').textContent = gameState.player.mp;
+      document.getElementById('mpValue').textContent = `${gameState.player.mp}/${gameState.player.maxMp}`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ========================================
+    // EVENT LISTENERS
+    // ========================================
+
+    sendBtn.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (text) {
+        addMessage(text, 'user');
+        chatInput.value = '';
+
+        // Simulate Toobix response (later: AI integration)
+        setTimeout(() => {
+          const responses = [
+            "Das ist interessant! Lass mich darüber nachdenken... 🤔",
+            "Gut gemacht! Du sammelst fleißig XP! 🎮",
+            "Ich habe das in deiner Memory Palace gespeichert. 🧠",
+            "Spannend! Das könnte eine neue Quest werden... 🎯"
+          ];
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          addMessage(randomResponse, 'toobix');
+        }, 1000);
+      }
+    });
+
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendBtn.click();
+      }
+    });
+
+    // Sidebar toggle
+    document.getElementById('toggleSidebar').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    });
+
+    // ========================================
+    // IDLE RESOURCES
+    // ========================================
+
+    setInterval(() => {
+      // Gain credits every minute
+      gameState.resources.credits += 15;
+      document.getElementById('creditsValue').textContent = gameState.resources.credits.toLocaleString();
+      document.getElementById('statusCredits').textContent = gameState.resources.credits.toLocaleString();
+
+      // Gain research every hour (simulated per minute)
+      if (Math.random() < 0.033) {
+        gameState.resources.research = Math.min(100, gameState.resources.research + 2);
+        document.getElementById('researchValue').textContent = gameState.resources.research + '%';
+        document.getElementById('statusResearch').textContent = gameState.resources.research + '%';
+      }
+    }, 60000); // Every 60 seconds
+
+    // ========================================
+    // CANVAS (PLACEHOLDER)
+    // ========================================
+
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function drawSciFiStation() {
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Starfield background
+      ctx.fillStyle = '#0a0e27';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < 50; i++) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          2, 2
+        );
+      }
+
+      // Station platform
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const time = Date.now() / 1000;
+
+      ctx.strokeStyle = '#00d4ff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 100, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Rotating core
+      ctx.fillStyle = '#00ffff';
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#00ffff';
+      ctx.beginPath();
+      ctx.arc(
+        centerX + Math.cos(time) * 50,
+        centerY + Math.sin(time) * 50,
+        20, 0, Math.PI * 2
+      );
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Text
+      ctx.fillStyle = '#00d4ff';
+      ctx.font = '14px "Segoe UI"';
+      ctx.textAlign = 'center';
+      ctx.fillText('SciFi Station A7', centerX, centerY - 140);
+      ctx.fillText('(Three.js upgrade coming soon)', centerX, centerY + 140);
+
+      requestAnimationFrame(drawSciFiStation);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    drawSciFiStation();
+
+    // ========================================
+    // INITIAL FOCUS
+    // ========================================
+
+    chatInput.focus();
+
+    console.log('🎮 Toobix Unified Universe loaded!');
+    console.log('🧠 Game State:', gameState);
+  </script>
+
+</body>
+</html>
