@@ -198,7 +198,7 @@ const EVENT_MAPPINGS: Record<string, EventEffect[]> = {
     { target: 'creativeSuite', action: 'log_memory', params: { type: 'achievement' }, description: 'In Erinnerung speichern' }
   ],
   'game:level_up': [
-    { target: 'idleEmpire', action: 'unlock_building', params: {} }, description: 'Neues Gebäude verfügbar' }
+    { target: 'idleEmpire', action: 'unlock_building', params: {}, description: 'Neues Gebäude verfügbar' }
   ],
 
   // Streak Events
