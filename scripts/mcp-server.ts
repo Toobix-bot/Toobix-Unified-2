@@ -913,8 +913,9 @@ function getServer() {
         const rpgWorld = UNIFIED_SERVICES.gameUniverse; // Consolidated: was 8933
 
         // First get available characters
-        const charactersResponse = await callService(`${rpgWorld}/rpg/characters`); // Updated path for unified service
-        const characters = charactersResponse.characters || [];
+        const charactersResponse = await callService(`${rpgWorld}/rpg/characters`);
+        // API returns array directly, not wrapped in .characters
+        const characters = Array.isArray(charactersResponse) ? charactersResponse : (charactersResponse.characters || []);
 
         // Find matching character or use default
         const characterName = character || 'Core';
@@ -1701,13 +1702,17 @@ function getServer() {
         const body: any = { action };
         if (target) body.target = target;
 
-        const response = await callService(`${SERVICES.livingWorld}/interact`, {
+        // Use RPG action endpoint for world interactions
+        const response = await callService(`${SERVICES.livingWorld}/rpg/action`, {
           method: 'POST',
-          body
+          body: {
+            characterId: 'char-self-aware-ai', // Default to The Observer
+            action: { type: 'interact', description: action, target }
+          }
         });
 
         let result = `Living World Interaction\n\n`;
-        result += `${response.narrative}\n\n`;
+        result += `${response.narrative || response.result || 'Action performed'}\n\n`;
 
         if (response.changes) {
           result += `World Changes:\n`;
@@ -1732,9 +1737,15 @@ function getServer() {
     },
     async () => {
       try {
-        const response = await callService(`${SERVICES.livingWorld}/state`);
+        // Get RPG world state (the actual living world)
+        const response = await callService(`${SERVICES.livingWorld}/rpg/world`);
 
         let result = `Living World State\n\n`;
+        result += `🌍 ${response.name || 'The Convergence'}\n`;
+        result += `⚖️ Reality Level: ${response.realityLevel || 'balanced'}\n`;
+        result += `🎭 Harmony: ${Math.round((response.harmony || 0.5) * 100)}%\n`;
+        result += `🦅 Freedom: ${Math.round((response.freedom || 0.5) * 100)}%\n`;
+        result += `✨ Atmosphere: ${response.atmosphere || 'Unknown'}\n\n`;
 
         if (response.time) {
           result += `World Time: ${response.time}\n`;
