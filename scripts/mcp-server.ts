@@ -696,40 +696,35 @@ function getServer() {
   server.registerTool(
     'translate_text',
     {
-      title: 'Translate Text [Toobix Core]',
-      description: 'Translate text to any of 37 supported languages',
+      title: 'Translate Text [LLM Gateway]',
+      description: 'Translate text using LLM (supports all languages)',
       inputSchema: {
         text: z.string().describe('Text to translate'),
-        target_language: z.string().describe('Target language code (e.g. en, de, es, fr, it)'),
-        source_language: z.string().optional().describe('Source language code (auto-detect if omitted)'),
+        target_language: z.string().describe('Target language (e.g. English, German, Spanish, French)'),
+        source_language: z.string().optional().describe('Source language (auto-detect if omitted)'),
       },
     },
     async ({ text, target_language, source_language }) => {
       try {
-        const body: any = {
-          text,
-          to: target_language,
-        };
-        if (source_language) {
-          body.from = source_language;
-        }
+        const sourceInfo = source_language ? `from ${source_language} ` : '';
+        const prompt = `Translate the following text ${sourceInfo}to ${target_language}. Only respond with the translation, nothing else:\n\n${text}`;
 
-        const response = await callService(`${SERVICES.translation}/translate`, {
+        const response = await callService(`${UNIFIED_SERVICES.llmGateway}/chat`, {
           method: 'POST',
-          body,
+          body: {
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.3,
+          },
         });
 
         let result = `Translation\n\n`;
-        result += `Original (${response.detectedLanguage || response.from || source_language || 'auto'}): ${text}\n\n`;
-        result += `Translated (${target_language}): ${response.translated}\n`;
-
-        if (response.detectedLanguage) {
-          result += `\nDetected: ${response.detectedLanguage}`;
-        }
+        result += `Original${source_language ? ` (${source_language})` : ''}: ${text}\n\n`;
+        result += `Translated (${target_language}): ${response.content}\n`;
+        result += `\nProvider: ${response.provider} | Model: ${response.model}`;
 
         return { content: [{ type: 'text', text: result }] };
       } catch (err: any) {
-        return { content: [{ type: 'text', text: `Translation service offline: ${err.message}` }], isError: true };
+        return { content: [{ type: 'text', text: `Translation via LLM failed: ${err.message}` }], isError: true };
       }
     }
   );
