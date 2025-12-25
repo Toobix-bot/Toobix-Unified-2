@@ -2739,8 +2739,7 @@ function getServer() {
       title: 'Idle Empire Status [Idle Empire]',
       description: 'Get resources, buildings, farms, and mines status',
       inputSchema: {
-        type: 'object',
-        properties: { userId: { type: 'string', description: 'User ID' } }
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -2779,8 +2778,7 @@ function getServer() {
       title: 'Collect Offline Production [Idle Empire]',
       description: 'Collect resources produced while offline',
       inputSchema: {
-        type: 'object',
-        properties: { userId: { type: 'string' } }
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -2808,12 +2806,8 @@ function getServer() {
       title: 'Build Structure [Idle Empire]',
       description: 'Build a new structure (farm, mine, sawmill, quarry, storage, workshop, tower, mana_well)',
       inputSchema: {
-        type: 'object',
-        properties: {
-          type: { type: 'string', description: 'Building type' },
-          userId: { type: 'string' }
-        },
-        required: ['type']
+        type: z.string().describe('Building type (farm, mine, sawmill, quarry, storage, workshop, tower, mana_well)'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -2840,14 +2834,10 @@ function getServer() {
       title: 'Farm Status & Actions [Idle Empire]',
       description: 'View farm status, plant crops, or harvest',
       inputSchema: {
-        type: 'object',
-        properties: {
-          action: { type: 'string', description: 'status, plant, harvest, harvest_all' },
-          cropType: { type: 'string', description: 'Crop to plant (wheat, carrot, magic_beans, pumpkin, crystal_flower)' },
-          plotId: { type: 'string' },
-          userId: { type: 'string' }
-        },
-        required: ['action']
+        action: z.enum(['status', 'plant', 'harvest', 'harvest_all']).describe('Farm action'),
+        cropType: z.string().optional().describe('Crop to plant (wheat, carrot, magic_beans, pumpkin, crystal_flower)'),
+        plotId: z.string().optional().describe('Plot ID'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -2906,11 +2896,8 @@ function getServer() {
       title: 'Start Tower Defense [Tower Defense]',
       description: 'Start a new Tower Defense game',
       inputSchema: {
-        type: 'object',
-        properties: {
-          difficulty: { type: 'string', description: 'easy, normal, hard' },
-          userId: { type: 'string' }
-        }
+        difficulty: z.enum(['easy', 'normal', 'hard']).optional().describe('Difficulty level'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -2943,14 +2930,10 @@ function getServer() {
       title: 'Place Tower [Tower Defense]',
       description: 'Place a tower on the map',
       inputSchema: {
-        type: 'object',
-        properties: {
-          gameId: { type: 'string', description: 'Game ID' },
-          type: { type: 'string', description: 'Tower type (archer, cannon, mage, tesla, frost, sniper)' },
-          x: { type: 'number' },
-          y: { type: 'number' }
-        },
-        required: ['gameId', 'type', 'x', 'y']
+        gameId: z.string().describe('Game ID'),
+        type: z.enum(['archer', 'cannon', 'mage', 'tesla', 'frost', 'sniper']).describe('Tower type'),
+        x: z.number().describe('X position'),
+        y: z.number().describe('Y position'),
       },
     },
     async (args: any) => {
@@ -2977,9 +2960,7 @@ function getServer() {
       title: 'Start Wave [Tower Defense]',
       description: 'Start the next enemy wave',
       inputSchema: {
-        type: 'object',
-        properties: { gameId: { type: 'string', description: 'Game ID' } },
-        required: ['gameId']
+        gameId: z.string().describe('Game ID'),
       },
     },
     async (args: any) => {
@@ -3005,9 +2986,7 @@ function getServer() {
       title: 'Game Status [Tower Defense]',
       description: 'Get current TD game status',
       inputSchema: {
-        type: 'object',
-        properties: { gameId: { type: 'string' } },
-        required: ['gameId']
+        gameId: z.string().describe('Game ID'),
       },
     },
     async (args: any) => {
@@ -3041,8 +3020,7 @@ function getServer() {
       title: 'View Skill Tree [Game Universe]',
       description: 'View available skills and your learned skills',
       inputSchema: {
-        type: 'object',
-        properties: { userId: { type: 'string' } }
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3074,12 +3052,8 @@ function getServer() {
       title: 'Learn Skill [Game Universe]',
       description: 'Learn a new skill',
       inputSchema: {
-        type: 'object',
-        properties: {
-          skillId: { type: 'string', description: 'Skill ID' },
-          userId: { type: 'string' }
-        },
-        required: ['skillId']
+        skillId: z.string().describe('Skill ID'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3102,8 +3076,7 @@ function getServer() {
       title: 'View Inventory [Game Universe]',
       description: 'View your items and equipment',
       inputSchema: {
-        type: 'object',
-        properties: { userId: { type: 'string' } }
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3140,11 +3113,8 @@ function getServer() {
       title: 'View Quests [Game Universe]',
       description: 'View active and available quests',
       inputSchema: {
-        type: 'object',
-        properties: {
-          type: { type: 'string', description: 'active or available' },
-          userId: { type: 'string' }
-        }
+        type: z.enum(['active', 'available']).optional().describe('Quest type'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3189,12 +3159,8 @@ function getServer() {
       title: 'Accept Quest [Game Universe]',
       description: 'Accept a quest',
       inputSchema: {
-        type: 'object',
-        properties: {
-          questId: { type: 'string', description: 'Quest ID' },
-          userId: { type: 'string' }
-        },
-        required: ['questId']
+        questId: z.string().describe('Quest ID'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3221,8 +3187,7 @@ function getServer() {
       title: 'Get Pending Notifications [Event Hub]',
       description: 'Get all pending notifications and offline summary',
       inputSchema: {
-        type: 'object',
-        properties: { userId: { type: 'string' } }
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3260,13 +3225,9 @@ function getServer() {
       title: 'Sync Emotion to Game [Event Hub]',
       description: 'Apply emotional state to game mechanics',
       inputSchema: {
-        type: 'object',
-        properties: {
-          emotion: { type: 'string', description: 'joy, sadness, anxiety, anger, hope, gratitude' },
-          intensity: { type: 'number', description: '0-1' },
-          userId: { type: 'string' }
-        },
-        required: ['emotion']
+        emotion: z.enum(['joy', 'sadness', 'anxiety', 'anger', 'hope', 'gratitude']).describe('Emotion to sync'),
+        intensity: z.number().min(0).max(1).optional().describe('Intensity (0-1)'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3296,13 +3257,9 @@ function getServer() {
       title: 'Dream to Quest [Event Hub]',
       description: 'Generate quests from dream symbols',
       inputSchema: {
-        type: 'object',
-        properties: {
-          symbols: { type: 'array', items: { type: 'string' }, description: 'Dream symbols (water, fire, flying, etc.)' },
-          lucidity: { type: 'number', description: 'Lucidity level 0-100' },
-          userId: { type: 'string' }
-        },
-        required: ['symbols']
+        symbols: z.array(z.string()).describe('Dream symbols (water, fire, flying, etc.)'),
+        lucidity: z.number().min(0).max(100).optional().describe('Lucidity level 0-100'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3335,12 +3292,9 @@ function getServer() {
       title: 'Search Memories [Event Hub]',
       description: 'Search through unified memory storage',
       inputSchema: {
-        type: 'object',
-        properties: {
-          query: { type: 'string', description: 'Search query' },
-          source: { type: 'string', description: 'Filter by source service' },
-          userId: { type: 'string' }
-        }
+        query: z.string().optional().describe('Search query'),
+        source: z.string().optional().describe('Filter by source service'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3375,14 +3329,10 @@ function getServer() {
       title: 'Start Branching Story [Creative Suite]',
       description: 'Start a new interactive branching story adventure',
       inputSchema: {
-        type: 'object',
-        properties: {
-          title: { type: 'string', description: 'Story title' },
-          genre: { type: 'string', enum: ['fantasy', 'scifi', 'mystery', 'horror', 'adventure', 'philosophical'], description: 'Story genre' },
-          description: { type: 'string', description: 'Setting/premise' },
-          userId: { type: 'string' }
-        },
-        required: ['title', 'genre']
+        title: z.string().describe('Story title'),
+        genre: z.enum(['fantasy', 'scifi', 'mystery', 'horror', 'adventure', 'philosophical']).describe('Story genre'),
+        description: z.string().optional().describe('Setting/premise'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3414,13 +3364,9 @@ function getServer() {
       title: 'Make Story Choice [Creative Suite]',
       description: 'Make a choice in an interactive story',
       inputSchema: {
-        type: 'object',
-        properties: {
-          storyId: { type: 'string', description: 'Story ID' },
-          choiceId: { type: 'string', description: 'Choice ID' },
-          userId: { type: 'string' }
-        },
-        required: ['storyId', 'choiceId']
+        storyId: z.string().describe('Story ID'),
+        choiceId: z.string().describe('Choice ID'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3477,12 +3423,8 @@ function getServer() {
       title: 'Story State [Creative Suite]',
       description: 'Get current state of a branching story',
       inputSchema: {
-        type: 'object',
-        properties: {
-          storyId: { type: 'string', description: 'Story ID' },
-          userId: { type: 'string' }
-        },
-        required: ['storyId']
+        storyId: z.string().describe('Story ID'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3518,10 +3460,7 @@ function getServer() {
       title: 'User Profile [Gamification]',
       description: 'Get complete user profile with XP, level, resources, and achievements',
       inputSchema: {
-        type: 'object',
-        properties: {
-          userId: { type: 'string', description: 'User ID' }
-        }
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3564,10 +3503,7 @@ function getServer() {
       title: 'Shop Items [Gamification]',
       description: 'Browse shop items available for purchase',
       inputSchema: {
-        type: 'object',
-        properties: {
-          category: { type: 'string', enum: ['energy', 'items', 'currency', 'upgrades'], description: 'Item category' }
-        }
+        category: z.enum(['energy', 'items', 'currency', 'upgrades']).optional().describe('Item category'),
       },
     },
     async (args: any) => {
@@ -3598,12 +3534,8 @@ function getServer() {
       title: 'Purchase Item [Gamification]',
       description: 'Purchase an item from the shop',
       inputSchema: {
-        type: 'object',
-        properties: {
-          itemId: { type: 'string', description: 'Item ID to purchase' },
-          userId: { type: 'string' }
-        },
-        required: ['itemId']
+        itemId: z.string().describe('Item ID to purchase'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
@@ -3637,12 +3569,8 @@ function getServer() {
       title: 'Activate Boost [Gamification]',
       description: 'Activate a temporary boost',
       inputSchema: {
-        type: 'object',
-        properties: {
-          boostType: { type: 'string', enum: ['xp_boost', 'xp_mega', 'energy_boost', 'gold_boost', 'luck_boost'], description: 'Boost type' },
-          userId: { type: 'string' }
-        },
-        required: ['boostType']
+        boostType: z.enum(['xp_boost', 'xp_mega', 'energy_boost', 'gold_boost', 'luck_boost']).describe('Boost type'),
+        userId: z.string().optional().describe('User ID'),
       },
     },
     async (args: any) => {
