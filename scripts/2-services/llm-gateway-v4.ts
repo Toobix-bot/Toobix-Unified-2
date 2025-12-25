@@ -358,6 +358,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// Usage tracking
+const usageStats = {
+  totalRequests: 0,
+  successfulRequests: 0,
+  failedRequests: 0,
+  modelUsage: {} as Record<string, number>,
+  providerUsage: {} as Record<string, number>,
+  startTime: Date.now()
+};
+
+function trackUsage(provider: string, model: string, success: boolean) {
+  usageStats.totalRequests++;
+  if (success) usageStats.successfulRequests++;
+  else usageStats.failedRequests++;
+  usageStats.modelUsage[model] = (usageStats.modelUsage[model] || 0) + 1;
+  usageStats.providerUsage[provider] = (usageStats.providerUsage[provider] || 0) + 1;
+}
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
@@ -381,6 +399,26 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Stats endpoint
+app.get('/stats', (req, res) => {
+  const uptimeMs = Date.now() - usageStats.startTime;
+  const uptimeHours = (uptimeMs / 1000 / 60 / 60).toFixed(2);
+
+  res.json({
+    totalRequests: usageStats.totalRequests,
+    successfulRequests: usageStats.successfulRequests,
+    failedRequests: usageStats.failedRequests,
+    successRate: usageStats.totalRequests > 0
+      ? ((usageStats.successfulRequests / usageStats.totalRequests) * 100).toFixed(1) + '%'
+      : 'N/A',
+    modelUsage: usageStats.modelUsage,
+    providerUsage: usageStats.providerUsage,
+    uptime: `${uptimeHours} hours`,
+    activeProvider: ROUTER_MODE,
+    defaultModel: ROUTER_MODE === 'groq' ? DEFAULT_GROQ_MODEL : DEFAULT_OLLAMA_MODEL
+  });
+});
+
 // Main chat endpoint
 app.post('/chat', async (req, res) => {
   try {
@@ -394,6 +432,7 @@ app.post('/chat', async (req, res) => {
     }
 
     const response = await queryLLM(request);
+    trackUsage(response.provider, response.model, response.success);
     res.json(response);
   } catch (error: any) {
     res.status(500).json({
@@ -435,6 +474,7 @@ app.post('/query', async (req, res) => {
       store_in_memory: true
     });
 
+    trackUsage(response.provider, response.model, response.success);
     res.json(response);
   } catch (error: any) {
     res.status(500).json({
