@@ -630,13 +630,14 @@ function getServer() {
 
         switch (type) {
           case 'gratitude': {
-            // Use Gratitude Service /log endpoint
-            const gratitudeService = UNIFIED_SERVICES.lifeCompanionUnified; // Consolidated: was 8901
-            await callService(`${gratitudeService}/gratitude/log`, { // Updated path for unified service
+            // Use Life Companion Unified /gratitude endpoint
+            const gratitudeService = UNIFIED_SERVICES.lifeCompanionUnified;
+            await callService(`${gratitudeService}/gratitude`, {
               method: 'POST',
               body: {
-                entry: content,
-                category: category || 'life'
+                content: content,
+                category: category || 'general',
+                depth: 'surface'
               },
             });
             result = `Gratitude logged: "${content}"`;
@@ -1782,29 +1783,39 @@ function getServer() {
     },
     async ({ topic, style }) => {
       try {
-        const body: any = { topic };
-        if (style) body.style = style;
+        // Creative Suite /idea is a GET endpoint for random ideas
+        // For topic-specific ideas, use LLM Gateway
+        if (topic) {
+          const prompt = `Generate a creative ${style || 'innovative'} idea about: ${topic}.
+                         Format: Start with the idea title, then explain the concept,
+                         then list 3-5 implementation steps.`;
 
-        const response = await callService(`${SERVICES.megaUpgrade}/idea`, {
-          method: 'POST',
-          body
-        });
+          const llmResponse = await callService(`${UNIFIED_SERVICES.llmGateway}/chat`, {
+            method: 'POST',
+            body: {
+              messages: [{ role: 'user', content: prompt }],
+              temperature: 0.9
+            }
+          });
 
-        let result = `Creative Idea\n\n`;
-        result += `Topic: ${topic}\n`;
-        result += `Style: ${style || 'balanced'}\n\n`;
-        result += `${response.idea}\n`;
+          let result = `💡 Creative Idea\n\n`;
+          result += `Topic: ${topic}\n`;
+          result += `Style: ${style || 'innovative'}\n\n`;
+          result += `${llmResponse.content}\n`;
 
-        if (response.implementation) {
-          result += `\nHow to implement:\n`;
-          for (const step of response.implementation) {
-            result += `  ${step}\n`;
-          }
+          return { content: [{ type: 'text', text: result }] };
+        } else {
+          // Random idea from Creative Suite
+          const response = await callService(`${SERVICES.megaUpgrade}/idea`);
+
+          let result = `💡 Random Creative Idea\n\n`;
+          result += `Category: ${response.category}\n\n`;
+          result += `${response.idea}\n`;
+
+          return { content: [{ type: 'text', text: result }] };
         }
-
-        return { content: [{ type: 'text', text: result }] };
       } catch (err: any) {
-        return { content: [{ type: 'text', text: `Mega Upgrade error: ${err.message}` }], isError: true };
+        return { content: [{ type: 'text', text: `Creative Ideas error: ${err.message}` }], isError: true };
       }
     }
   );
@@ -1821,28 +1832,34 @@ function getServer() {
     },
     async ({ problem, constraints }) => {
       try {
-        const body: any = { problem };
-        if (constraints) body.constraints = constraints;
+        const constraintText = constraints?.length ? `\nConstraints: ${constraints.join(', ')}` : '';
+        const prompt = `Solve this problem creatively:
 
-        const response = await callService(`${SERVICES.megaUpgrade}/solve`, {
+Problem: ${problem}${constraintText}
+
+Provide:
+1. A clear solution
+2. Step-by-step implementation
+3. 2-3 alternative approaches`;
+
+        const llmResponse = await callService(`${UNIFIED_SERVICES.llmGateway}/chat`, {
           method: 'POST',
-          body
+          body: {
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7
+          }
         });
 
-        let result = `Problem Solution\n\n`;
-        result += `Problem: ${problem}\n\n`;
-        result += `Solution:\n${response.solution}\n\n`;
-
-        if (response.alternatives) {
-          result += `Alternative Approaches:\n`;
-          for (const alt of response.alternatives) {
-            result += `  • ${alt}\n`;
-          }
+        let result = `🔧 Problem Solution\n\n`;
+        result += `Problem: ${problem}\n`;
+        if (constraints?.length) {
+          result += `Constraints: ${constraints.join(', ')}\n`;
         }
+        result += `\n${llmResponse.content}\n`;
 
         return { content: [{ type: 'text', text: result }] };
       } catch (err: any) {
-        return { content: [{ type: 'text', text: `Mega Upgrade error: ${err.message}` }], isError: true };
+        return { content: [{ type: 'text', text: `Problem Solver error: ${err.message}` }], isError: true };
       }
     }
   );
@@ -1993,15 +2010,22 @@ function getServer() {
         if (genre) body.genre = genre;
         if (length) body.length = length;
 
-        const response = await callService(`${SERVICES.storyEngine}/generate`, {
+        const response = await callService(`${SERVICES.storyEngine}/story/create`, {
           method: 'POST',
           body
         });
 
-        let result = `Story Generated\n\n`;
-        result += `Title: ${response.story.title}\n`;
-        result += `Words: ${response.story.wordCount}\n\n`;
-        result += `${response.story.content}\n`;
+        let result = `📖 Story Generated\n\n`;
+        result += `Title: ${response.title || 'Untitled'}\n`;
+        result += `Genre: ${response.genre || genre || 'fantasy'}\n`;
+        result += `Story ID: ${response.id}\n\n`;
+
+        // Get first chapter content
+        const chapter = response.chapters?.[0];
+        if (chapter) {
+          result += `--- ${chapter.title || 'Chapter 1'} ---\n\n`;
+          result += `${chapter.content}\n`;
+        }
 
         return { content: [{ type: 'text', text: result }] };
       } catch (err: any) {
@@ -2025,14 +2049,21 @@ function getServer() {
         const body: any = { storyId };
         if (direction) body.direction = direction;
 
-        const response = await callService(`${SERVICES.storyEngine}/continue`, {
+        const response = await callService(`${SERVICES.storyEngine}/story/${storyId}/continue`, {
           method: 'POST',
-          body
+          body: { direction }
         });
 
-        let result = `Story Continued\n\n`;
-        result += `Title: ${response.story.title}\n`;
-        result += `Total Words: ${response.story.wordCount}\n`;
+        let result = `📖 Story Continued\n\n`;
+        result += `Title: ${response.title || 'Story'}\n`;
+        result += `Chapters: ${response.chapters?.length || 0}\n\n`;
+
+        // Get latest chapter
+        const latestChapter = response.chapters?.[response.chapters.length - 1];
+        if (latestChapter) {
+          result += `--- ${latestChapter.title || 'Next Chapter'} ---\n\n`;
+          result += `${latestChapter.content}\n`;
+        }
 
         return { content: [{ type: 'text', text: result }] };
       } catch (err: any) {
