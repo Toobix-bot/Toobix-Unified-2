@@ -44,9 +44,8 @@ const UNIFIED_SERVICES = {
 
 // Legacy service mappings (for backwards compatibility)
 const SERVICES = {
-  // Unified mappings
-  commandCenter: 'http://localhost:7777',
-  googleIntegration: 'http://localhost:8801',
+  // Unified mappings - PRIMARY SERVICES
+  commandCenter: UNIFIED_SERVICES.consciousnessUnified,  // Redirect to Consciousness
   memoryPalace: 'http://localhost:8953',
   llmGateway: 'http://localhost:8954',
 
@@ -59,34 +58,41 @@ const SERVICES = {
   emotionalSupport: UNIFIED_SERVICES.lifeCompanionUnified,
   gratitude: UNIFIED_SERVICES.lifeCompanionUnified,
   proactiveCheckin: UNIFIED_SERVICES.lifeCompanionUnified,
+  proactiveCheckIn: UNIFIED_SERVICES.lifeCompanionUnified,
 
   // CONSOLIDATED -> creative-suite (8902)
   storyEngine: UNIFIED_SERVICES.creativeSuite,
+  megaUpgrade: UNIFIED_SERVICES.creativeSuite,
 
   // CONSOLIDATED -> game-universe (8896)
   rpgWorld: UNIFIED_SERVICES.gameUniverse,
   minecraftBot: UNIFIED_SERVICES.gameUniverse,
-  gamification: UNIFIED_SERVICES.gameUniverse,
+  gamification: UNIFIED_SERVICES.gamification,  // User Gamification (8898)
   livingWorld: UNIFIED_SERVICES.gameUniverse,
+  gameLogic: UNIFIED_SERVICES.gameUniverse,     // ADDED: Fix for process_game_action
 
-  // Other services (still standalone)
-  eventBus: 'http://localhost:8920',
-  autonomyEngine: 'http://localhost:8975',
+  // Event Hub (NEW - was eventBus on 8920)
+  eventBus: UNIFIED_SERVICES.eventHub,          // Updated: Port 8894
+
+  // Autonomy & External
+  autonomyEngine: UNIFIED_SERVICES.lifeCompanionUnified,  // Redirect to Life Companion
   twitterAutonomy: 'http://localhost:8965',
-  chatService: 'http://localhost:8995',
-  userProfile: 'http://localhost:8937',   // Updated port (was 8904)
-  translation: 'http://localhost:8912',   // Updated port (was 8931)
-  dataScience: 'http://localhost:8935',
+
+  // Optional/External services
+  chatService: UNIFIED_SERVICES.lifeCompanionUnified,
+  userProfile: UNIFIED_SERVICES.lifeCompanionUnified,
+  translation: UNIFIED_SERVICES.consciousnessUnified,
+  dataScience: UNIFIED_SERVICES.consciousnessUnified,
   healthMonitor: 'http://localhost:9200',
   performanceDashboard: 'http://localhost:8899',
-  megaUpgrade: 'http://localhost:9100',
   serviceGateway: 'http://localhost:9000',
   hardwareAwareness: 'http://localhost:8940',
-  unifiedCommunication: 'http://localhost:8001',
-  unifiedConsciousness: 'http://localhost:8002',
-  multiLlmRouter: 'http://localhost:8959',
+  unifiedCommunication: UNIFIED_SERVICES.lifeCompanionUnified,
+  unifiedConsciousness: UNIFIED_SERVICES.consciousnessUnified,
+  multiLlmRouter: 'http://localhost:8954',      // LLM Gateway handles this
   realWorldIntelligence: 'http://localhost:8888',
   autonomousWeb: 'http://localhost:8980',
+  googleIntegration: 'http://localhost:8801',
 };
 
 function safeJoin(root: string, subpath: string): string {
@@ -3438,7 +3444,7 @@ function getServer() {
     {
       title: 'Story Templates [Creative Suite]',
       description: 'Get available story templates to start quickly',
-      inputSchema: { type: 'object', properties: {} },
+      inputSchema: {},
     },
     async () => {
       try {
@@ -3661,7 +3667,7 @@ function getServer() {
     {
       title: 'Available Boosts [Gamification]',
       description: 'List all available boosts and their costs',
-      inputSchema: { type: 'object', properties: {} },
+      inputSchema: {},
     },
     async () => {
       try {
