@@ -3695,15 +3695,23 @@ function getServer() {
 const app = express();
 
 app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok', tools: 51, services: Object.keys(SERVICES).length });
+  res.status(200).json({
+    status: 'ok',
+    version: '2.0.0',
+    architecture: 'Unified (50+ -> 11)',
+    tools: 51,
+    unifiedServices: Object.keys(UNIFIED_SERVICES).length,  // 11 real services
+    legacyMappings: Object.keys(SERVICES).length,           // backwards compatibility
+  });
 });
 
 app.get('/mcp', (_req, res) => {
   res.status(200).json({
     status: 'ok',
     version: '2.0.0',
-    tools: 14,
-    services: Object.keys(SERVICES).length,
+    architecture: 'Unified (50+ -> 11)',
+    tools: 51,
+    unifiedServices: Object.keys(UNIFIED_SERVICES).length,
     message: 'Use POST /mcp for JSON-RPC requests',
   });
 });
