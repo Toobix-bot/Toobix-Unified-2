@@ -271,21 +271,32 @@ function getServer() {
     },
     async ({ question, perspective }) => {
       try {
-        const response = await callService(`${SERVICES.commandCenter}/ask`, {
+        const response = await callService(`${UNIFIED_SERVICES.consciousnessUnified}/query`, {
           method: 'POST',
           body: { question, perspective },
         });
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Toobix responds:\n\n${response.answer || response.message || JSON.stringify(response, null, 2)}`,
-            },
-          ],
-        };
+
+        let result = `Toobix responds:\n\n`;
+        if (response.oracleWisdom) {
+          result += `Oracle: ${response.oracleWisdom}\n\n`;
+        }
+        if (response.perspectiveSynthesis) {
+          result += `Synthesis: ${response.perspectiveSynthesis}\n\n`;
+        }
+        if (response.perspectives && response.perspectives.length > 0) {
+          result += `Perspectives:\n`;
+          for (const p of response.perspectives) {
+            result += `- ${p.name}: ${p.insight}\n`;
+          }
+        }
+        if (!response.oracleWisdom && !response.perspectiveSynthesis) {
+          result += JSON.stringify(response, null, 2);
+        }
+
+        return { content: [{ type: 'text', text: result }] };
       } catch (err: any) {
         return {
-          content: [{ type: 'text', text: `Command Center offline. Error: ${err.message}` }],
+          content: [{ type: 'text', text: `Consciousness Unified offline. Error: ${err.message}` }],
           isError: true,
         };
       }
